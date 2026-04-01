@@ -14,6 +14,6 @@ export async function searchMinimalAction(query: string) {
   return minimalSource.search(query);
 }
 
-export async function searchEmbeddedAction(query: string) {
-  return embeddedSource.search(query);
+export async function searchEmbeddedAction(query: string, locale?: string) {
+  return embeddedSource.search(query, locale);
 }

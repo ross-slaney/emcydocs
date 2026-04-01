@@ -1,13 +1,18 @@
 import path from "node:path";
 import { createDocsSource } from "@emcy/docs";
+import {
+  defaultSiteLocale,
+  hideDefaultSiteLocaleInUrl,
+  siteLocales,
+} from "@/lib/site-i18n";
 
 const contentDir = path.join(process.cwd(), "site/content/docs");
 
 const sharedConfig = {
   contentDir,
-  defaultLocale: "en",
-  locales: ["en", "es"],
-  hideDefaultLocaleInUrl: true,
+  defaultLocale: defaultSiteLocale,
+  locales: [...siteLocales],
+  hideDefaultLocaleInUrl: hideDefaultSiteLocaleInUrl,
   siteTitle: "EmcyDocs",
   titleSuffix: "EmcyDocs",
   sectionLabels: {

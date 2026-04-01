@@ -1,14 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const navLinks = [
-  { href: "/docs", label: "Docs" },
-  { href: "/notebook", label: "Notebook" },
-  { href: "/minimal", label: "Minimal" },
-  { href: "/embedded/docs", label: "Embedded" },
-];
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import { buildLocalizedHref, getLocaleFromPathname } from "@/lib/site-i18n";
 
 function BrandMark({ className }: { className?: string }) {
   return (
@@ -57,6 +53,15 @@ function BrandMark({ className }: { className?: string }) {
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname() ?? "/";
+  const currentLocale = getLocaleFromPathname(pathname);
+  const navLinks = [
+    { href: buildLocalizedHref("/docs", currentLocale), label: "Docs" },
+    { href: "/notebook", label: "Notebook" },
+    { href: "/minimal", label: "Minimal" },
+    { href: buildLocalizedHref("/embedded/docs", currentLocale), label: "Embedded" },
+  ];
+  const docsHomeHref = buildLocalizedHref("/docs", currentLocale);
 
   useEffect(() => {
     const desktopQuery = window.matchMedia("(min-width: 1024px)");
@@ -116,8 +121,9 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
+              <LanguageSwitcher className="ml-2" />
               <Link
-                href="/docs"
+                href={docsHomeHref}
                 className="ml-2 rounded-md bg-stone-950 px-3.5 py-1.5 text-[13px] font-semibold text-white transition hover:bg-stone-800"
               >
                 Open docs
@@ -167,8 +173,11 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
+                <div className="px-3 pt-2">
+                  <LanguageSwitcher onNavigate={() => setIsMenuOpen(false)} />
+                </div>
                 <Link
-                  href="/docs"
+                  href={docsHomeHref}
                   className="mt-2 inline-flex items-center justify-center rounded-md bg-stone-950 px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-stone-800"
                   onClick={() => setIsMenuOpen(false)}
                 >

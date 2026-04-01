@@ -1,0 +1,32 @@
+---
+title: "Una libreria de docs para Next.js que encaja en apps SaaS"
+description: "EmcyDocs empaqueta MDX dentro del repo, rutas SEO con App Router, UX mobile para docs, busqueda, enlaces a headings y rutas por idioma en un solo paquete npm."
+order: -1
+---
+
+EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MDX dentro del repo, rutas prerenderizadas amigables para SEO, una UX mobile integrada y una forma limpia de alternar entre experiencias standalone y embebidas.
+
+## Ideas principales
+
+- Una sola llamada a `createDocsSource(...)` construye el modelo de contenido, la navegacion, la metadata, los helpers de rutas, la extraccion de headings y la busqueda.
+- El mismo paquete puede alimentar un sitio de documentacion standalone o docs embebidos dentro de una app mas grande.
+- Los layouts son intercambiables. El sitio de ejemplo expone vistas clasicas, notebook y minimal desde el mismo arbol de contenido.
+- Carpetas por idioma como `entry/en.mdx`, `entry/es.mdx` y `entry/zh.mdx` se convierten directamente en URLs localizadas.
+
+## Lo que muestra este sitio de ejemplo
+
+- Una experiencia clasica en `docs`
+- Un layout `notebook` mas denso
+- Un layout `minimal` enfocado en lectura
+- Un modo `embedded/docs` que renderiza los docs dentro de un shell anfitrion
+
+## Recorrido recomendado
+
+Empieza aqui si quieres entender rapido el paquete:
+
+- [Primeros pasos](getting-started)
+- [Standalone vs embebido](guides/standalone-vs-embedded)
+- [Busqueda](guides/search)
+- [UX mobile para docs](guides/mobile-docs-ux)
+- [Carpetas por idioma](internationalization/locale-folders)
+- [createDocsSource](reference/create-docs-source)

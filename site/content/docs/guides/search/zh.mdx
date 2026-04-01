@@ -1,0 +1,33 @@
+---
+title: "搜索"
+description: "搜索会索引标题、描述和正文内容，并直接深链到匹配的章节。"
+order: 2
+section: guides
+sectionLabel: "指南"
+---
+
+## 搜索会索引什么
+
+EmcyDocs 会搜索：
+
+- 文档标题
+- 文档描述
+- Markdown 内容
+
+## 章节感知结果
+
+当最佳匹配出现在某个标题章节内时，结果可以直接跳转到对应锚点，而不只是落到页面顶部。
+
+## 适合服务端的 API
+
+这个包从 docs source 暴露了统一的搜索接口，因此 server action 可以非常简洁：
+
+```ts
+export async function searchDocsAction(query: string) {
+  return docsSource.search(query);
+}
+```
+
+## UI 行为
+
+默认搜索 UI 支持快捷键唤起、内联结果面板，以及移动端使用。

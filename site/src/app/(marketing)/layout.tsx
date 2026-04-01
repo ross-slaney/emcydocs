@@ -1,16 +1,10 @@
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import MarketingShell from "@/components/MarketingShell";
+import { defaultSiteLocale } from "@/lib/site-i18n";
 
 export default function MarketingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="flex min-h-screen flex-col overflow-x-hidden overscroll-x-none">
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
-    </div>
-  );
+  return <MarketingShell locale={defaultSiteLocale}>{children}</MarketingShell>;
 }

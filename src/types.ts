@@ -130,6 +130,7 @@ export interface DocsLayoutCommonProps {
   children: ReactNode;
   brand?: ReactNode;
   topLinks?: DocsLayoutLink[];
+  languageSwitcher?: ReactNode;
   searchAction?: DocsSearchAction;
   locale?: string;
   mode?: "standalone" | "embedded";

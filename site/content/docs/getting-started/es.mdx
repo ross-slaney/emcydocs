@@ -1,0 +1,121 @@
+---
+title: "Primeros pasos"
+description: "Instala el paquete, apuntalo a un directorio de contenido y renderiza los docs desde una sola fuente."
+order: 0
+sectionLabel: "Primeros pasos"
+---
+
+Pon EmcyDocs en marcha en minutos.
+
+## Instalacion
+
+Instala el paquete desde npm:
+
+```bash
+npm install @emcy/docs
+```
+
+## Configuracion rapida
+
+### 1. Crea una fuente de docs
+
+Crea un archivo como `lib/docs.ts` en tu app:
+
+```ts
+import path from "node:path";
+import { createDocsSource } from "@emcy/docs";
+
+export const docsSource = createDocsSource({
+  contentDir: path.join(process.cwd(), "content/docs"),
+  basePath: "/docs",
+  defaultLocale: process.env.NEXT_PUBLIC_EMCYDOCS_DEFAULT_LOCALE ?? "en",
+  locales: ["en", "es", "zh"],
+  hideDefaultLocaleInUrl: true,
+  sectionOrder: ["", "guides", "reference"],
+});
+```
+
+> El objeto `docsSource` es tu unica fuente de verdad para contenido, navegacion, metadata y busqueda.
+
+### 2. Crea el layout
+
+Agrega un archivo de layout en `app/docs/layout.tsx`:
+
+```tsx
+import { DocsLayout } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+import { docsSource } from "@/lib/docs";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+### 3. Crea la pagina
+
+Agrega una pagina catch-all en `app/docs/[[...slug]]/page.tsx`:
+
+```tsx
+import { DocsPage, DocsHomePage } from "@emcy/docs";
+import { docsSource } from "@/lib/docs";
+
+export default async function Page({ params }: { params: { slug?: string[] } }) {
+  const resolved = docsSource.resolveRoute(params.slug);
+
+  if (resolved.type === "notFound") {
+    return notFound();
+  }
+
+  if (!resolved.entry) {
+    return notFound();
+  }
+
+  if (resolved.entry.isHome) {
+    return (
+      <DocsHomePage
+        entry={resolved.entry}
+        navigation={docsSource.getNavigation()}
+      />
+    );
+  }
+
+  return (
+    <DocsPage
+      entry={resolved.entry}
+      previousEntry={resolved.previousEntry}
+      nextEntry={resolved.nextEntry}
+    />
+  );
+}
+
+export function generateStaticParams() {
+  return docsSource.getStaticParams();
+}
+```
+
+### 4. Agrega tu primer doc
+
+Crea `content/docs/getting-started/es.mdx`:
+
+```mdx
+---
+title: "Primeros pasos"
+description: "Tu primera pagina en EmcyDocs"
+order: 0
+---
+
+Bienvenido a tus docs.
+```
+
+Eso es todo. Ejecuta `npm run dev` y visita `docs`.
+
+## Siguientes pasos
+
+- [Standalone vs embebido](guides/standalone-vs-embedded) - Decide como encajan los docs dentro de tu app
+- [Layout de docs](layouts/docs-layout) - Personaliza el layout clasico
+- [Carpetas por idioma](internationalization/locale-folders) - Agrega soporte i18n
+- [createDocsSource](reference/create-docs-source) - Referencia completa de la API

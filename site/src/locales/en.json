@@ -1,0 +1,130 @@
+{
+  "common": {
+    "brand": "EmcyDocs",
+    "github": "GitHub",
+    "npm": "npm"
+  },
+  "header": {
+    "nav": {
+      "docs": "Docs",
+      "notebook": "Notebook",
+      "minimal": "Minimal",
+      "embedded": "Embedded"
+    },
+    "menu": {
+      "openAria": "Open navigation menu",
+      "closeAria": "Close navigation menu"
+    },
+    "githubAria": "View on GitHub",
+    "cta": "Get started"
+  },
+  "footer": {
+    "tagline": "App Router-native MDX documentation for Next.js",
+    "sections": {
+      "layouts": "Layouts",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "classicDocs": "Classic Docs",
+      "notebook": "Notebook",
+      "minimal": "Minimal",
+      "embedded": "Embedded",
+      "documentation": "Documentation",
+      "license": "MIT License"
+    },
+    "copyright": "EmcyDocs. All rights reserved."
+  },
+  "docs": {
+    "layout": {
+      "brand": "EmcyDocs",
+      "classicDocs": "Classic docs",
+      "defaultDocs": "Default docs",
+      "notebook": "Notebook",
+      "minimal": "Minimal",
+      "embedded": "Embedded"
+    }
+  },
+  "pages": {
+    "marketingHome": {
+      "heroBadge": "Now available on npm",
+      "heroTitlePrimary": "Documentation that",
+      "heroTitleAccent": "lives in your app",
+      "heroDescription": "EmcyDocs is an App Router-native MDX documentation library for Next.js. File-based content, locale-aware routes, multiple layouts, and a mobile-first UX all in one package.",
+      "primaryCta": "Get started",
+      "secondaryCta": "View on GitHub",
+      "terminalLabel": "Terminal",
+      "installCommand": "npm install @emcy/docs",
+      "layoutsHeading": "Multiple layouts, one package",
+      "layoutsDescription": "Choose the layout that fits your use case. Use them standalone or embed them in your existing app.",
+      "exploreLabel": "Explore",
+      "layoutCards": [
+        {
+          "title": "Classic",
+          "description": "Full docs shell with sidebar, search, and TOC.",
+          "badge": "Popular"
+        },
+        {
+          "title": "Notebook",
+          "description": "Dense, app-like experience for product surfaces."
+        },
+        {
+          "title": "Minimal",
+          "description": "Reading-first markdown with less chrome."
+        },
+        {
+          "title": "Embedded",
+          "description": "Slot docs into your existing app or marketing shell."
+        }
+      ],
+      "featuresHeading": "Built for modern Next.js",
+      "featuresDescription": "Everything you need to build great documentation, without the boilerplate.",
+      "features": [
+        {
+          "title": "App Router Native",
+          "description": "Generate metadata and static params from the same content source. First-class RSC support."
+        },
+        {
+          "title": "File-based Locales",
+          "description": "Keep en.mdx and es.mdx in the same folder. Routes handle locale prefixes automatically."
+        },
+        {
+          "title": "Mobile-first UX",
+          "description": "Built-in mobile nav, search, sticky chrome, and scroll locking. No rebuilding required."
+        },
+        {
+          "title": "Section Deep Links",
+          "description": "Search results jump directly to matching section anchors with useful snippets."
+        },
+        {
+          "title": "Progressive Disclosure",
+          "description": "Use createDocsSource for the common path, override when you need more control."
+        },
+        {
+          "title": "Battle Tested",
+          "description": "Dogfooded against real apps, so the API handles embedded docs, route quirks, and real content."
+        }
+      ],
+      "ctaHeading": "Ready to build better docs?",
+      "ctaDescription": "Get started in minutes. Install the package, create your first MDX file, and you are live.",
+      "ctaPrimary": "Read the docs",
+      "ctaSecondary": "Star on GitHub"
+    },
+    "docsClassicHome": {
+      "title": "Localized docs with route-aware locale prefixes",
+      "description": "The default locale stays clean at /docs while non-default locales can live under prefixed routes without changing the content model."
+    },
+    "docsNotebookHome": {
+      "title": "Notebook layout",
+      "description": "A compact docs shell for product teams that want app-like docs with persistent nav and search."
+    },
+    "docsMinimalHome": {
+      "title": "Minimal layout",
+      "description": "A stripped-down markdown reading experience for docs that need as little chrome as possible."
+    },
+    "docsEmbeddedHome": {
+      "title": "Embedded docs mode with route-level locale switching",
+      "description": "The embedded demo keeps the same docs shell while localized routes move between embedded docs URLs."
+    }
+  }
+}

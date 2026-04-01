@@ -1,0 +1,121 @@
+---
+title: "快速开始"
+description: "安装包，指向内容目录，然后通过一个统一的 source 对象渲染文档。"
+order: 0
+sectionLabel: "入门"
+---
+
+几分钟内即可运行 EmcyDocs。
+
+## 安装
+
+从 npm 安装这个包：
+
+```bash
+npm install @emcy/docs
+```
+
+## 快速配置
+
+### 1. 创建 docs source
+
+在你的应用中创建一个类似 `lib/docs.ts` 的文件：
+
+```ts
+import path from "node:path";
+import { createDocsSource } from "@emcy/docs";
+
+export const docsSource = createDocsSource({
+  contentDir: path.join(process.cwd(), "content/docs"),
+  basePath: "/docs",
+  defaultLocale: process.env.NEXT_PUBLIC_EMCYDOCS_DEFAULT_LOCALE ?? "en",
+  locales: ["en", "es", "zh"],
+  hideDefaultLocaleInUrl: true,
+  sectionOrder: ["", "guides", "reference"],
+});
+```
+
+> `docsSource` 对象是内容、导航、元数据和搜索的唯一数据源。
+
+### 2. 创建布局
+
+在 `app/docs/layout.tsx` 中添加布局文件：
+
+```tsx
+import { DocsLayout } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+import { docsSource } from "@/lib/docs";
+
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+### 3. 创建页面
+
+在 `app/docs/[[...slug]]/page.tsx` 中添加 catch-all 页面：
+
+```tsx
+import { DocsPage, DocsHomePage } from "@emcy/docs";
+import { docsSource } from "@/lib/docs";
+
+export default async function Page({ params }: { params: { slug?: string[] } }) {
+  const resolved = docsSource.resolveRoute(params.slug);
+
+  if (resolved.type === "notFound") {
+    return notFound();
+  }
+
+  if (!resolved.entry) {
+    return notFound();
+  }
+
+  if (resolved.entry.isHome) {
+    return (
+      <DocsHomePage
+        entry={resolved.entry}
+        navigation={docsSource.getNavigation()}
+      />
+    );
+  }
+
+  return (
+    <DocsPage
+      entry={resolved.entry}
+      previousEntry={resolved.previousEntry}
+      nextEntry={resolved.nextEntry}
+    />
+  );
+}
+
+export function generateStaticParams() {
+  return docsSource.getStaticParams();
+}
+```
+
+### 4. 添加第一篇文档
+
+创建 `content/docs/getting-started/zh.mdx`：
+
+```mdx
+---
+title: "快速开始"
+description: "你的第一篇 EmcyDocs 页面"
+order: 0
+---
+
+欢迎来到你的文档。
+```
+
+这样就完成了。运行 `npm run dev` 然后访问 `docs`。
+
+## 下一步
+
+- [独立模式与嵌入模式](guides/standalone-vs-embedded) - 选择文档如何融入你的应用
+- [Docs 布局](layouts/docs-layout) - 自定义经典布局
+- [语言文件夹](internationalization/locale-folders) - 添加 i18n 支持
+- [createDocsSource](reference/create-docs-source) - 完整 API 参考

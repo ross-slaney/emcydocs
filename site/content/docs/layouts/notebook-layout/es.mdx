@@ -1,0 +1,52 @@
+---
+title: "Layout notebook"
+description: "Una experiencia de documentacion mas densa y con sensacion de aplicacion."
+order: 2
+section: layouts
+sectionLabel: "Layouts"
+---
+
+El layout notebook ofrece una experiencia de documentacion mas compacta y parecida a una app.
+
+## Cuando usarlo
+
+Elige este layout cuando necesites:
+
+- Mostrar mas informacion
+- Mas foco en el contenido
+- Una experiencia de lectura parecida a una app
+- Menos chrome visual
+
+Funciona bien para:
+
+- Documentacion dentro de la app
+- Bases de conocimiento
+- Wikis internas
+- Guias de producto
+
+## Diferencias frente al clasico
+
+| Caracteristica | Clasico | Notebook |
+|----------------|---------|----------|
+| Ancho del sidebar | 260px | 220px |
+| Densidad del contenido | Estandar | Compacta |
+| Peso visual | Mas chrome | Menos chrome |
+| TOC | Si | Si |
+
+## Uso
+
+```tsx
+import { NotebookLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <NotebookLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </NotebookLayout>
+  );
+}
+```
+
+## Pruebalo
+
+Ve esta documentacion en layout notebook en [notebook](../../notebook).

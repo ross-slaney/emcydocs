@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { docsSource } from "@/lib/docs-source";
+import { getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ locale: string; slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function LocaleDocsRoutePage({ params }: PageProps) {
   const { locale, slug } = await params;
+  const homeCopy = getDocsPageDictionary(locale, "docsClassicHome");
   if (!docsSource.getSupportedLocales().includes(locale)) {
     notFound();
   }
@@ -39,8 +41,8 @@ export default async function LocaleDocsRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={docsSource.getNavigation(locale)}
-        title="Localized docs with route-aware locale prefixes"
-        description="The default locale stays clean at /docs while non-default locales can live under /es/docs without changing the content model."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

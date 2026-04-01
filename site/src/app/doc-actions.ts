@@ -6,12 +6,12 @@ export async function searchDocsAction(query: string, locale?: string) {
   return docsSource.search(query, locale);
 }
 
-export async function searchNotebookAction(query: string) {
-  return notebookSource.search(query);
+export async function searchNotebookAction(query: string, locale?: string) {
+  return notebookSource.search(query, locale);
 }
 
-export async function searchMinimalAction(query: string) {
-  return minimalSource.search(query);
+export async function searchMinimalAction(query: string, locale?: string) {
+  return minimalSource.search(query, locale);
 }
 
 export async function searchEmbeddedAction(query: string, locale?: string) {

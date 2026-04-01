@@ -1,0 +1,52 @@
+---
+title: "Minimal 布局"
+description: "一个更强调阅读、界面装饰更少、干扰更少的布局。"
+order: 3
+section: layouts
+sectionLabel: "布局"
+---
+
+Minimal 布局会移除大部分导航 chrome，把注意力放回内容本身。
+
+## 何时使用
+
+当你需要以下体验时，可以选择这个布局：
+
+- 无干扰阅读
+- 长篇内容
+- 博客风格文章
+- 更聚焦的教程
+
+这个布局很适合：
+
+- 教程和指南
+- 博客文章
+- 更新日志条目
+- 单页文档
+
+## 与经典布局的区别
+
+| 特性 | Classic | Minimal |
+|------|---------|---------|
+| Sidebar | 全宽 | 更窄 |
+| TOC | 有 | 无 |
+| 视觉重心 | 导航 | 内容 |
+| Chrome 强度 | 标准 | 极简 |
+
+## 用法
+
+```tsx
+import { MinimalLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <MinimalLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </MinimalLayout>
+  );
+}
+```
+
+## 立即体验
+
+在 [minimal](../../minimal) 查看这个布局下的文档。

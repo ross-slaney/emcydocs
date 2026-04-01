@@ -1,0 +1,91 @@
+---
+title: "Layout clasico de docs"
+description: "El layout estandar de sidebar, contenido y TOC para sitios de documentacion."
+order: 1
+section: layouts
+sectionLabel: "Layouts"
+---
+
+El layout clasico de docs ofrece la experiencia de documentacion de tres columnas que ya conoces.
+
+## Cuando usarlo
+
+Elige este layout cuando necesites:
+
+- Navegacion completa en sidebar
+- Tabla de contenidos para paginas largas
+- Paginacion anterior y siguiente
+- Busqueda en el header
+
+Es el layout mas comun para:
+
+- Documentacion para desarrolladores
+- Referencias de API
+- Guias tecnicas
+- Manuales de producto
+
+## Caracteristicas
+
+| Caracteristica | Incluida |
+|----------------|----------|
+| Navegacion lateral | Si |
+| Tabla de contenidos | Si |
+| Drawer mobile | Si |
+| Busqueda | Si |
+| Enlaces anterior/siguiente | Si |
+| Colapso de secciones | Si |
+
+## Uso
+
+```tsx
+import { DocsLayout, DocsPage } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+
+// En tu layout.tsx
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      brand={<span>My Docs</span>}
+      languageSwitcher={<LanguageSwitcher locales={["en", "es", "zh"]} />}
+      searchAction={search}
+    >
+      {children}
+    </DocsLayout>
+  );
+}
+
+// En tu page.tsx
+export default function Page() {
+  const { entry, previousEntry, nextEntry } = docsSource.resolveRoute(slug);
+
+  return (
+    <DocsPage
+      entry={entry}
+      previousEntry={previousEntry}
+      nextEntry={nextEntry}
+    />
+  );
+}
+```
+
+## Props del layout
+
+| Prop | Tipo | Descripcion |
+|------|------|-------------|
+| `navigation` | `DocsNavSection[]` | Estructura de navegacion lateral |
+| `brand` | `ReactNode` | Logo o marca del header |
+| `topLinks` | `DocsLayoutLink[]` | Enlaces del header |
+| `languageSwitcher` | `ReactNode` | Slot opcional para un selector de idioma en el shell compartido |
+| `searchAction` | `DocsSearchAction` | Server action para la busqueda |
+| `mode` | `"standalone" \| "embedded"` | Modo de despliegue |
+| `mobileHeaderId` | `string` | ID del header anfitrion en modo embebido |
+
+## Pruebalo
+
+Estas viendo este layout ahora mismo en [docs](../../docs).
+
+Compáralo con:
+
+- [Layout notebook](../../notebook) - Mas denso y parecido a una app
+- [Layout minimal](../../minimal) - Enfocado en lectura y sin distracciones laterales

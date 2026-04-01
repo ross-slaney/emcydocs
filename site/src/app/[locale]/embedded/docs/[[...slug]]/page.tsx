@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { embeddedSource } from "@/lib/docs-source";
+import { getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ locale: string; slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function LocaleEmbeddedRoutePage({ params }: PageProps) {
   const { locale, slug } = await params;
+  const homeCopy = getDocsPageDictionary(locale, "docsEmbeddedHome");
   if (!embeddedSource.getSupportedLocales().includes(locale)) {
     notFound();
   }
@@ -39,8 +41,8 @@ export default async function LocaleEmbeddedRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={embeddedSource.getNavigation(locale)}
-        title="Embedded docs mode with route-level locale switching"
-        description="The embedded demo keeps the same docs shell while localized routes move between /embedded/docs and /es/embedded/docs."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

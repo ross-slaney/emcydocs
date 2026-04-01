@@ -1,0 +1,19 @@
+---
+title: "DocsPage 与 DocsHomePage"
+description: "通过同一个 source 对象渲染文档页面和文档首页。"
+order: 2
+section: reference
+sectionLabel: "参考"
+---
+
+## DocsPage
+
+`DocsPage` 用于渲染单篇文档，包含标题链接、TOC 支持、上一篇和下一篇导航，以及复制链接操作。
+
+## DocsHomePage
+
+`DocsHomePage` 用于渲染首页条目，以及根据导航树生成的章节卡片。
+
+## 为什么两者都存在
+
+文档站通常需要为顶级路由准备一个与普通文章不同的首页体验。把它单独拆出来，能让首页更容易承载总览内容，而不会被当成普通文章页面处理。

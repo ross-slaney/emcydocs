@@ -1,0 +1,33 @@
+---
+title: "Busqueda"
+description: "La busqueda indexa titulos, descripciones y contenido, y luego enlaza directamente a las secciones coincidentes."
+order: 2
+section: guides
+sectionLabel: "Guias"
+---
+
+## Que indexa la busqueda
+
+EmcyDocs busca en:
+
+- titulos de documentos
+- descripciones de documentos
+- contenido markdown
+
+## Resultados conscientes de la seccion
+
+Cuando la mejor coincidencia vive dentro de una seccion con heading, el resultado puede enlazar directamente a esa ancla en vez de quedarse solo en la parte superior de la pagina.
+
+## API amigable para el servidor
+
+El paquete expone una sola superficie de busqueda desde la fuente de docs, asi que una server action puede mantenerse muy pequena:
+
+```ts
+export async function searchDocsAction(query: string) {
+  return docsSource.search(query);
+}
+```
+
+## Comportamiento de la UI
+
+La UI de busqueda por defecto soporta atajo de teclado, paneles de resultados inline y uso mobile.

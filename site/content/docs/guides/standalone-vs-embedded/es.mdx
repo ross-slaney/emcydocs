@@ -1,0 +1,107 @@
+---
+title: "Standalone vs embebido"
+description: "Usa el mismo paquete como un sitio completo de docs o como un shell de docs dentro de una aplicacion mas grande."
+order: 1
+section: guides
+sectionLabel: "Guias"
+---
+
+EmcyDocs soporta dos modos de despliegue. Elige el que mejor encaje con tu proyecto.
+
+## Modo standalone
+
+En **modo standalone**, EmcyDocs proporciona la experiencia completa de docs:
+
+- Header con marca, busqueda y enlaces de navegacion
+- Sidebar con navegacion por secciones
+- Chrome optimizado para mobile con drawer
+- Control total de la pagina
+
+Esto es ideal para:
+
+- Sitios de documentacion dedicados, como `docs.tuapp.com`
+- Documentacion de proyectos open source
+- Sitios de referencia de API
+
+```tsx
+// app/docs/layout.tsx
+import { DocsLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      brand={<span>My Docs</span>}
+      topLinks={[
+        { href: "/api", label: "API" },
+        { href: "https://github.com/...", label: "GitHub" },
+      ]}
+    >
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+## Modo embebido
+
+En **modo embebido**, EmcyDocs renderiza solo el area de contenido de docs y deja que tu app provea el shell exterior:
+
+- Sin header, tu app controla el header
+- Solo el sidebar y el marco de contenido
+- Se integra con la navegacion existente
+
+Esto es ideal para:
+
+- Productos SaaS con documentacion dentro de la app
+- Sitios de marketing con una seccion de docs
+- Apps que necesitan docs junto a otras funciones del producto
+
+```tsx
+// app/docs/layout.tsx
+import { DocsLayout } from "@emcy/docs";
+import { AppShell, AppHeader } from "@/components/app";
+
+export default function Layout({ children }) {
+  return (
+    <AppShell>
+      <AppHeader />
+      <DocsLayout
+        mode="embedded"
+        mobileHeaderId="app-header"
+        navigation={docsSource.getNavigation()}
+      >
+        {children}
+      </DocsLayout>
+    </AppShell>
+  );
+}
+```
+
+> La prop `mobileHeaderId` le dice a EmcyDocs que coloque el chrome mobile debajo del header de tu app.
+
+## Prueba ambos modos
+
+Este sitio de ejemplo muestra ambos:
+
+| Modo | URL | Lo que ves |
+|------|-----|------------|
+| Standalone | [docs](../../docs) | EmcyDocs controla toda la pagina |
+| Embebido | [embedded/docs](../../embedded/docs) | Docs dentro de un shell anfitrion |
+
+El contenido viene de los mismos archivos MDX. Solo cambia el chrome exterior.
+
+## Como elegir un modo
+
+| Escenario | Recomendado |
+|-----------|-------------|
+| Sitio publico de documentacion | Standalone |
+| Referencia de API para desarrolladores | Standalone |
+| Centro de ayuda dentro de la app | Embebido |
+| Sitio de marketing con docs | Embebido |
+| Docs del producto dentro del dashboard | Embebido |
+
+## Siguientes pasos
+
+- [UX mobile para docs](mobile-docs-ux) - Como se adapta el chrome mobile a cada modo
+- [Layout de docs](../layouts/docs-layout) - Referencia completa del layout

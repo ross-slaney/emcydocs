@@ -6,12 +6,14 @@ import type { DocsLayoutCommonProps } from "../types";
 import DocsSearch from "./DocsSearch";
 import DocsSidebar from "./DocsSidebar";
 import MobileDocsChrome from "./MobileDocsChrome";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function DocsShell({
   navigation,
   children,
   brand,
   topLinks,
+  languageSwitcher,
   searchAction,
   locale,
   mode = "standalone",
@@ -95,6 +97,10 @@ export default function DocsShell({
           <div className="emcydocs-header-search">
             <DocsSearch searchAction={searchAction} locale={locale} />
           </div>
+          <ThemeSwitcher />
+          {languageSwitcher ? (
+            <div className="emcydocs-header-language">{languageSwitcher}</div>
+          ) : null}
           {topLinks?.length ? (
             <nav className="emcydocs-header-links" aria-label="Top level docs links">
               {topLinks.map((link) => (
@@ -115,6 +121,9 @@ export default function DocsShell({
           topOffset={topOffset}
         >
           <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
+          {languageSwitcher ? (
+            <div className="emcydocs-mobile-language">{languageSwitcher}</div>
+          ) : null}
         </MobileDocsChrome>
       </div>
 

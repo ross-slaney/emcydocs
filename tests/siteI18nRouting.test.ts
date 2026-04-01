@@ -29,8 +29,8 @@ describe("site locale routing", () => {
     );
   });
 
-  it("falls back to localized docs home outside docs routes", () => {
-    expect(getRouteLevelLanguageHref("/", "es")).toBe("/es/docs");
+  it("falls back to the localized marketing home outside routed sections", () => {
+    expect(getRouteLevelLanguageHref("/", "es")).toBe("/es");
   });
 
   it("derives the active locale from the current pathname", () => {

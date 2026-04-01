@@ -1,0 +1,32 @@
+---
+title: "适合 SaaS 应用的 Next.js 文档库"
+description: "EmcyDocs 将仓库内 MDX、面向 SEO 的 App Router 文档、移动端文档体验、搜索、标题链接和多语言路由整合到一个 npm 包中。"
+order: -1
+---
+
+EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库内、使用对 SEO 友好的预渲染路由、内置移动端文档体验，并且在独立文档站和嵌入式文档之间自由切换。
+
+## 核心理念
+
+- 一次 `createDocsSource(...)` 调用即可生成内容模型、导航、元数据、路由辅助函数、标题提取和搜索。
+- 同一个包既可以驱动独立文档站，也可以驱动嵌入在更大应用中的文档。
+- 布局可以互换。示例站点基于同一套内容树展示了 classic、notebook 和 minimal 三种视图。
+- 像 `entry/en.mdx`、`entry/es.mdx`、`entry/zh.mdx` 这样的语言文件夹会直接映射到带语言感知的 URL。
+
+## 这个示例站点展示了什么
+
+- 经典的 `docs` 体验
+- 更紧凑的 `notebook` 布局
+- 更专注阅读的 `minimal` 布局
+- 在宿主外壳中渲染文档的 `embedded/docs` 模式
+
+## 推荐浏览顺序
+
+如果你想快速了解这个包，可以从这里开始：
+
+- [快速开始](getting-started)
+- [独立模式与嵌入模式](guides/standalone-vs-embedded)
+- [搜索](guides/search)
+- [移动端文档体验](guides/mobile-docs-ux)
+- [语言文件夹](internationalization/locale-folders)
+- [createDocsSource](reference/create-docs-source)

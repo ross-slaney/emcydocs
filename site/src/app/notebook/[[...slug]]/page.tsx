@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { notebookSource } from "@/lib/docs-source";
+import { defaultSiteLocale, getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function NotebookRoutePage({ params }: PageProps) {
   const { slug } = await params;
+  const homeCopy = getDocsPageDictionary(defaultSiteLocale, "docsNotebookHome");
   const resolved = notebookSource.resolveRoute(slug);
 
   if (resolved.type === "redirect" && resolved.href) {
@@ -32,8 +34,8 @@ export default async function NotebookRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={notebookSource.getNavigation()}
-        title="Notebook layout"
-        description="A compact docs shell for product teams that want app-like docs with persistent nav and search."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

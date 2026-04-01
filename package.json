@@ -27,7 +27,7 @@
     "build:site": "npm run build:lib && next build ./site",
     "dev": "npm run build:lib && concurrently -k \"npm run dev:lib\" \"npm run dev:site\"",
     "dev:lib": "tsc -p tsconfig.build.json --watch",
-    "dev:site": "next dev ./site",
+    "dev:site": "next dev ./site --port 4003",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",

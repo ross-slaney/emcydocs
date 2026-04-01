@@ -1,0 +1,52 @@
+---
+title: "Notebook 布局"
+description: "更紧凑、更像应用界面的文档体验。"
+order: 2
+section: layouts
+sectionLabel: "布局"
+---
+
+Notebook 布局提供了更紧凑、更像应用界面的文档体验。
+
+## 何时使用
+
+当你需要以下特性时，可以选择这个布局：
+
+- 更高的信息密度
+- 更关注内容本身
+- 更像应用界面的阅读体验
+- 更少的视觉 chrome
+
+它非常适合：
+
+- 应用内文档
+- 知识库
+- 内部 wiki
+- 产品指南
+
+## 与经典布局的区别
+
+| 特性 | Classic | Notebook |
+|------|---------|----------|
+| Sidebar 宽度 | 260px | 220px |
+| 内容密度 | 标准 | 紧凑 |
+| 视觉重量 | 更多 chrome | 更少 chrome |
+| TOC | 有 | 有 |
+
+## 用法
+
+```tsx
+import { NotebookLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <NotebookLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </NotebookLayout>
+  );
+}
+```
+
+## 立即体验
+
+在 [notebook](../../notebook) 查看这个布局下的文档。

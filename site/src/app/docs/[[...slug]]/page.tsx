@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { docsSource } from "@/lib/docs-source";
+import { defaultSiteLocale, getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function DocsRoutePage({ params }: PageProps) {
   const { slug } = await params;
+  const homeCopy = getDocsPageDictionary(defaultSiteLocale, "docsClassicHome");
   const resolved = docsSource.resolveRoute(slug);
 
   if (resolved.type === "redirect" && resolved.href) {
@@ -32,8 +34,8 @@ export default async function DocsRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={docsSource.getNavigation()}
-        title="A Next.js docs library that feels at home in SaaS apps"
-        description="EmcyDocs packages repo-local MDX, SEO-friendly App Router docs, mobile docs UX, search, heading links, and locale-aware routes into one npm package."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

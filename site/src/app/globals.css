@@ -2,19 +2,63 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #fafaf9;
-  --foreground: #1c1917;
+  /* Sync with EmcyDocs theme system */
+  --emcydocs-hue: 270;
+
+  /* Core colors */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --muted: #71717a;
+  --muted-foreground: #a1a1aa;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.12);
+
+  /* Accent colors - derived from hue */
+  --accent: hsl(var(--emcydocs-hue) 80% 65%);
+  --accent-light: hsl(var(--emcydocs-hue) 85% 75%);
+  --accent-dark: hsl(var(--emcydocs-hue) 75% 50%);
+  --accent-glow: hsl(var(--emcydocs-hue) 80% 65% / 0.5);
+  --accent-soft: hsl(var(--emcydocs-hue) 80% 65% / 0.1);
+
+  /* Surfaces */
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-elevated: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+}
+
+/* Theme presets */
+[data-theme="blue"] {
+  --emcydocs-hue: 220;
+}
+
+[data-theme="teal"] {
+  --emcydocs-hue: 175;
+}
+
+[data-theme="rose"] {
+  --emcydocs-hue: 350;
+}
+
+[data-theme="orange"] {
+  --emcydocs-hue: 25;
+}
+
+[data-theme="green"] {
+  --emcydocs-hue: 145;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
   --font-sans: var(--font-sans-ui);
   --font-mono: var(--font-mono-ui);
 }
 
 html {
   background: var(--background);
+  color-scheme: dark;
 }
 
 body {
@@ -22,42 +66,28 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans-ui), system-ui, sans-serif;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 ::selection {
-  background: rgba(28, 25, 23, 0.1);
+  background: hsl(var(--emcydocs-hue) 80% 65% / 0.3);
 }
 
 pre code {
   font-family: var(--font-mono-ui), ui-monospace, monospace;
 }
 
-/* Docs code blocks should feel like tiny, friendly editor windows. */
+/* Modern code blocks */
 .docs-prose pre {
   position: relative;
   overflow-x: auto;
-  border-radius: 1rem;
-  border: 1px solid #2d2d30;
-  background: #1e1e1e;
-  color: #d4d4d4;
-  padding: 3.15rem 1.125rem 1rem;
-  box-shadow:
-    inset 0 2.55rem 0 #252526,
-    0 12px 28px rgba(28, 25, 23, 0.12);
-}
-
-.docs-prose pre::before {
-  content: "";
-  position: absolute;
-  top: 0.92rem;
-  left: 1rem;
-  width: 0.72rem;
-  height: 0.72rem;
-  border-radius: 9999px;
-  background: #ff5f57;
-  box-shadow:
-    1.15rem 0 0 #febc2e,
-    2.3rem 0 0 #28c840;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-strong);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%);
+  color: #e4e4e7;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .docs-prose pre code {
@@ -65,17 +95,35 @@ pre code {
   background: transparent;
   color: inherit;
   padding: 0;
-  font-size: 0.95em;
+  font-size: 0.8125rem;
   line-height: 1.7;
 }
 
 .docs-prose :not(pre) > code {
-  border-radius: 0.45rem;
-  background: rgba(148, 163, 184, 0.14);
-  padding: 0.15rem 0.38rem;
+  border-radius: 0.375rem;
+  background: var(--accent-soft);
+  padding: 0.125rem 0.375rem;
+  color: var(--accent-light);
+  font-size: 0.875em;
 }
 
-/* Landing page animations */
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeSlideIn {
   from {
     opacity: 0;
@@ -87,26 +135,29 @@ pre code {
   }
 }
 
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-fadeUp {
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
 .animate-fadeSlideIn {
   animation: fadeSlideIn 0.35s ease-out forwards;
 }
 
-@keyframes grantSlideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-    max-height: 0;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    max-height: 200px;
-  }
-}
-
-@keyframes grantFadeIn {
-  from { opacity: 0; transform: scale(0.8); }
-  to { opacity: 1; transform: scale(1); }
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
 @keyframes searchPanelIn {
@@ -122,4 +173,30 @@ pre code {
 
 .animate-searchPanelIn {
   animation: searchPanelIn 0.18s ease-out forwards;
+}
+
+/* Gradient text - uses CSS variable for theme sync */
+.gradient-text {
+  background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Grid pattern */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Button with accent glow */
+.btn-accent-glow {
+  background: var(--accent);
+  transition: box-shadow 0.3s ease;
+}
+
+.btn-accent-glow:hover {
+  box-shadow: 0 0 40px var(--accent-glow);
 }

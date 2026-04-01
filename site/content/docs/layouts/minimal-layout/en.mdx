@@ -1,0 +1,52 @@
+---
+title: "Minimal Layout"
+description: "A reading-first layout with less chrome and fewer distractions."
+order: 3
+section: layouts
+sectionLabel: "Layouts"
+---
+
+The minimal layout strips away navigation chrome to focus on content.
+
+## When to use
+
+Choose this layout when you need:
+
+- Distraction-free reading
+- Long-form content
+- Blog-style articles
+- Focused tutorials
+
+This layout works well for:
+
+- Tutorials and guides
+- Blog posts
+- Changelog entries
+- Single-page documentation
+
+## Differences from classic
+
+| Feature | Classic | Minimal |
+|---------|---------|---------|
+| Sidebar | Full width | Narrow |
+| TOC | Yes | No |
+| Visual focus | Navigation | Content |
+| Chrome weight | Standard | Minimal |
+
+## Usage
+
+```tsx
+import { MinimalLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <MinimalLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </MinimalLayout>
+  );
+}
+```
+
+## Try it
+
+View this documentation in minimal layout at [minimal](../../minimal).

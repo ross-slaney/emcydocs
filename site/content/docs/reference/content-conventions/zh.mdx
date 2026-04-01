@@ -1,0 +1,22 @@
+---
+title: "内容约定"
+description: "关于平铺文件、语言文件夹、章节分组和排序的文件约定。"
+order: 3
+section: reference
+sectionLabel: "参考"
+---
+
+## 支持的结构
+
+EmcyDocs 支持：
+
+- 像 `getting-started.mdx` 这样的平铺文件
+- 像 `locale-folders/en.mdx` 这样的语言文件夹
+
+## 排序
+
+使用 frontmatter 中的 `order` 控制某个章节内的顺序。
+
+## 章节
+
+第一个路径片段通常会成为章节 key。这让导航主要由文件系统驱动，同时仍然允许你在 source 层配置标签和顺序。

@@ -1,0 +1,52 @@
+---
+title: "Notebook Layout"
+description: "A denser, app-like documentation experience."
+order: 2
+section: layouts
+sectionLabel: "Layouts"
+---
+
+The notebook layout provides a more compact, app-like documentation experience.
+
+## When to use
+
+Choose this layout when you need:
+
+- Denser information display
+- More focus on content
+- App-like reading experience
+- Less visual chrome
+
+This layout works well for:
+
+- In-app documentation
+- Knowledge bases
+- Internal wikis
+- Product guides
+
+## Differences from classic
+
+| Feature | Classic | Notebook |
+|---------|---------|----------|
+| Sidebar width | 260px | 220px |
+| Content density | Standard | Compact |
+| Visual weight | More chrome | Less chrome |
+| TOC | Yes | Yes |
+
+## Usage
+
+```tsx
+import { NotebookLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <NotebookLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </NotebookLayout>
+  );
+}
+```
+
+## Try it
+
+View this documentation in notebook layout at [notebook](../../notebook).

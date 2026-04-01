@@ -1,8 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { DocsLayout } from "@emcy/docs";
+import DocumentLanguage from "@/components/DocumentLanguage";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { docsSource } from "@/lib/docs-source";
 import { searchDocsAction } from "@/app/doc-actions";
+import {
+  buildLocalizedHref,
+  docsLocales,
+  getDocsDictionary,
+  isSupportedDocsLocale,
+} from "@/lib/site-i18n";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,27 +22,35 @@ export default async function LocaleDocsLayout({
   params,
 }: LayoutProps) {
   const { locale } = await params;
-  if (!docsSource.getSupportedLocales().includes(locale)) {
+  if (!isSupportedDocsLocale(locale)) {
     notFound();
   }
 
+  const copy = getDocsDictionary(locale).layout;
+
   return (
-    <DocsLayout
-      navigation={docsSource.getNavigation(locale)}
-      searchAction={searchDocsAction}
-      locale={locale}
-      brand={
-        <Link href="/" className="font-semibold text-stone-950">
-          EmcyDocs
-        </Link>
-      }
-      topLinks={[
-        { href: "/docs", label: "Default docs" },
-        { href: "/notebook", label: "Notebook" },
-        { href: "/minimal", label: "Minimal" },
-      ]}
-    >
-      {children}
-    </DocsLayout>
+    <>
+      <DocumentLanguage locale={locale} />
+      <DocsLayout
+        navigation={docsSource.getNavigation(locale)}
+        searchAction={searchDocsAction}
+        locale={locale}
+        languageSwitcher={
+          <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
+        }
+        brand={
+          <Link href={buildLocalizedHref("/docs", locale)} className="font-semibold">
+            {copy.brand}
+          </Link>
+        }
+        topLinks={[
+          { href: buildLocalizedHref("/docs", locale), label: copy.defaultDocs },
+          { href: buildLocalizedHref("/notebook", locale), label: copy.notebook },
+          { href: buildLocalizedHref("/minimal", locale), label: copy.minimal },
+        ]}
+      >
+        {children}
+      </DocsLayout>
+    </>
   );
 }

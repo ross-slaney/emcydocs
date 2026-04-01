@@ -1,0 +1,91 @@
+---
+title: "Classic Docs Layout"
+description: "The standard sidebar + content + TOC layout for documentation sites."
+order: 1
+section: layouts
+sectionLabel: "Layouts"
+---
+
+The classic docs layout provides the familiar three-column documentation experience.
+
+## When to use
+
+Choose this layout when you need:
+
+- Full sidebar navigation for browsing docs
+- Table of contents for long pages
+- Previous and next pagination
+- Search in the header
+
+This is the most common layout for:
+
+- Developer documentation
+- API references
+- Technical guides
+- Product manuals
+
+## Features
+
+| Feature | Included |
+|---------|----------|
+| Sidebar navigation | Yes |
+| Table of contents | Yes |
+| Mobile drawer | Yes |
+| Search | Yes |
+| Previous/next links | Yes |
+| Section collapsing | Yes |
+
+## Usage
+
+```tsx
+import { DocsLayout, DocsPage } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+
+// In your layout.tsx
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      brand={<span>My Docs</span>}
+      languageSwitcher={<LanguageSwitcher locales={["en", "es", "zh"]} />}
+      searchAction={search}
+    >
+      {children}
+    </DocsLayout>
+  );
+}
+
+// In your page.tsx
+export default function Page() {
+  const { entry, previousEntry, nextEntry } = docsSource.resolveRoute(slug);
+
+  return (
+    <DocsPage
+      entry={entry}
+      previousEntry={previousEntry}
+      nextEntry={nextEntry}
+    />
+  );
+}
+```
+
+## Layout props
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `navigation` | `DocsNavSection[]` | Sidebar navigation structure |
+| `brand` | `ReactNode` | Logo or brand for the header |
+| `topLinks` | `DocsLayoutLink[]` | Links in the header |
+| `languageSwitcher` | `ReactNode` | Optional language switcher slot in the shared shell |
+| `searchAction` | `DocsSearchAction` | Server action for search |
+| `mode` | `"standalone" \| "embedded"` | Deployment mode |
+| `mobileHeaderId` | `string` | ID of host header for embedded mode |
+
+## Try it
+
+You are viewing this layout right now at [docs](../../docs).
+
+Compare with:
+
+- [Notebook layout](../../notebook) - Denser, app-like experience
+- [Minimal layout](../../minimal) - Reading-focused, no sidebar distractions

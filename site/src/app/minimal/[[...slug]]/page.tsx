@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { minimalSource } from "@/lib/docs-source";
+import { defaultSiteLocale, getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function MinimalRoutePage({ params }: PageProps) {
   const { slug } = await params;
+  const homeCopy = getDocsPageDictionary(defaultSiteLocale, "docsMinimalHome");
   const resolved = minimalSource.resolveRoute(slug);
 
   if (resolved.type === "redirect" && resolved.href) {
@@ -32,8 +34,8 @@ export default async function MinimalRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={minimalSource.getNavigation()}
-        title="Minimal layout"
-        description="A stripped-down markdown reading experience for docs that need as little chrome as possible."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

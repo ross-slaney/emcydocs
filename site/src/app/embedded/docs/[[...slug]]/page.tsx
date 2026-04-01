@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { DocsHomePage, DocsPage } from "@emcy/docs";
 import { embeddedSource } from "@/lib/docs-source";
+import { defaultSiteLocale, getDocsPageDictionary } from "@/lib/site-i18n";
 
 interface PageProps {
   params: Promise<{ slug?: string[] }>;
@@ -17,6 +18,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function EmbeddedRoutePage({ params }: PageProps) {
   const { slug } = await params;
+  const homeCopy = getDocsPageDictionary(defaultSiteLocale, "docsEmbeddedHome");
   const resolved = embeddedSource.resolveRoute(slug);
 
   if (resolved.type === "redirect" && resolved.href) {
@@ -32,8 +34,8 @@ export default async function EmbeddedRoutePage({ params }: PageProps) {
       <DocsHomePage
         entry={resolved.entry}
         navigation={embeddedSource.getNavigation()}
-        title="Embedded docs mode"
-        description="This route shows the same package running inside a larger app shell instead of owning the whole page."
+        title={homeCopy.title}
+        description={homeCopy.description}
       />
     );
   }

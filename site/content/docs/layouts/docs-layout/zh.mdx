@@ -1,0 +1,91 @@
+---
+title: "经典 Docs 布局"
+description: "适用于文档站点的标准 sidebar + 内容 + TOC 布局。"
+order: 1
+section: layouts
+sectionLabel: "布局"
+---
+
+经典 docs 布局提供了熟悉的三栏文档体验。
+
+## 何时使用
+
+当你需要以下能力时，选择这个布局：
+
+- 完整的侧边栏导航
+- 长页面的目录
+- 上一篇和下一篇分页
+- Header 内搜索
+
+这是以下场景中最常见的布局：
+
+- 开发者文档
+- API 参考
+- 技术指南
+- 产品手册
+
+## 特性
+
+| 特性 | 是否包含 |
+|------|----------|
+| Sidebar 导航 | 是 |
+| 目录 | 是 |
+| 移动端抽屉 | 是 |
+| 搜索 | 是 |
+| 上一篇/下一篇链接 | 是 |
+| 分组折叠 | 是 |
+
+## 用法
+
+```tsx
+import { DocsLayout, DocsPage } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+
+// 在你的 layout.tsx 中
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      brand={<span>My Docs</span>}
+      languageSwitcher={<LanguageSwitcher locales={["en", "es", "zh"]} />}
+      searchAction={search}
+    >
+      {children}
+    </DocsLayout>
+  );
+}
+
+// 在你的 page.tsx 中
+export default function Page() {
+  const { entry, previousEntry, nextEntry } = docsSource.resolveRoute(slug);
+
+  return (
+    <DocsPage
+      entry={entry}
+      previousEntry={previousEntry}
+      nextEntry={nextEntry}
+    />
+  );
+}
+```
+
+## 布局属性
+
+| Prop | 类型 | 说明 |
+|------|------|------|
+| `navigation` | `DocsNavSection[]` | 侧边栏导航结构 |
+| `brand` | `ReactNode` | Header 中的品牌或 Logo |
+| `topLinks` | `DocsLayoutLink[]` | Header 中的链接 |
+| `languageSwitcher` | `ReactNode` | 共享 shell 中可选的语言切换插槽 |
+| `searchAction` | `DocsSearchAction` | 用于搜索的 server action |
+| `mode` | `"standalone" \| "embedded"` | 部署模式 |
+| `mobileHeaderId` | `string` | 嵌入模式下宿主 header 的 ID |
+
+## 立即体验
+
+你现在看到的就是这个布局，位于 [docs](../../docs)。
+
+你也可以对比：
+
+- [Notebook 布局](../../notebook) - 更紧凑，更像应用界面
+- [Minimal 布局](../../minimal) - 更专注阅读，没有侧边栏干扰

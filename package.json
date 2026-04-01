@@ -23,10 +23,10 @@
   ],
   "scripts": {
     "build": "npm run build:lib",
-    "build:lib": "tsup && mkdir -p dist && cp src/styles.css dist/styles.css",
+    "build:lib": "rm -rf dist && tsc -p tsconfig.build.json && cp src/styles.css dist/styles.css",
     "build:site": "npm run build:lib && next build ./site",
     "dev": "npm run build:lib && concurrently -k \"npm run dev:lib\" \"npm run dev:site\"",
-    "dev:lib": "tsup --watch",
+    "dev:lib": "tsc -p tsconfig.build.json --watch",
     "dev:site": "next dev ./site",
     "lint": "eslint .",
     "test": "vitest run",
@@ -91,7 +91,6 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwindcss": "^4.1.12",
-    "tsup": "^8.5.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   }

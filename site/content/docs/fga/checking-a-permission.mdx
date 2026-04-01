@@ -1,0 +1,86 @@
+---
+title: "Access Checks"
+description: "Point-check whether a subject can perform an action."
+order: 8
+section: fga
+---
+
+Use `CheckAccessAsync` for a yes/no answer: can this subject perform this action on this resource?
+
+## CheckAccessAsync
+
+```csharp
+var access = await authService.CheckAccessAsync(
+    subjectId,
+    "CHAIN_EDIT",
+    resourceId
+);
+
+if (!access.Allowed)
+    return Results.Json(new { error = "Permission denied" }, statusCode: 403);
+```
+
+Use this for:
+
+- **Mutations** -- check before creating, updating, or deleting
+- **Single-resource gates** -- when you already have the resource ID
+
+## HasCapabilityAsync
+
+Check if a subject has a permission anywhere in the tree (effectively a root-level check):
+
+```csharp
+var canManageChains = await authService.HasCapabilityAsync(subjectId, "CHAIN_EDIT");
+```
+
+Use this for:
+
+- **Global UI toggles** -- show/hide "Create Chain" button
+- **Broad capability gates** -- "can this user create anything at all?"
+
+## Access Tester (dashboard)
+
+Test access decisions visually in the dashboard at Fine-Grained Auth > Access Tester.
+
+![Access Tester](/docs/dashboard-access-tester.png)
+
+Select a subject, permission, and resource to see whether access is allowed and trace the decision path.
+
+## Full mutation example
+
+From the retail example -- creating a chain with authorization:
+
+```csharp
+app.MapPost("/api/chains", async (
+    CreateChainRequest request,
+    ExampleAppDbContext context,
+    ISqlOSFgaAuthService authService,
+    HttpContext http) =>
+{
+    var subjectId = http.GetSubjectId();
+
+    // 1. Check permission on the parent resource
+    var access = await authService.CheckAccessAsync(
+        subjectId, "CHAIN_EDIT", "retail_root");
+    if (!access.Allowed)
+        return Results.Json(new { error = "Permission denied" }, statusCode: 403);
+
+    // 2. Create FGA resource as child of parent
+    var resourceId = context.CreateResource(
+        "retail_root", request.Name, "chain");
+
+    // 3. Create domain entity with the resource ID
+    var chain = new Chain
+    {
+        ResourceId = resourceId,
+        Name = request.Name,
+        Description = request.Description
+    };
+    context.Chains.Add(chain);
+
+    // 4. Save in one transaction
+    await context.SaveChangesAsync();
+
+    return Results.Created($"/api/chains/{chain.Id}", chain);
+});
+```

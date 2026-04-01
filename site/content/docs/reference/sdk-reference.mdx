@@ -1,0 +1,237 @@
+---
+title: "SDK Reference"
+description: "All SqlOS services, methods, and contracts."
+order: 8
+section: reference
+---
+
+## AuthServer Services
+
+### SqlOSAuthService
+
+Main auth API. Inject `SqlOSAuthService`.
+
+```csharp
+// Password login
+var result = await authService.LoginWithPasswordAsync(
+    new SqlOSPasswordLoginRequest(email, password, clientId, organizationId),
+    httpContext, ct);
+
+// Signup
+var result = await authService.SignUpAsync(
+    new SqlOSSignupRequest(email, password, displayName, clientId),
+    httpContext, ct);
+
+// Organization selection (after multi-org login)
+var tokens = await authService.SelectOrganizationAsync(
+    new SqlOSSelectOrganizationRequest(pendingAuthToken, organizationId),
+    httpContext, ct);
+
+// SSO/OIDC code exchange
+var tokens = await authService.ExchangeCodeAsync(
+    new SqlOSExchangeCodeRequest(code, state),
+    httpContext, ct);
+
+// Refresh tokens
+var tokens = await authService.RefreshAsync(
+    new SqlOSRefreshRequest(refreshToken, organizationId), ct);
+
+// Validate access token
+var validated = await authService.ValidateAccessTokenAsync(rawToken, ct);
+
+// Logout
+await authService.LogoutAsync(refreshToken, sessionId, ct);
+await authService.LogoutAllAsync(userId, ct);
+
+// Session creation (for custom OIDC flows)
+var tokens = await authService.CreateSessionTokensForUserAsync(
+    user, client, organizationId, "password", userAgent, ipAddress, ct);
+
+// Password reset
+var token = await authService.CreatePasswordResetTokenAsync(
+    new SqlOSForgotPasswordRequest(email), ct);
+await authService.ResetPasswordAsync(
+    new SqlOSResetPasswordRequest(token, newPassword), ct);
+
+// Email verification
+var token = await authService.CreateEmailVerificationTokenAsync(
+    new SqlOSCreateVerificationTokenRequest(userId, email), ct);
+await authService.VerifyEmailAsync(
+    new SqlOSVerifyEmailRequest(token), ct);
+```
+
+### SqlOSAdminService
+
+Administrative operations. Inject via `SqlOSAdminService`.
+
+```csharp
+// Organizations
+var org = await adminService.CreateOrganizationAsync(
+    new CreateOrganizationRequest { Name = "Acme", Slug = "acme", PrimaryDomain = "acme.com" }, ct);
+
+// Users
+var user = await adminService.CreateUserAsync(
+    new CreateUserRequest { DisplayName = "Jane", Email = "jane@acme.com", Password = "..." }, ct);
+
+// Memberships
+var membership = await adminService.CreateMembershipAsync(
+    new CreateMembershipRequest { OrganizationId = org.Id, UserId = user.Id, Role = "admin" }, ct);
+
+// Clients
+var client = await adminService.CreateClientAsync(
+    new CreateClientRequest { ClientId = "my-app", Name = "My App", RedirectUris = ["..."] }, ct);
+
+// SSO
+var draft = await adminService.CreateSsoConnectionDraftAsync(
+    new CreateSsoConnectionDraftRequest { OrganizationId = org.Id, DisplayName = "Entra SSO", PrimaryDomain = "acme.com" }, ct);
+await adminService.ImportSsoMetadataAsync(draft.ConnectionId, metadataXml, ct);
+
+// Queries
+var orgs = await adminService.GetUserOrganizationsAsync(userId, ct);
+var isMember = await adminService.UserHasMembershipAsync(userId, organizationId, ct);
+
+// Helpers
+var normalized = SqlOSAdminService.NormalizeEmail(email);
+```
+
+### SqlOSHomeRealmDiscoveryService
+
+```csharp
+var result = await discoveryService.DiscoverAsync(
+    new SqlOSHomeRealmDiscoveryRequest(email), ct);
+// result.Mode → "password" | "sso"
+// result.OrganizationId, result.SsoConnectionId
+```
+
+### SqlOSSsoAuthorizationService
+
+```csharp
+var start = await ssoService.StartAuthorizationAsync(
+    new SqlOSSsoAuthorizationStartRequest { ConnectionId = "...", RedirectUri = "..." }, ct);
+// start.AuthorizationUrl → SAML IdP redirect
+
+var tokens = await ssoService.ExchangeCodeAsync(
+    new SqlOSPkceExchangeRequest { Code = "...", State = "..." },
+    httpContext, ct);
+```
+
+### SqlOSOidcAuthService
+
+```csharp
+var start = await oidcService.StartAuthorizationAsync(
+    new SqlOSStartOidcAuthorizationRequest { ConnectionId = "...", RedirectUri = "..." },
+    ipAddress, ct);
+// start.AuthorizationUrl → provider redirect
+
+var complete = await oidcService.CompleteAuthorizationAsync(
+    new SqlOSCompleteOidcAuthorizationRequest { Code = "...", State = "..." },
+    ipAddress, ct);
+
+var providers = await oidcService.ListEnabledProvidersAsync(ct);
+```
+
+### SqlOSCryptoService
+
+```csharp
+var token = cryptoService.GenerateOpaqueToken();
+var id = cryptoService.GenerateId("usr");           // "usr_a1b2c3..."
+var hash = cryptoService.HashToken(token);
+var passwordHash = cryptoService.HashPassword("...");
+var valid = cryptoService.VerifyPassword(hash, "...");
+var challenge = cryptoService.CreatePkceCodeChallenge(verifier);
+```
+
+### SqlOSSettingsService
+
+```csharp
+var settings = await settingsService.GetResolvedSecuritySettingsAsync(ct);
+// settings.RefreshTokenLifetime    → TimeSpan
+// settings.SessionIdleTimeout      → TimeSpan
+// settings.SessionAbsoluteLifetime → TimeSpan
+```
+
+---
+
+## FGA Services
+
+### ISqlOSFgaAuthService
+
+```csharp
+// Point check
+var result = await authService.CheckAccessAsync(subjectId, "CHAIN_VIEW", resourceId);
+// result.Allowed → bool
+
+// Root-level capability
+var canEdit = await authService.HasCapabilityAsync(subjectId, "CHAIN_EDIT");
+
+// Query filter
+var filter = await authService.GetAuthorizationFilterAsync<Chain>(subjectId, "CHAIN_VIEW");
+var chains = await dbContext.Chains.Where(filter).ToListAsync();
+
+// Trace (for debugging)
+var trace = await authService.TraceResourceAccessAsync(subjectId, resourceId, "CHAIN_VIEW");
+```
+
+### CreateResource Extension
+
+```csharp
+var resourceId = context.CreateResource(parentId, name, resourceTypeId);
+var resourceId = context.CreateResource(parentId, name, resourceTypeId, id: "custom-id");
+```
+
+### AuthorizedDetailAsync Extension
+
+```csharp
+return await authService.AuthorizedDetailAsync(
+    dbContext.Chains, c => c.Id == id,
+    subjectId, "CHAIN_VIEW",
+    chain => new ChainDto { Id = chain.Id, Name = chain.Name });
+```
+
+### PagedSpec Builder
+
+```csharp
+var spec = PagedSpec.For<Chain>(c => c.Id)
+    .RequirePermission("CHAIN_VIEW")
+    .SortByString("name", c => c.Name, isDefault: true)
+    .Search(search, c => c.Name, c => c.Description)
+    .Build(pageSize, cursor, sortBy, sortDir);
+
+var result = await executor.ExecuteAsync(dbContext.Chains, spec, subjectId, chain => new ChainDto { ... });
+// result.Items, result.NextCursor, result.HasMore
+```
+
+---
+
+## Key Types
+
+### AuthServer
+
+| Type | Key fields |
+| --- | --- |
+| `SqlOSLoginResult` | `RequiresOrganizationSelection`, `PendingAuthToken`, `Organizations`, `Tokens` |
+| `SqlOSTokenResponse` | `AccessToken`, `RefreshToken`, `SessionId`, `ClientId`, `OrganizationId` |
+| `SqlOSValidatedToken` | `UserId`, `SessionId`, `ClientId`, `OrganizationId`, `Principal` |
+| `SqlOSHomeRealmDiscoveryResponse` | `Mode`, `Organizations`, `SsoConnectionId` |
+
+### FGA
+
+| Type | Key fields |
+| --- | --- |
+| `SqlOSFgaAccessCheckResult` | `Allowed` |
+| `PagedResult<T>` | `Items`, `NextCursor`, `HasMore` |
+
+---
+
+## Namespaces
+
+| Namespace | Contents |
+| --- | --- |
+| `SqlOS` | Bootstrap, options |
+| `SqlOS.AuthServer.Services` | Auth service classes |
+| `SqlOS.AuthServer.Contracts` | Request/response types |
+| `SqlOS.AuthServer.Models` | EF Core entities |
+| `SqlOS.Fga.Interfaces` | `ISqlOSFgaAuthService`, `IHasResourceId` |
+| `SqlOS.Fga.Extensions` | Convenience extensions |
+| `SqlOS.Fga.Models` | FGA entities |
+| `SqlOS.Fga.Specifications` | PagedSpec, ISpecificationExecutor |

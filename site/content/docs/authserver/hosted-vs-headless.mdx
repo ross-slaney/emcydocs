@@ -1,0 +1,79 @@
+---
+title: "Hosted vs Headless"
+description: "Choose between hosted and headless auth UI."
+order: 1.75
+section: authserver
+---
+
+SqlOS runs OAuth. You choose who draws the login screens.
+
+## Hosted AuthPage
+
+The default. SqlOS renders the sign-in, sign-up, and organization selection pages.
+
+**Choose hosted when:**
+
+- You want the fastest setup
+- The built-in auth UI is good enough
+- You don't need app-owned signup fields
+
+**What you get:**
+
+- Working OAuth 2.0 flow out of the box
+- Branded login page with your app name and logo
+- Password, OIDC, and SAML support
+- No frontend auth code to write
+
+**Downside:** Less control over how the popup looks.
+
+![Hosted sign-in page](/docs/auth-signin-page.png)
+
+## Headless Auth
+
+SqlOS owns the OAuth protocol. Your app owns the UI.
+
+**Choose headless when:**
+
+- The auth popup should match your app's design system
+- You want A/B testing on signup and login
+- You need app-owned custom fields (referral source, company profile, etc.)
+- You want the OAuth popup to feel native to your product
+
+**What you get:**
+
+- Full control over the authorize UI
+- App-owned signup fields via `customFields`
+- Same OAuth protocol underneath (PKCE, redirect validation, code issuance)
+- OIDC and SAML still handled by SqlOS
+
+**Downside:** You build and host the authorize page.
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.AuthServer.UseHeadlessAuthPage(headless =>
+    {
+        headless.BuildUiUrl = ctx =>
+            $"https://app.example.com/authorize?request={ctx.RequestId}&view={ctx.View}";
+    });
+});
+```
+
+Headless uses one switch: `BuildUiUrl`. If that callback exists, `/sqlos/auth/authorize` redirects into your app. [Details](/docs/guides/authserver/headless-auth#how-sqlos-picks-the-ui).
+
+## Don't rebuild the auth flow
+
+A DIY “login page + bolt on OAuth” often grows into:
+
+- Hand-rolled redirect checks
+- Home-grown auth codes
+- Messy callbacks
+- Behavior that drifts from the spec
+
+Want your own UI? Use **headless**. Still let SqlOS own codes, tokens, and PKCE.
+
+## Switching modes
+
+You can flip hosted ↔ headless. OAuth, tokens, sessions, and refresh stay the same. Only the login UI changes.
+
+How-to: [Headless Auth](/docs/guides/authserver/headless-auth)

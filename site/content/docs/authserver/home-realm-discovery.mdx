@@ -1,0 +1,63 @@
+---
+title: "Home Realm Discovery"
+description: "Route users to password or SSO by email domain."
+order: 4.8
+section: authserver
+---
+
+Home realm discovery inspects an email address and returns the appropriate login method. It determines whether a user should log in with password or be redirected to their organization's SSO identity provider.
+
+## How it works
+
+1. Extract the email domain
+2. Check if any organization has a matching primary domain with an active SSO connection
+3. If yes, return `sso` with the organization and connection details
+4. If no, return `password`
+
+## SDK
+
+```csharp
+var discovery = await discoveryService.DiscoverAsync(
+    new SqlOSHomeRealmDiscoveryRequest("user@acme.com"), ct);
+
+switch (discovery.Mode)
+{
+    case "sso":
+        // Redirect to IdP via SqlOSSsoAuthorizationService
+        break;
+    case "password":
+        // Show password form, optionally show OIDC provider buttons
+        break;
+}
+```
+
+## API
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/discover \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@acme.com"}'
+```
+
+Response:
+
+```json
+{
+  "mode": "password",
+  "organizations": []
+}
+```
+
+Or for an SSO user:
+
+```json
+{
+  "mode": "sso",
+  "organizationId": "org_...",
+  "ssoConnectionId": "sso_..."
+}
+```
+
+## Usage in the login UI
+
+The example apps use discovery as the first step of login. The user enters their email, the app calls discover, and then shows either a password form or redirects to SSO. If the mode is `password`, the UI can also display configured [OIDC providers](/docs/guides/authserver/oidc-auth).

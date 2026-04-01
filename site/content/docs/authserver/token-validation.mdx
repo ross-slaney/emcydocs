@@ -1,0 +1,82 @@
+---
+title: "Token Validation"
+description: "Validate access tokens and extract user claims."
+order: 5.0
+section: authserver
+---
+
+Access tokens are RS256 JWTs. Validate on the server for each API call.
+
+## Validate with the SDK
+
+```csharp
+var bearerToken = httpContext.Request.Headers.Authorization.ToString();
+if (!bearerToken.StartsWith("Bearer "))
+    return Results.Unauthorized();
+
+var validated = await authService.ValidateAccessTokenAsync(
+    bearerToken["Bearer ".Length..].Trim(), ct);
+
+if (validated == null)
+    return Results.Unauthorized();
+
+// Use the validated claims
+var userId = validated.UserId;
+var orgId = validated.OrganizationId;
+```
+
+## Middleware pattern
+
+The example app uses middleware to extract the subject ID from multiple auth methods:
+
+```csharp
+public static string? GetSubjectId(this HttpContext http)
+{
+    // Bearer JWT
+    var auth = http.Request.Headers.Authorization.ToString();
+    if (auth.StartsWith("Bearer "))
+    {
+        var token = auth["Bearer ".Length..].Trim();
+        var validated = http.RequestServices
+            .GetRequiredService<SqlOSAuthService>()
+            .ValidateAccessTokenAsync(token, ct).Result;
+        return validated?.UserId;
+    }
+
+    // API key (service accounts)
+    if (http.Request.Headers.TryGetValue("X-Api-Key", out var apiKey))
+        return apiKey.ToString();
+
+    // Agent token
+    if (http.Request.Headers.TryGetValue("X-Agent-Token", out var agentToken))
+        return agentToken.ToString();
+
+    return null;
+}
+```
+
+## JWKS for external validation
+
+External services can validate SqlOS JWTs without calling the SDK by using the JWKS endpoint:
+
+```
+GET /sqlos/auth/.well-known/jwks.json
+```
+
+And the OAuth metadata endpoint:
+
+```
+GET /sqlos/auth/.well-known/oauth-authorization-server
+```
+
+## Token claims
+
+| Claim | Description |
+| --- | --- |
+| `sub` | User ID |
+| `sid` | Session ID |
+| `client_id` | OAuth client |
+| `org_id` | Organization (if scoped) |
+| `iss` | Issuer URL |
+| `aud` | Audience |
+| `exp` | Expiration |

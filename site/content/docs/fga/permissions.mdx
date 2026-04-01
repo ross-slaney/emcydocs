@@ -1,0 +1,70 @@
+---
+title: "Permissions"
+description: "Permission keys scoped to resource types."
+order: 3
+section: fga
+---
+
+A permission is a capability key scoped to a resource type. Permissions define what actions can be performed on which kinds of resources.
+
+## Define permissions in startup
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.Fga.Seed(seed =>
+    {
+        seed.ResourceType("chain", "Chain");
+        seed.ResourceType("location", "Location");
+        seed.ResourceType("inventory", "Inventory Item");
+
+        seed.Permission("CHAIN_VIEW", "CHAIN_VIEW", "View Chain", "chain");
+        seed.Permission("CHAIN_EDIT", "CHAIN_EDIT", "Edit Chain", "chain");
+        seed.Permission("LOCATION_VIEW", "LOCATION_VIEW", "View Location", "location");
+        seed.Permission("LOCATION_EDIT", "LOCATION_EDIT", "Edit Location", "location");
+        seed.Permission("INVENTORY_VIEW", "INVENTORY_VIEW", "View Inventory", "inventory");
+        seed.Permission("INVENTORY_EDIT", "INVENTORY_EDIT", "Edit Inventory", "inventory");
+    });
+});
+```
+
+## Naming convention
+
+Use `RESOURCETYPE_ACTION` in uppercase:
+
+| Key | Resource type | Action |
+| --- | --- | --- |
+| `CHAIN_VIEW` | chain | Read access |
+| `CHAIN_EDIT` | chain | Write access |
+| `LOCATION_VIEW` | location | Read access |
+| `INVENTORY_EDIT` | inventory | Write access |
+
+## Usage in code
+
+Permission keys are strings passed to authorization checks:
+
+```csharp
+// List filtering
+var filter = await authService
+    .GetAuthorizationFilterAsync<Chain>(subjectId, "CHAIN_VIEW");
+
+// Point check
+var access = await authService
+    .CheckAccessAsync(subjectId, "CHAIN_EDIT", resourceId);
+
+// Capability check
+var canEdit = await authService
+    .HasCapabilityAsync(subjectId, "CHAIN_EDIT");
+```
+
+## Permission model
+
+```csharp
+public class SqlOSFgaPermission
+{
+    public string Id { get; set; }
+    public string Key { get; set; }            // "CHAIN_VIEW"
+    public string DisplayName { get; set; }    // "View Chain"
+    public string ResourceTypeId { get; set; } // "chain"
+}
+```

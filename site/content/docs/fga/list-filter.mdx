@@ -1,0 +1,84 @@
+---
+title: "List Filtering"
+description: "Filter EF Core queries by authorization at query time."
+order: 9
+section: fga
+---
+
+`GetAuthorizationFilterAsync` returns a filter for `Where(...)`. Lists only rows the subject may see. Use this on list endpoints.
+
+## Basic usage
+
+```csharp
+var filter = await authService
+    .GetAuthorizationFilterAsync<Chain>(subjectId, "CHAIN_VIEW");
+
+var chains = await dbContext.Chains
+    .Where(filter)
+    .OrderBy(c => c.Name)
+    .ToListAsync();
+```
+
+The subject only sees chains they have access to. The filter translates to a SQL query -- no in-memory filtering.
+
+## With pagination and search
+
+Use `PagedSpec` for built-in pagination, sorting, search, and authorization:
+
+```csharp
+var spec = PagedSpec.For<Chain>(c => c.Id)
+    .RequirePermission("CHAIN_VIEW")
+    .SortByString("name", c => c.Name, isDefault: true)
+    .Search(searchQuery, c => c.Name, c => c.Description)
+    .Build(pageSize: 20, cursor, sortBy, sortDir);
+
+var result = await executor.ExecuteAsync(
+    dbContext.Chains, spec, subjectId,
+    chain => new ChainDto
+    {
+        Id = chain.Id,
+        Name = chain.Name,
+        Description = chain.Description,
+        CreatedAt = chain.CreatedAt
+    });
+
+// result.Items     → authorized, searched, sorted, paged
+// result.NextCursor → cursor for next page
+// result.HasMore   → whether more results exist
+```
+
+## Full endpoint example
+
+From the retail example app:
+
+```csharp
+app.MapGet("/api/chains", async (
+    ExampleAppDbContext context,
+    ISqlOSFgaAuthService authService,
+    ISpecificationExecutor executor,
+    HttpContext http,
+    string? search, int? pageSize, string? cursor,
+    string? sortBy, string? sortDir) =>
+{
+    var subjectId = http.GetSubjectId();
+
+    var spec = PagedSpec.For<Chain>(c => c.Id)
+        .RequirePermission(RetailPermissionKeys.ChainView)
+        .SortByString("name", c => c.Name, isDefault: true)
+        .Search(search, c => c.Name, c => c.Description)
+        .Build(pageSize ?? 20, cursor, sortBy, sortDir);
+
+    return await executor.ExecuteAsync(
+        context.Chains.Include(c => c.Locations),
+        spec, subjectId,
+        chain => new ChainListDto { /* ... */ });
+});
+```
+
+## When to use
+
+- **List endpoints** -- filter results by what the user can see
+- **Search** -- combine authorization with text search and sorting
+- **Dashboards** -- aggregate only accessible data
+
+For single-resource access, use [AuthorizedDetailAsync](/docs/guides/fga/detail-endpoint). For mutations, use [CheckAccessAsync](/docs/guides/fga/checking-a-permission).

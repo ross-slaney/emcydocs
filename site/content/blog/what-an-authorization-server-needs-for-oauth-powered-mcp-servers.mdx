@@ -1,0 +1,202 @@
+---
+title: "What an Authorization Server Needs for OAuth-Powered MCP Servers"
+description: "If you want an MCP server to work with modern OAuth clients, your authorization server needs more than a token endpoint. Here is the practical checklist and how SqlOS maps to it today."
+date: "2026-03-15"
+author: "SqlOS Team"
+tags: ["MCP", "OAuth", "AuthServer", "SqlOS"]
+---
+
+If you want your MCP server to work with a modern OAuth client, the right question is not "do I have login?"
+
+It is:
+
+> "Does my authorization server expose the exact protocol surface that a modern public client and protected resource expect?"
+
+That question is narrower, and it is much easier to answer precisely.
+
+## The split: authorization server vs protected resource
+
+For OAuth-powered MCP there are two protocol surfaces:
+
+1. **Authorization server**
+   - browser login and signup
+   - authorization code + PKCE
+   - token issuance
+   - authorization-server metadata
+   - JWKS
+   - client onboarding rules
+
+2. **Protected resource**
+   - `/.well-known/oauth-protected-resource`
+   - `WWW-Authenticate: Bearer resource_metadata="..."`
+   - bearer-token validation
+   - audience enforcement
+
+That split matters because many teams only build half.
+
+SqlOS covers the authorization-server side. Your application or MCP server still needs to expose protected-resource metadata and validate bearer tokens on the resource side.
+
+## What an authorization server needs now
+
+If you want to support modern public clients cleanly, your auth server needs more than `/authorize` and `/token`.
+
+At minimum it should provide:
+
+- authorization-server metadata
+- authorization code + PKCE for public clients
+- real redirect URI validation
+- signed JWTs and JWKS
+- refresh, revocation, and logout
+- a browser auth experience
+- a client onboarding story for both owned apps and public interoperability
+- resource indicators when the protected resource matters
+
+## What SqlOS ships today
+
+On the authorization-server side, SqlOS now provides:
+
+- `GET /sqlos/auth/authorize`
+- `POST /sqlos/auth/token`
+- `GET /sqlos/auth/.well-known/oauth-authorization-server`
+- `GET /sqlos/auth/.well-known/jwks.json`
+- hosted `/sqlos/auth/login`, `/sqlos/auth/signup`, and related auth-page routes
+- public PKCE clients
+- seeded and manual client records for owned apps
+- `CIMD` for portable public clients
+- optional `DCR` for compatibility clients
+- resource-indicator binding through authorize, token, refresh, and JWT `aud`
+- redirect validation, rate limiting, audit logging, disable, revoke, and stale-client cleanup
+- password auth, upstream OIDC, and SAML behind the same browser flow
+
+That is enough to support the auth-server half of modern MCP-oriented OAuth, not just classic app login.
+
+## The three-lane model
+
+The simplest way to reason about SqlOS is not "which RFC acronym do I pick?"
+
+It is:
+
+### 1. Owned apps
+
+Use seeded or manual clients when you control the app.
+
+Examples:
+
+- your web app
+- your mobile app
+- your desktop app
+- localhost tooling
+
+This should stay the easiest path:
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.AuthServer.SeedOwnedWebApp(
+        "todo-web",
+        "Todo Web",
+        "https://app.example.com/auth/callback");
+});
+```
+
+### 2. Portable public clients
+
+Use `CIMD` when the client should identify itself with a stable HTTPS `client_id` that points to metadata it owns.
+
+This is the better long-term public-client model because:
+
+- the client owns its metadata
+- the auth server can fetch and cache it
+- the same client can work across many deployments
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.AuthServer.EnablePortableMcpClients(registration =>
+    {
+        registration.Cimd.TrustedHosts.Add("clients.example.com");
+    });
+});
+```
+
+### 3. Compatibility clients
+
+Use `DCR` when a real client still expects runtime registration.
+
+This is practical compatibility, not the ideal first choice:
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.AuthServer.EnableChatGptCompatibility();
+});
+```
+
+SqlOS keeps that path intentionally narrow:
+
+- public clients only
+- PKCE required
+- `token_endpoint_auth_method=none`
+- strict redirect validation
+- rate limiting and audit logging
+
+## Resource indicators matter
+
+Classic app OAuth often gets away with a client-scoped audience model.
+
+MCP-style flows are better when the client sends a `resource` and the resulting token is clearly bound to that protected resource.
+
+SqlOS now supports that end to end:
+
+- the authorization request can carry `resource`
+- the token exchange must match the original binding
+- refresh preserves the original binding
+- the JWT `aud` becomes the resolved resource when present
+
+That gives the protected resource a cleaner audience model and avoids vague "whatever the client was configured with" semantics for public interoperability.
+
+## What SqlOS still does not do for you
+
+SqlOS is not the protected resource.
+
+Your resource server still needs to:
+
+- expose `/.well-known/oauth-protected-resource`
+- return `WWW-Authenticate` challenges with `resource_metadata`
+- validate issuer, signature, expiry, and audience
+
+The Todo sample shows both halves working together.
+
+## Practical checklist
+
+If you are evaluating an auth server for modern MCP-oriented OAuth, ask:
+
+1. Does it publish authorization-server metadata and JWKS?
+2. Does it support authorization code + PKCE for public clients?
+3. Can it onboard owned clients cleanly?
+4. Can it support portable clients with `CIMD`?
+5. Can it optionally support compatibility clients with `DCR`?
+6. Can it bind tokens to a protected resource through `resource` and `aud`?
+7. Does it have lifecycle controls such as disable, revoke, audit, and cleanup?
+8. Can the browser experience stay branded and app-owned?
+
+SqlOS now answers yes to the auth-server side of that checklist.
+
+## Where to start
+
+If you are new to this space, keep the order simple:
+
+1. ship hosted auth with a seeded client
+2. add protected-resource metadata and audience validation
+3. add `CIMD` when you need portable public clients
+4. add `DCR` only when a real client still depends on it
+
+That keeps the first version small without closing the door on real interoperability later.
+
+## Next reading
+
+- [Todo Sample](/docs/guides/authserver/todo-sample)
+- [Preregistration vs CIMD vs DCR](/docs/guides/authserver/preregistration-vs-cimd-vs-dcr)
+- [Client ID Metadata Documents](/docs/guides/authserver/client-id-metadata-documents)
+- [Dynamic Client Registration](/docs/guides/authserver/dynamic-client-registration)
+- [MCP Resource Indicators and Audience](/docs/guides/authserver/mcp-resource-indicators-and-audience)

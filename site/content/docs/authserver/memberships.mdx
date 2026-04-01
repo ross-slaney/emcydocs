@@ -1,0 +1,51 @@
+---
+title: "Memberships"
+description: "Assign users to organizations with roles."
+order: 4
+section: authserver
+---
+
+Memberships link users to organizations. Each membership carries a role that your app can use for authorization logic.
+
+## Create a membership
+
+**SDK**:
+
+```csharp
+var membership = await adminService.CreateMembershipAsync(new CreateMembershipRequest
+{
+    OrganizationId = org.Id,
+    UserId = user.Id,
+    Role = "admin"
+});
+```
+
+**Admin API**:
+
+```bash
+curl -X POST http://localhost:5062/sqlos/admin/auth/api/memberships \
+  -H "Content-Type: application/json" \
+  -d '{"organizationId": "org_...", "userId": "usr_...", "role": "admin"}'
+```
+
+| Field | Required | Description |
+| --- | --- | --- |
+| `organizationId` | Yes | Target organization |
+| `userId` | Yes | User to add |
+| `role` | Yes | Role within the org (e.g., `member`, `admin`) |
+
+## Check membership
+
+```csharp
+bool isMember = await adminService.UserHasMembershipAsync(userId, organizationId, ct);
+```
+
+## List user organizations
+
+```csharp
+var orgs = await adminService.GetUserOrganizationsAsync(userId, ct);
+```
+
+## Syncing to FGA
+
+When using FGA, membership roles can be mapped to FGA grants. See [Syncing Auth to FGA](/docs/guides/fga/syncing-auth-to-fga) for the pattern.

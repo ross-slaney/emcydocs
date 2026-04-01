@@ -1,0 +1,60 @@
+---
+title: "Roles"
+description: "Define roles as named sets of permissions."
+order: 2
+section: fga
+---
+
+A role is a named set of permissions. When you grant a role to a subject on a resource, the subject gains all of that role's permissions on that resource and its descendants.
+
+## Define roles in startup
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.Fga.Seed(seed =>
+    {
+        seed.Role("company_admin", "CompanyAdmin", "Company Admin");
+        seed.Role("store_clerk", "StoreClerk", "Store Clerk");
+
+        seed.RolePermission("CompanyAdmin", "CHAIN_VIEW");
+        seed.RolePermission("CompanyAdmin", "CHAIN_EDIT");
+        seed.RolePermission("CompanyAdmin", "LOCATION_VIEW");
+        seed.RolePermission("CompanyAdmin", "LOCATION_EDIT");
+        seed.RolePermission("CompanyAdmin", "INVENTORY_VIEW");
+        seed.RolePermission("CompanyAdmin", "INVENTORY_EDIT");
+        seed.RolePermission("StoreClerk", "INVENTORY_VIEW");
+    });
+});
+```
+
+Roles defined in startup are reapplied on boot. Custom roles created through the dashboard are preserved.
+
+## Dashboard
+
+**Path**: Fine-Grained Auth > Roles
+
+![Roles page](/docs/dashboard-roles.png)
+
+The Roles page lists all roles with their permission count. Create new roles or view the permissions linked to each role.
+
+## Role model
+
+```csharp
+public class SqlOSFgaRole
+{
+    public string Id { get; set; }
+    public string Key { get; set; }         // e.g., "CompanyAdmin"
+    public string DisplayName { get; set; } // e.g., "Company Admin"
+    public string? Description { get; set; }
+}
+```
+
+## Example: retail app roles
+
+| Role | Key | Permissions |
+| --- | --- | --- |
+| Company Admin | `CompanyAdmin` | All chain, location, and inventory permissions |
+| Chain Manager | `ChainManager` | CHAIN_VIEW, LOCATION_VIEW, LOCATION_EDIT, INVENTORY_VIEW, INVENTORY_EDIT |
+| Store Manager | `StoreManager` | LOCATION_VIEW, INVENTORY_VIEW, INVENTORY_EDIT |
+| Store Clerk | `StoreClerk` | INVENTORY_VIEW |

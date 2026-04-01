@@ -1,0 +1,83 @@
+---
+title: "FGA Overview"
+description: "Hierarchical authorization for .NET apps with query-time filtering."
+order: 0
+section: fga
+---
+
+FGA models resources as a tree. You grant roles on a node. Child nodes inherit access. EF sends filters to SQL Server. You do not load everything and filter in memory.
+
+## How it works
+
+Define resources (projects, chains, stores), roles (admin, viewer), and permissions (VIEW, EDIT). Grant a role to a user on a resource. Every descendant of that resource inherits the grant.
+
+```
+root
+├── Acme Corp (Organization)          ← grant: jane / admin
+│   ├── Walmart (Chain)               ← jane inherits CHAIN_VIEW, CHAIN_EDIT
+│   │   ├── Store #001 (Location)     ← jane inherits LOCATION_VIEW
+│   │   └── Store #002 (Location)     ← jane inherits LOCATION_VIEW
+│   └── Target (Chain)                ← jane inherits CHAIN_VIEW, CHAIN_EDIT
+└── Globex (Organization)
+    └── Costco (Chain)                ← jane has NO access
+```
+
+## Query-time filtering
+
+The core feature. Instead of loading all records and filtering in memory, FGA pushes authorization into the SQL query:
+
+```csharp
+var filter = await authService
+    .GetAuthorizationFilterAsync<Chain>(subjectId, "CHAIN_VIEW");
+
+var chains = await dbContext.Chains
+    .Where(filter)
+    .OrderBy(c => c.Name)
+    .ToListAsync();
+```
+
+Users only see rows they may access. Under the hood that becomes a SQL Server TVF call.
+
+**Company Admin sees 5 chains:**
+
+![Admin view](/docs/retail-app-admin-dashboard.png)
+
+**Store Clerk sees 0 chains (only their store):**
+
+![Clerk view](/docs/retail-app-clerk-dashboard.png)
+
+## Point checks
+
+For a single action on one resource, check permission explicitly:
+
+```csharp
+var access = await authService.CheckAccessAsync(subjectId, "CHAIN_EDIT", resourceId);
+
+if (!access.Allowed)
+    return Results.Json(new { error = "Permission denied" }, statusCode: 403);
+```
+
+## Setup
+
+```csharp
+builder.AddSqlOS<AppDbContext>();
+
+var app = builder.Build();
+app.MapSqlOS();
+```
+
+## Dashboard
+
+`/sqlos/admin/fga/` — browse resources, grants, roles, permissions, and run the access tester.
+
+![FGA Resources](/docs/dashboard-fga-resources.png)
+
+## Key concepts
+
+| Concept | Description |
+| --- | --- |
+| [Resource](/docs/guides/fga/resource-hierarchy) | A node in the hierarchy (org, project, store) |
+| [Subject](/docs/guides/fga/subject-types) | Who is being authorized (user, agent, service account) |
+| [Role](/docs/guides/fga/roles) | A named set of permissions (viewer, editor, admin) |
+| [Permission](/docs/guides/fga/permissions) | A capability key (CHAIN_VIEW, INVENTORY_EDIT) |
+| [Grant](/docs/guides/fga/grants) | Links subject + role + resource; inherits downward |

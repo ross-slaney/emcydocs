@@ -1,0 +1,18 @@
+---
+title: Locale folders
+description: Keep each document concept in one folder and place translated MDX files inside it.
+order: 2
+section: internationalization
+---
+
+## Why this shape works
+
+Instead of naming files by locale in the slug itself, EmcyDocs treats a folder as the document identity and language files inside that folder as localized variants.
+
+## Route behavior
+
+The default locale can stay clean at `/docs/...` while non-default locales can live at `/es/docs/...`.
+
+## Fallbacks
+
+If a translated file is missing, EmcyDocs can fall back to the default language without changing the route structure.

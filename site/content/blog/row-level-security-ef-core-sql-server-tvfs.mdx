@@ -1,0 +1,253 @@
+---
+title: "Row-Level Security with EF Core, SQL Server, and Table-Valued Functions"
+description: "How to implement database-level row-level security in .NET using SQL Server TVFs composed into EF Core LINQ queries — no post-load filtering, no external service calls."
+date: "2026-03-15"
+author: "SqlOS Team"
+tags: ["Row-Level Security", "EF Core", "SQL Server", "TVF", "FGA", "RBAC", "Authorization"]
+---
+
+You need certain users to see certain rows. That's the whole problem.
+
+The typical solution is application-level filtering — `.Where(x => x.TenantId == currentTenant)` — scattered across every query in your codebase. It works until someone forgets the filter, adds a new endpoint without it, or builds a report that bypasses the service layer entirely. At that point, unauthorized data leaks.
+
+Database-level row-level security solves this by pushing authorization into the query itself. The database won't return rows the caller can't see, regardless of how the query was constructed.
+
+This guide covers how to implement RLS in .NET using SQL Server Table-Valued Functions (TVFs) composed directly into EF Core LINQ queries — the approach used by SqlOS FGA.
+
+## The Problem with Application-Level Filtering
+
+Consider a standard multi-tenant query:
+
+```csharp
+var documents = await db.Documents
+    .Where(d => d.TenantId == currentTenantId)
+    .ToListAsync();
+```
+
+This has four problems:
+
+1. **Easy to forget.** Every query needs the filter. Miss one and you have a data leak.
+2. **Easy to bypass.** Raw SQL, background jobs, reporting queries — anything outside your service layer skips the check.
+3. **Flat.** `TenantId` works for single-level multi-tenancy. But what about org → team → project → document? You'd need nested joins and subqueries for every query.
+4. **Scattered.** Authorization logic lives in dozens of places instead of one.
+
+SQL Server has a built-in RLS feature using security policies and predicate functions. It works, but it's tightly coupled to database users/roles and doesn't integrate cleanly with application-level identity (JWTs, claims, etc.).
+
+## A Better Approach: TVFs as Authorization Predicates
+
+A Table-Valued Function (TVF) is a SQL function that returns a table. When it's an *inline* TVF, SQL Server's optimizer doesn't treat it as a black box — it folds the function body directly into the calling query's execution plan.
+
+This means you can write an authorization check as a TVF and use it as a `WHERE EXISTS` predicate. The database handles authorization, filtering, sorting, and pagination in a single query. No post-load filtering, no N+1 permission checks, no external service calls.
+
+Here's the core idea:
+
+```sql
+CREATE FUNCTION fn_IsResourceAccessible(
+    @ResourceId NVARCHAR(128),
+    @SubjectIds NVARCHAR(MAX),
+    @PermissionId NVARCHAR(128)
+)
+RETURNS TABLE
+AS
+RETURN
+(
+    WITH ancestors AS (
+        -- Walk up the resource tree from the target to the root
+        SELECT Id, ParentId, 0 AS Depth
+        FROM Resources WHERE Id = @ResourceId
+
+        UNION ALL
+
+        SELECT r.Id, r.ParentId, a.Depth + 1
+        FROM Resources r
+        INNER JOIN ancestors a ON r.Id = a.ParentId
+        WHERE a.Depth < 10
+    )
+    SELECT TOP 1 a.Id
+    FROM ancestors a
+    INNER JOIN Grants g ON a.Id = g.ResourceId
+    INNER JOIN RolePermissions rp ON g.RoleId = rp.RoleId
+    WHERE g.SubjectId IN (
+        SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@SubjectIds, ',')
+    )
+    AND rp.PermissionId = @PermissionId
+    AND (g.EffectiveFrom IS NULL OR g.EffectiveFrom <= GETUTCDATE())
+    AND (g.EffectiveTo IS NULL OR g.EffectiveTo >= GETUTCDATE())
+)
+```
+
+What this does for each row:
+
+1. **Walks up** the resource tree from the target resource to the root (recursive CTE, bounded at depth 10)
+2. **Joins** against grants at each ancestor node
+3. **Checks** if any grant matches the caller's principals and the required permission
+4. **Returns** a row if access exists (`TOP 1` — one match is enough)
+
+Because it's an inline TVF, the SQL Server optimizer composes this directly into your query plan. Authorization becomes part of the index seek, not a separate operation.
+
+## Mapping It to EF Core
+
+The TVF needs to be callable from LINQ. In EF Core, you register it as a database function on your `DbContext`:
+
+```csharp
+public class AppDbContext : DbContext
+{
+    [DbFunction("fn_IsResourceAccessible", Schema = "sqlos")]
+    public IQueryable<AccessibleResource> IsResourceAccessible(
+        string resourceId,
+        string subjectIds,
+        string permissionId)
+        => FromExpression(() => IsResourceAccessible(
+            resourceId, subjectIds, permissionId));
+}
+```
+
+Then you build an authorization filter as an `Expression<Func<T, bool>>` that calls the TVF:
+
+```csharp
+var filter = await fga.BuildFilterAsync<Document>(
+    subjectId: currentUserId,
+    permissionKey: "documents.read");
+
+var results = await db.Documents
+    .Where(d => d.ProjectId == projectId)   // your business filter
+    .Where(filter)                           // ← authorization
+    .OrderBy(d => d.CreatedAt)
+    .Take(20)
+    .ToListAsync();
+```
+
+EF Core translates this to a single SQL statement. The TVF call becomes a `WHERE EXISTS (...)` subquery that the optimizer inlines. One database round-trip. No post-load filtering.
+
+## Why a Resource Tree, Not a Flat Tenant ID
+
+The flat `TenantId` approach breaks down as your product grows. Real applications have nested structure:
+
+```
+Organization
+  └─ Team
+      └─ Project
+          └─ Document
+```
+
+With a flat model, a team lead who should see all documents in their team's projects needs explicit grants on every project, or you need complex join logic in every query.
+
+With a resource tree, you grant a role at the team level and it inherits downward:
+
+```csharp
+// Grant "viewer" role to user at the team level
+await fga.GrantRoleAsync(new GrantRequest(
+    subjectId: userId,
+    roleKey: "viewer",
+    resourceId: "team::engineering"));
+
+// This grant now covers:
+// - team::engineering
+// - project::alpha (child)
+// - project::beta (child)
+// - doc::1, doc::2, ... (grandchildren)
+```
+
+The TVF handles the inheritance automatically — it walks up from each document's resource to the root, and the team-level grant matches at the ancestor node.
+
+## Performance Characteristics
+
+The TVF approach has predictable, bounded cost:
+
+**Per-row cost:** O(D) where D is the tree depth. Each row triggers a recursive CTE that walks at most D ancestor hops. With proper indexes, each hop is an index seek.
+
+**Per-page cost:** O(k · D) where k is the page size. Under cursor pagination, the database evaluates rows sequentially until it finds k authorized ones.
+
+**The critical property: cost is independent of total row count.** Whether your table has 10K or 1.5M rows, the per-page latency is the same — because cursor pagination only examines rows forward from the cursor, and the TVF only examines ancestors of each candidate row.
+
+Benchmarked results from the [SHRBAC paper](https://github.com/ross-slaney/sqlos/blob/main/paper/shrbac-compsac-2026.pdf):
+
+| Metric | D = 5 (1.2M resources) | D = 10 (1.5M resources) |
+|---|---|---|
+| List page (k=20) | 3.47ms | 5.69ms |
+| Point check | 0.86–1.31ms | 0.89–1.46ms |
+| Cursor vs offset (100K) | 3.30ms vs 2,310ms | — |
+
+A notable finding: **narrower grants are faster.** A store-level grant (2.28ms) matches at the first ancestor hop, while a chain-level grant (3.12ms) requires 3–4 hops. Least-privilege is not just more secure — it's measurably faster.
+
+## Grants, Not Roles, Carry the Scope
+
+A common mistake in RBAC systems is encoding scope into role names: `TeamA_Editor`, `ProjectAlpha_Viewer`, `Document42_Commenter`. This leads to role explosion.
+
+With the TVF approach, roles stay generic and reusable:
+
+```csharp
+// Define roles once
+seed.Role("viewer", "Viewer");
+seed.Role("editor", "Editor");
+seed.Role("admin", "Admin");
+
+// Scope is determined by WHERE the grant is placed
+await fga.GrantRoleAsync("viewer", userId, "org::acme");      // sees everything
+await fga.GrantRoleAsync("editor", userId, "team::eng");       // edits eng subtree
+await fga.GrantRoleAsync("viewer", userId, "doc::42");         // sees one document
+```
+
+Same three roles. Different scope depending on where in the tree the grant lives. No role explosion.
+
+## Mutations Use the Same Model
+
+The TVF handles reads. For writes, you use point checks against the same resource tree:
+
+```csharp
+var access = await fga.CheckAccessAsync(
+    subjectId: userId,
+    permissionKey: "documents.edit",
+    resourceId: document.ResourceId);
+
+if (!access.Allowed)
+    return Results.Forbid();
+```
+
+Reads and writes use the same grants, the same roles, the same resource tree. One authorization model for your entire application.
+
+## When to Use This Approach
+
+**Use TVF-based RLS when:**
+- You need row-level visibility filtering in EF Core
+- Your authorization model has hierarchical structure (orgs, teams, projects, etc.)
+- You want authorization enforced at the database level, not just the application level
+- You need predictable query performance that doesn't degrade with dataset size
+- You want the same model for human users, service accounts, and autonomous agents
+
+**Consider alternatives when:**
+- Your access model is truly flat (single tenant ID per row, no hierarchy)
+- You need arbitrary attribute-based policies (IP ranges, time-of-day, device type)
+- Your resources form a DAG rather than a tree (multiple parents per node)
+
+## Getting Started
+
+SqlOS implements this pattern as a library. Install it, register the services, and the TVF is created automatically:
+
+```bash
+dotnet add package SqlOS
+```
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.Fga.Seed(seed =>
+    {
+        seed.ResourceType("document", "Document");
+        seed.Permission("documents.read", "Read documents", "document");
+        seed.Permission("documents.edit", "Edit documents", "document");
+        seed.Role("viewer", "Viewer");
+        seed.Role("editor", "Editor");
+        seed.RolePermission("viewer", "documents.read");
+        seed.RolePermission("editor", "documents.read");
+        seed.RolePermission("editor", "documents.edit");
+    });
+});
+
+var app = builder.Build();
+app.MapSqlOS(); // Maps routes; schema + TVF run on host startup
+```
+
+The [getting started guide](/docs/guides/getting-started) walks through the full setup. The [SHRBAC paper](https://github.com/ross-slaney/sqlos/blob/main/paper/shrbac-compsac-2026.pdf) covers the formal model and benchmark methodology.
+
+Row-level security isn't a feature you bolt on. It's a property of how your authorization model composes with your data queries. When authorization lives in the database as a TVF, every query is automatically secure — not because every developer remembered to add the filter, but because the filter is the query.

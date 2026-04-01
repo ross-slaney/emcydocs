@@ -1,0 +1,50 @@
+import { notFound, redirect } from "next/navigation";
+import { DocsHomePage, DocsPage } from "@emcy/docs";
+import { embeddedSource } from "@/lib/docs-source";
+
+interface PageProps {
+  params: Promise<{ slug?: string[] }>;
+}
+
+export function generateStaticParams() {
+  return embeddedSource.getStaticParams();
+}
+
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  return embeddedSource.getMetadata(slug);
+}
+
+export default async function EmbeddedRoutePage({ params }: PageProps) {
+  const { slug } = await params;
+  const resolved = embeddedSource.resolveRoute(slug);
+
+  if (resolved.type === "redirect" && resolved.href) {
+    redirect(resolved.href);
+  }
+
+  if (resolved.type !== "entry" || !resolved.entry) {
+    notFound();
+  }
+
+  if (resolved.entry.isHome) {
+    return (
+      <DocsHomePage
+        entry={resolved.entry}
+        navigation={embeddedSource.getNavigation()}
+        title="Embedded docs mode"
+        description="This route shows the same package running inside a larger app shell instead of owning the whole page."
+      />
+    );
+  }
+
+  return (
+    <DocsPage
+      entry={resolved.entry}
+      previousEntry={resolved.previousEntry}
+      nextEntry={resolved.nextEntry}
+      backHref={embeddedSource.getHref()}
+      variant="docs"
+    />
+  );
+}

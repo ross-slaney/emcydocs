@@ -1,0 +1,141 @@
+---
+title: "Headless Auth"
+description: "Use SqlOS as the authorization server while your app owns the login UI."
+order: 1.7
+section: authserver
+---
+
+**Headless** = SqlOS runs OAuth (`/sqlos/auth/authorize`, `/sqlos/auth/token`, PKCE, sessions, OIDC, SAML, codes). **Your app** draws the HTML.
+
+## When to use headless
+
+- Hosted SqlOS pages do not match your product.
+- You need extra signup fields (referral, company, etc.).
+- You want to A/B test login.
+- You want the popup to feel like your app.
+
+Not sure? Start [hosted](/docs/guides/authserver/hosted-vs-headless). You can switch later.
+
+## Configuration
+
+```csharp
+builder.AddSqlOS<AppDbContext>(options =>
+{
+    options.AuthServer.UseHeadlessAuthPage(headless =>
+    {
+        headless.BuildUiUrl = ctx =>
+            $"https://app.example.com/authorize?request={ctx.RequestId}&view={ctx.View}";
+    });
+
+    options.AuthServer.SeedAuthPage(page =>
+    {
+        page.PageTitle = "Sign in";
+    });
+});
+
+var app = builder.Build();
+app.MapSqlOS();
+```
+
+The browser hits `/sqlos/auth/authorize` on SqlOS first. SqlOS then redirects to the URL from `BuildUiUrl`. Your app shows the login UI.
+
+## How SqlOS picks the UI
+
+SqlOS uses one rule:
+
+- `BuildUiUrl` exists: headless.
+- `BuildUiUrl` does not exist: hosted.
+
+There is no second seed or dashboard switch to keep in sync.
+
+More context: [Hosted vs Headless](/docs/guides/authserver/hosted-vs-headless).
+
+## Headless endpoints
+
+Your UI calls these SqlOS endpoints:
+
+| Endpoint | Purpose |
+| --- | --- |
+| `GET /sqlos/auth/headless/requests/{requestId}` | Get the current authorization request state |
+| `POST /sqlos/auth/headless/identify` | Submit email for home realm discovery |
+| `POST /sqlos/auth/headless/password/login` | Submit email + password |
+| `POST /sqlos/auth/headless/signup` | Create account with optional custom fields |
+| `POST /sqlos/auth/headless/organization/select` | Select org for multi-org users |
+| `POST /sqlos/auth/headless/provider/start` | Start OIDC or SSO flow |
+
+## Custom signup fields
+
+Pass extra signup data in `customFields`. Validate in `OnHeadlessSignupAsync`:
+
+```csharp
+options.AuthServer.UseHeadlessAuthPage(headless =>
+{
+    headless.BuildUiUrl = ctx =>
+        $"https://app.example.com/authorize?request={ctx.RequestId}&view={ctx.View}";
+
+    headless.OnHeadlessSignupAsync = async (ctx, ct) =>
+    {
+        var referral = ctx.CustomFields["referralSource"]?.GetValue<string>();
+
+        if (string.IsNullOrWhiteSpace(referral))
+        {
+            throw new SqlOSHeadlessValidationException(
+                "Tell us how you heard about the product.",
+                new Dictionary<string, string>
+                {
+                    ["referralSource"] = "Required."
+                });
+        }
+
+        // Persist to your own table
+        await SaveProfileAsync(ctx.User.Id, referral);
+    };
+});
+```
+
+## Frontend implementation
+
+The example repo has a full headless UI. Main files:
+
+```
+app/auth/authorize/page.tsx          → Custom authorize route
+components/sqlos-headless-auth-panel.tsx → Login/signup/org-selection UI
+lib/sqlos-headless.ts                → Typed client for headless endpoints
+```
+
+**Typical flow** in your custom authorize page:
+
+```typescript
+// 1. Read the authorization request
+const request = await getHeadlessRequest(requestId);
+
+// 2. Show login or signup based on request.view
+if (request.view === "signup") {
+  // Show signup form
+}
+
+// 3. User submits email
+const identified = await headlessIdentify(requestId, email);
+// identified.mode → "password" | "sso" | "signup"
+
+// 4. User submits password
+const result = await headlessPasswordLogin(requestId, email, password);
+
+// 5. If multi-org, select organization
+if (result.requiresOrganizationSelection) {
+  await headlessSelectOrganization(requestId, orgId);
+}
+
+// 6. SqlOS issues the auth code and redirects back to the OAuth client
+```
+
+## What doesn't change
+
+OAuth on the wire is the same. MCP and other clients still use:
+
+- `/sqlos/auth/.well-known/oauth-authorization-server`
+- `/sqlos/auth/authorize`
+- `/sqlos/auth/token`
+- `/sqlos/auth/.well-known/jwks.json`
+
+Only the **browser UI** during login changes.

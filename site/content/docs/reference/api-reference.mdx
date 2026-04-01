@@ -1,0 +1,227 @@
+---
+title: "API Reference"
+description: "HTTP endpoints for auth, admin, and FGA."
+order: 9
+section: reference
+---
+
+## OAuth Endpoints
+
+Call `app.MapSqlOS()` to mount OAuth. Default base: `{DashboardBasePath}/auth` (e.g. `/sqlos/auth`).
+
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| GET | `/sqlos/auth/.well-known/oauth-authorization-server` | OAuth metadata |
+| GET | `/sqlos/auth/.well-known/jwks.json` | Public keys for JWT validation |
+| GET | `/sqlos/auth/authorize` | OAuth authorize (PKCE) |
+| POST | `/sqlos/auth/token` | Token exchange (code or refresh) |
+| GET | `/sqlos/auth/login` | Hosted login page |
+| GET | `/sqlos/auth/signup` | Hosted signup page |
+
+## Auth API (Example)
+
+The sample API exposes REST helpers around SqlOS. Copy the shape you need.
+
+### Discover
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/discover \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@acme.com"}'
+```
+
+```json
+{"mode": "password", "organizations": []}
+```
+
+### Login
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@retail.demo", "password": "RetailDemo1!"}'
+```
+
+```json
+{
+  "accessToken": "eyJhbG...",
+  "refreshToken": "rt_...",
+  "sessionId": "ses_...",
+  "organizationId": "org_...",
+  "requiresOrganizationSelection": false
+}
+```
+
+### Select Organization
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/select-organization \
+  -H "Content-Type: application/json" \
+  -d '{"pendingAuthToken": "...", "organizationId": "org_..."}'
+```
+
+### Refresh
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken": "rt_...", "organizationId": null}'
+```
+
+### Session
+
+```bash
+curl http://localhost:5062/api/v1/auth/session \
+  -H "Authorization: Bearer eyJhbG..."
+```
+
+```json
+{
+  "userId": "usr_...",
+  "sessionId": "ses_...",
+  "organizationId": "org_...",
+  "email": "admin@retail.demo",
+  "displayName": "Company Admin"
+}
+```
+
+### Logout
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/logout \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken": "rt_..."}'
+```
+
+### OIDC Providers
+
+```bash
+curl http://localhost:5062/api/v1/auth/oidc/providers
+```
+
+```json
+[{"connectionId": "oidc_...", "providerType": "google", "displayName": "Google"}]
+```
+
+### Start SSO
+
+```bash
+curl -X POST http://localhost:5062/api/v1/auth/sso/start \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@acme.com"}'
+```
+
+---
+
+## Dashboard Admin API
+
+Used by the dashboard UI. Base path: `/sqlos/admin/auth/api`.
+
+### Organizations
+
+```bash
+# List
+curl http://localhost:5062/sqlos/admin/auth/api/organizations
+
+# Create
+curl -X POST http://localhost:5062/sqlos/admin/auth/api/organizations \
+  -d '{"name": "Acme Corp", "slug": "acme", "primaryDomain": "acme.com"}'
+```
+
+### Users
+
+```bash
+# List
+curl http://localhost:5062/sqlos/admin/auth/api/users
+
+# Create
+curl -X POST http://localhost:5062/sqlos/admin/auth/api/users \
+  -d '{"displayName": "Jane Doe", "email": "jane@acme.com", "password": "secret123"}'
+```
+
+### Memberships
+
+```bash
+curl -X POST http://localhost:5062/sqlos/admin/auth/api/memberships \
+  -d '{"organizationId": "org_...", "userId": "usr_...", "role": "admin"}'
+```
+
+### Clients
+
+```bash
+curl -X POST http://localhost:5062/sqlos/admin/auth/api/clients \
+  -d '{"clientId": "my-app", "name": "My App", "audience": "sqlos", "redirectUris": ["http://localhost:3000/callback"]}'
+```
+
+### Security Settings
+
+```bash
+# Get
+curl http://localhost:5062/sqlos/admin/auth/api/settings/security
+
+# Update
+curl -X PUT http://localhost:5062/sqlos/admin/auth/api/settings/security \
+  -d '{"refreshTokenLifetimeMinutes": 10080, "sessionIdleTimeoutMinutes": 1440, "sessionAbsoluteLifetimeMinutes": 43200}'
+```
+
+### Sessions
+
+```bash
+curl http://localhost:5062/sqlos/admin/auth/api/sessions
+```
+
+---
+
+## FGA Admin API
+
+Base path: `/sqlos/admin/fga/api`.
+
+### Resources
+
+```bash
+# List (tree)
+curl http://localhost:5062/sqlos/admin/fga/api/resources
+
+# Create
+curl -X POST http://localhost:5062/sqlos/admin/fga/api/resources \
+  -d '{"name": "New Chain", "typeId": "chain", "parentId": "retail_root"}'
+```
+
+### Grants
+
+```bash
+# List
+curl http://localhost:5062/sqlos/admin/fga/api/grants
+
+# Create
+curl -X POST http://localhost:5062/sqlos/admin/fga/api/grants \
+  -d '{"subjectId": "usr_...", "roleId": "role_...", "resourceId": "org::acme"}'
+
+# Revoke
+curl -X DELETE http://localhost:5062/sqlos/admin/fga/api/grants/{id}
+```
+
+### Access Test
+
+```bash
+curl -X POST http://localhost:5062/sqlos/admin/fga/api/access-test \
+  -d '{"subjectId": "usr_...", "resourceId": "chain-1", "permissionKey": "CHAIN_VIEW"}'
+```
+
+```json
+{"allowed": true}
+```
+
+### Roles and Permissions
+
+```bash
+curl http://localhost:5062/sqlos/admin/fga/api/roles
+curl http://localhost:5062/sqlos/admin/fga/api/permissions
+curl http://localhost:5062/sqlos/admin/fga/api/subjects
+```
+
+---
+
+## Swagger
+
+Open `http://localhost:5062/swagger` for the interactive API explorer when running the example stack.

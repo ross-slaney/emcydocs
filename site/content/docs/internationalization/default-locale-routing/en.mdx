@@ -1,0 +1,18 @@
+---
+title: Default locale routing
+description: Keep the default locale clean in URLs while still supporting prefixed routes for other languages.
+order: 3
+section: internationalization
+---
+
+## Hidden default locale
+
+When `hideDefaultLocaleInUrl` is enabled, the default locale renders at `/docs/...` instead of `/en/docs/...`.
+
+## Prefixed secondary locales
+
+Additional locales can still map to explicit route prefixes like `/es/docs/...`.
+
+## Why this is useful
+
+The default locale stays clean for primary marketing and SEO needs, while secondary locales remain explicit and predictable.

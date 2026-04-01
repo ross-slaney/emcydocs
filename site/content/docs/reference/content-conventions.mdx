@@ -1,0 +1,21 @@
+---
+title: "Content conventions"
+description: "File-based conventions for flat files, locale folders, section grouping, and ordering."
+order: 3
+section: reference
+---
+
+## Supported shapes
+
+EmcyDocs supports:
+
+- flat files like `getting-started.mdx`
+- locale folders like `locale-folders/en.mdx`
+
+## Ordering
+
+Use frontmatter `order` to control the order inside a section.
+
+## Sections
+
+The first path segment usually becomes the section key. That keeps navigation mostly filesystem-driven, while still allowing labels and ordering to be configured at the source level.

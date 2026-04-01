@@ -1,0 +1,26 @@
+---
+title: "createDocsSource"
+description: "The main API that builds content loading, navigation, routes, metadata, headings, and search."
+order: 1
+section: reference
+---
+
+## Role
+
+`createDocsSource(...)` is the main entrypoint for the package.
+
+## What it returns
+
+The resulting object exposes helpers such as:
+
+- `getNavigation()`
+- `getEntry()`
+- `getHomeEntry()`
+- `resolveRoute()`
+- `getMetadata()`
+- `getStaticParams()`
+- `search()`
+
+## Why it is central
+
+Instead of wiring content loading, route generation, TOC extraction, and search as separate utilities, EmcyDocs keeps them together behind one source object.

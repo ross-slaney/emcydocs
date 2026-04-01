@@ -125,7 +125,7 @@ export default function Home() {
               },
               {
                 title: "Dogfooded against a real app",
-                body: "The package is built first for SqlOS and the example site, so the API has to handle embedded docs, route quirks, and real content trees.",
+                body: "The package is built against this example app and a production integration target, so the API has to handle embedded docs, route quirks, and real content trees.",
               },
               {
                 title: "Search with section deep links",

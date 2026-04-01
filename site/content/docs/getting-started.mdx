@@ -1,138 +1,72 @@
 ---
 title: "Getting Started"
-description: "Install SqlOS and run the example stack in five minutes."
+description: "Install the package, point it at a content directory, and render docs from a single source object."
 order: 0
 ---
 
 ## Install
 
 ```bash
-dotnet add package SqlOS
+npm install @emcy/docs
 ```
 
-## Configure services
+## Point the package at your docs
 
-Register SqlOS on your `DbContext`:
+Create a docs source in your app:
 
-```csharp
-builder.AddSqlOS<AppDbContext>();
-```
+```ts
+import path from "node:path";
+import { createDocsSource } from "@emcy/docs";
 
-## Set up your DbContext
-
-Your context implements the SqlOS interfaces. This sample includes both auth and FGA:
-
-```csharp
-public sealed class AppDbContext : DbContext,
-    ISqlOSAuthServerDbContext,
-    ISqlOSFgaDbContext
-{
-    public DbSet<Project> Projects => Set<Project>();
-
-    public IQueryable<SqlOSFgaAccessibleResource> IsResourceAccessible(
-        string subjectId,
-        string permissionKey)
-        => FromExpression(() =>
-            IsResourceAccessible(subjectId, permissionKey));
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
-        modelBuilder.UseSqlOS(GetType());
-    }
-}
-```
-
-## Map routes
-
-```csharp
-var app = builder.Build();
-app.MapSqlOS();
-```
-
-This gives you:
-
-| Path | What it does |
-| --- | --- |
-| `/sqlos` | Admin dashboard |
-| `/sqlos/auth/*` | OAuth 2.0 endpoints (authorize, token, JWKS) |
-| `/sqlos/admin/auth` | Auth management UI |
-| `/sqlos/admin/fga` | FGA management UI |
-
-## Seed a client
-
-Register your frontend as an OAuth client so users can sign in immediately:
-
-```csharp
-builder.AddSqlOS<AppDbContext>(options =>
-{
-    options.AuthServer.SeedOwnedWebApp(
-        "my-app",
-        "My Application",
-        "http://localhost:3000/auth/callback");
+export const docsSource = createDocsSource({
+  contentDir: path.join(process.cwd(), "content/docs"),
+  basePath: "/docs",
+  defaultLocale: "en",
+  locales: ["en", "es"],
+  hideDefaultLocaleInUrl: true,
+  sectionLabels: {
+    "": "Getting Started",
+    guides: "Guides",
+    reference: "Reference",
+  },
+  sectionOrder: ["", "guides", "reference"],
 });
 ```
 
-That is the default story for most teams: an owned app, hosted auth, and a seeded client.
+## Render the layout
 
-## Protect the dashboard
+Use one of the package layouts in your App Router tree:
 
-Set a dashboard password in `appsettings.json`:
+```tsx
+import { DocsLayout } from "@emcy/docs";
 
-```json
-{
-  "SqlOS": {
-    "Dashboard": {
-      "AuthMode": "Password",
-      "Password": "your-strong-password"
-    }
-  }
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
 }
 ```
 
-## Run the Todo sample first
+## Render the page
 
-If your first goal is hosted auth, simple FGA, and public-client onboarding, start with the Todo sample:
+Resolve the current route from the same source and hand the result to `DocsPage` or `DocsHomePage`.
 
-```bash
-dotnet run --project examples/SqlOS.Todo.AppHost/SqlOS.Todo.AppHost.csproj
+```tsx
+const resolved = docsSource.resolveRoute(slug);
 ```
 
-That sample focuses on:
+That gives you:
 
-- hosted auth first
-- per-user tenant + todo resource hierarchy
-- SQL-backed FGA filtering and simple auth checks
-- headless follow-on
-- protected-resource metadata
-- preregistration, `CIMD`, and optional `DCR`
-
-## Run the broad Example stack
-
-The repo also includes a larger example with API, Next.js frontend, Angular frontend, and Expo mobile app:
-
-```bash
-cd examples/SqlOS.Example.Web && npm install
-cd /path/to/SqlOS
-dotnet run --project examples/SqlOS.Example.AppHost/SqlOS.Example.AppHost.csproj
-```
-
-| URL | App |
-| --- | --- |
-| `http://localhost:5062/sqlos/` | Dashboard |
-| `http://localhost:5062/swagger` | Swagger UI |
-| `http://localhost:3010/` | Next.js app |
-| `http://localhost:4200/` | Angular app |
-
-## Schema management
-
-SqlOS manages its own tables. It runs SQL scripts on host startup. Your EF migrations do **not** own those tables.
-
-If you migrate **before** the app has started SqlOS once, call `SqlOSBootstrapper.InitializeAsync()` first. The example API shows that pattern when your tables reference SqlOS.
+- the current entry
+- previous and next entries
+- section landing redirects
+- metadata and static params helpers
 
 ## Next steps
 
-- [AuthServer Overview](/docs/guides/authserver/overview) -- identity, sessions, and auth flows
-- [Todo Sample](/docs/guides/authserver/todo-sample) -- hosted auth, simple FGA, and MCP-oriented flows
-- [FGA Overview](/docs/guides/fga/overview) -- hierarchical authorization and query filtering
-- [SDK Reference](/docs/guides/reference/sdk-reference) -- all services and methods
+- [Standalone vs embedded](/docs/guides/standalone-vs-embedded)
+- [Docs layout](/docs/layouts/docs-layout)
+- [Locale folders](/docs/internationalization/locale-folders)
+- [createDocsSource](/docs/reference/create-docs-source)

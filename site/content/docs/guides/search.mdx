@@ -1,0 +1,32 @@
+---
+title: "Search"
+description: "Search indexes titles, descriptions, and content, then deep-links into matching sections."
+order: 2
+section: guides
+---
+
+## What search indexes
+
+EmcyDocs searches:
+
+- document titles
+- document descriptions
+- markdown content
+
+## Section-aware results
+
+When the best match lives inside a heading section, the result can link directly to that anchor instead of only landing at the page top.
+
+## Server-friendly API
+
+The package exposes a single search surface from the docs source, so a server action can stay very small:
+
+```ts
+export async function searchDocsAction(query: string) {
+  return docsSource.search(query);
+}
+```
+
+## UI behavior
+
+The default search UI supports keyboard invocation, inline result panels, and mobile usage.

@@ -12,12 +12,12 @@ const sharedConfig = {
   titleSuffix: "EmcyDocs",
   sectionLabels: {
     "": "Getting Started",
+    guides: "Guides",
+    layouts: "Layouts",
     internationalization: "Internationalization",
-    authserver: "App-Integrated Docs Demo",
-    fga: "SaaS Patterns",
     reference: "Reference",
   },
-  sectionOrder: ["", "internationalization", "authserver", "fga", "reference"],
+  sectionOrder: ["", "guides", "layouts", "internationalization", "reference"],
 };
 
 export const docsSource = createDocsSource({

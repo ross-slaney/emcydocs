@@ -7,19 +7,19 @@
 >
   <defs>
     <linearGradient
-      id="sqlos-icon-gradient"
+      id="emcydocs-icon-gradient"
       x1="10"
       y1="6"
       x2="54"
       y2="58"
       gradientUnits="userSpaceOnUse"
     >
-      <stop stop-color="#8B5CF6" />
-      <stop offset="1" stop-color="#6D28D9" />
+      <stop stop-color="#0F766E" />
+      <stop offset="1" stop-color="#155E75" />
     </linearGradient>
   </defs>
 
-  <rect width="64" height="64" rx="16" fill="url(#sqlos-icon-gradient)" />
+  <rect width="64" height="64" rx="16" fill="url(#emcydocs-icon-gradient)" />
   <path
     d="M14 14C24 8 44 8 52 22C44 18 28 17 18 20C15 18 14 16 14 14Z"
     fill="#FFFFFF"
@@ -36,6 +36,6 @@
     text-anchor="middle"
     dominant-baseline="middle"
   >
-    SO
+    ED
   </text>
 </svg>

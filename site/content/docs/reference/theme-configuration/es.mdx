@@ -1,0 +1,80 @@
+---
+title: "Configuracion de Tema"
+description: "Configura preset, modo, hue de acento, anchos del shell y radios desde un solo objeto."
+order: 2
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="API de tema"
+  title="Ajusta el chrome de docs con un solo objeto y un slot opcional para switchers"
+  href="../layouts/docs-layout"
+  actionLabel="Ver layout"
+>
+  El theming vive dentro del mismo paquete. Pasas un objeto `theme` al layout y puedes renderizar `themeSwitcher` o `languageSwitcher` solo cuando lo necesites.
+</Banner>
+
+<CardGrid cols={3}>
+  <Card title="Presets" description="Empieza con `neutral`, `dusk`, `ocean` o `sqlos` y ajusta desde ahi." />
+  <Card title="Anchos" description="Controla el ancho total, el contenido, el sidebar y el TOC sin crear otro layout." />
+  <Card title="Detalles visuales" description="Ajusta hue, modo y radios manteniendo intacta la libreria de componentes." />
+</CardGrid>
+
+## Theme prop
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  theme={{
+    preset: "neutral",
+    mode: "light",
+    accentHue: 38,
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+    sidebarWidth: "276px",
+    tocWidth: "240px",
+    radius: "xl",
+  }}
+  themeSwitcher={<ThemeSwitcher />}
+/>
+```
+
+## Presets
+
+<Tabs defaultValue="neutral">
+  <TabsList>
+    <TabsTrigger value="neutral">Neutral</TabsTrigger>
+    <TabsTrigger value="dusk">Dusk</TabsTrigger>
+    <TabsTrigger value="ocean">Ocean</TabsTrigger>
+    <TabsTrigger value="sqlos">SqlOS</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="neutral">Ideal para una experiencia clara y equilibrada.</TabsContent>
+  <TabsContent value="dusk">Funciona bien para un notebook oscuro con mas contraste.</TabsContent>
+  <TabsContent value="ocean">Encaja en shells tecnicos y embebidos con tono oscuro.</TabsContent>
+  <TabsContent value="sqlos">Pensado para el showcase de SqlOS y marcas con acento fuerte.</TabsContent>
+</Tabs>
+
+## Que hace cada opcion
+
+<Accordion>
+  <AccordionItem title="preset y mode" defaultOpen>
+    `preset` define la paleta y las superficies. `mode` fuerza light u dark cuando ese preset lo soporte.
+  </AccordionItem>
+  <AccordionItem title="accentHue">
+    Cambia solo el color de acento sin abandonar el preset base.
+  </AccordionItem>
+  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
+    Permite cubrir docs clasicos, notebook, embedded y minimal con el mismo componente de layout.
+  </AccordionItem>
+  <AccordionItem title="radius">
+    Elige `md`, `lg` o `xl` para endurecer o suavizar el lenguaje visual.
+  </AccordionItem>
+</Accordion>
+
+## Slots opcionales
+
+<Callout type="tip" title="El shell solo reserva el lugar">
+  EmcyDocs no obliga un selector de idioma o tema concreto. Puedes pasar `languageSwitcher` y `themeSwitcher` o dejar ambos vacios.
+</Callout>

@@ -1,8 +1,9 @@
 import Header from "@/components/Header";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { DocsLayout } from "@emcy/docs";
+import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
 import { embeddedSource } from "@/lib/docs-source";
+import { docsEmbeddedTheme } from "@/lib/docs-themes";
 import { searchEmbeddedAction } from "@/app/doc-actions";
 import { defaultSiteLocale, docsLocales } from "@/lib/site-i18n";
 
@@ -12,7 +13,7 @@ export default function EmbeddedDocsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-[#09090b]">
+    <div className="min-h-screen">
       <DocumentLanguage locale={defaultSiteLocale} />
       <div id="embedded-host-header">
         <Header locale={defaultSiteLocale} locales={docsLocales} />
@@ -24,6 +25,8 @@ export default function EmbeddedDocsLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/embedded/docs" />
         }
+        themeSwitcher={<ThemeSwitcher />}
+        theme={docsEmbeddedTheme}
         mode="embedded"
         mobileHeaderId="embedded-host-header"
       >

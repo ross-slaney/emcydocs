@@ -3,6 +3,26 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import type { DocsEntry } from "./types";
 import { slugifyHeading } from "./utils";
+import {
+  Accordion,
+  AccordionItem,
+  Banner,
+  Callout,
+  Card,
+  CardGrid,
+  CodeBlock,
+  File,
+  Files,
+  Folder,
+  InlineToc,
+  Pre,
+  Step,
+  Steps,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "./components/mdx";
 
 type MdxComponentMap = Record<string, React.ComponentType<any>>;
 
@@ -36,6 +56,24 @@ export function getDefaultMdxComponents(): MdxComponentMap {
     h2: createHeadingComponent("h2"),
     h3: createHeadingComponent("h3"),
     h4: createHeadingComponent("h4"),
+    Accordion,
+    AccordionItem,
+    Banner,
+    Callout,
+    Card,
+    CardGrid,
+    CodeBlock,
+    File,
+    Files,
+    Folder,
+    InlineToc,
+    pre: Pre,
+    Step,
+    Steps,
+    Tabs,
+    TabsContent,
+    TabsList,
+    TabsTrigger,
   };
 }
 

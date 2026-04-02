@@ -22,6 +22,9 @@ export default async function DocsPage({
   variant?: "docs" | "notebook" | "minimal";
   components?: Record<string, React.ComponentType<any>>;
 }) {
+  const headingCount = entry.headings.filter((heading) => heading.level === 2).length;
+  const localeCount = entry.availableLocales.length;
+
   return (
     <div className={["emcydocs-page", `emcydocs-page-${variant}`].join(" ")}>
       <article className="emcydocs-article">
@@ -31,8 +34,25 @@ export default async function DocsPage({
         </div>
 
         <header className="emcydocs-page-header">
+          {entry.sectionLabel ? (
+            <p className="emcydocs-page-kicker">{entry.sectionLabel}</p>
+          ) : null}
           <h1>{entry.title}</h1>
           {entry.description ? <p>{entry.description}</p> : null}
+          {headingCount > 0 || localeCount > 1 ? (
+            <div className="emcydocs-page-meta">
+              {headingCount > 0 ? (
+                <span className="emcydocs-page-meta-chip">
+                  {headingCount} section{headingCount === 1 ? "" : "s"}
+                </span>
+              ) : null}
+              {localeCount > 1 ? (
+                <span className="emcydocs-page-meta-chip">
+                  {localeCount} locales
+                </span>
+              ) : null}
+            </div>
+          ) : null}
         </header>
 
         <HeadingLinks />

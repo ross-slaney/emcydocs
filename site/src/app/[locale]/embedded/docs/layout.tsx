@@ -2,8 +2,9 @@ import { notFound } from "next/navigation";
 import Header from "@/components/Header";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
-import { DocsLayout } from "@emcy/docs";
+import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
 import { embeddedSource } from "@/lib/docs-source";
+import { docsEmbeddedTheme } from "@/lib/docs-themes";
 import { searchEmbeddedAction } from "@/app/doc-actions";
 import { docsLocales, isSupportedDocsLocale } from "@/lib/site-i18n";
 
@@ -22,7 +23,7 @@ export default async function LocaleEmbeddedDocsLayout({
   }
 
   return (
-    <div className="min-h-screen bg-stone-50">
+    <div className="min-h-screen">
       <DocumentLanguage locale={locale} />
       <div id="embedded-host-header">
         <Header locale={locale} locales={docsLocales} />
@@ -34,6 +35,8 @@ export default async function LocaleEmbeddedDocsLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/embedded/docs" />
         }
+        themeSwitcher={<ThemeSwitcher />}
+        theme={docsEmbeddedTheme}
         mode="embedded"
         mobileHeaderId="embedded-host-header"
       >

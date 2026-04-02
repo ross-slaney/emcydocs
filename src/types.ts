@@ -120,6 +120,21 @@ export interface DocsLayoutLink {
   label: string;
 }
 
+export type DocsThemePreset = "neutral" | "dusk" | "ocean" | "sqlos";
+export type DocsThemeMode = "light" | "dark";
+export type DocsThemeRadius = "md" | "lg" | "xl";
+
+export interface DocsThemeConfig {
+  preset?: DocsThemePreset;
+  mode?: DocsThemeMode;
+  accentHue?: number;
+  layoutWidth?: string;
+  contentWidth?: string;
+  sidebarWidth?: string;
+  tocWidth?: string;
+  radius?: DocsThemeRadius;
+}
+
 export type DocsSearchAction = (
   query: string,
   locale?: string
@@ -131,8 +146,10 @@ export interface DocsLayoutCommonProps {
   brand?: ReactNode;
   topLinks?: DocsLayoutLink[];
   languageSwitcher?: ReactNode;
+  themeSwitcher?: ReactNode;
   searchAction?: DocsSearchAction;
   locale?: string;
+  theme?: DocsThemeConfig;
   mode?: "standalone" | "embedded";
   mobileHeaderId?: string;
   className?: string;

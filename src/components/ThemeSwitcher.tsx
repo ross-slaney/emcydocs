@@ -16,15 +16,13 @@ export default function ThemeSwitcher() {
 
   useEffect(() => {
     const saved = localStorage.getItem("emcydocs-theme");
-    if (saved) {
-      setActiveTheme(saved);
-      document.documentElement.setAttribute("data-theme", saved);
-    }
+    applyTheme(saved ?? "purple");
+    setActiveTheme(saved ?? "purple");
   }, []);
 
   const handleThemeChange = (themeId: string) => {
     setActiveTheme(themeId);
-    document.documentElement.setAttribute("data-theme", themeId);
+    applyTheme(themeId);
     localStorage.setItem("emcydocs-theme", themeId);
   };
 
@@ -44,4 +42,16 @@ export default function ThemeSwitcher() {
       ))}
     </div>
   );
+}
+
+function applyTheme(themeId: string) {
+  const theme = themes.find((item) => item.id === themeId) ?? themes[0];
+  const hue = theme.hue;
+
+  document.documentElement.setAttribute("data-theme", theme.id);
+  document.documentElement.style.setProperty("--emcydocs-hue", hue);
+
+  document.querySelectorAll<HTMLElement>(".emcydocs-shell").forEach((node) => {
+    node.style.setProperty("--emcydocs-hue", hue);
+  });
 }

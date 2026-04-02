@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { DocsLayout } from "@emcy/docs";
+import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchDocsAction } from "@/app/doc-actions";
 import { docsSource } from "@/lib/docs-source";
+import { docsClassicTheme } from "@/lib/docs-themes";
 import {
   buildLocalizedHref,
   defaultSiteLocale,
@@ -28,6 +29,8 @@ export default function DocsRootLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
         }
+        themeSwitcher={<ThemeSwitcher />}
+        theme={docsClassicTheme}
         brand={
           <Link
             href={buildLocalizedHref("/docs", defaultSiteLocale)}

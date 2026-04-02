@@ -1,0 +1,119 @@
+---
+title: "Libreria de Componentes"
+description: "Componentes MDX opinados para banners, cards, acordeones, arboles de archivos, tabs y bloques de codigo."
+order: 1
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="Primitivas compartidas"
+  title="Publica paginas de documentacion pulidas desde el mismo paquete"
+  href="theme-configuration"
+  actionLabel="Abrir guia de tema"
+>
+  EmcyDocs ahora incluye una libreria de componentes compacta para que el home de docs, las guias y las referencias usen el mismo lenguaje visual.
+</Banner>
+
+<InlineToc items='[{"href":"#por-que-existe","label":"Por que existe"},{"href":"#banner-y-cards","label":"Banner y cards"},{"href":"#acordeones","label":"Acordeones"},{"href":"#arboles-de-archivos","label":"Arboles de archivos"},{"href":"#tabs-y-steps","label":"Tabs y steps"},{"href":"#bloques-de-codigo","label":"Bloques de codigo"}]' />
+
+## Por que existe
+
+<CardGrid cols={3}>
+  <Card title="Chrome compartido" description="Usa los mismos bloques en el sitio de ejemplo, docs embebidos y docs reales." />
+  <Card title="Mejores defaults" description="Evita reinventar grids de cards, banners y wrappers de codigo en cada repo." />
+  <Card title="MDX nativo" description="Todo se registra via `getDefaultMdxComponents()` y funciona directamente en `.mdx`." />
+</CardGrid>
+
+## Banner y cards
+
+<Banner
+  eyebrow="Superficie hero"
+  title="Usa banners para guias importantes, migraciones o anuncios"
+  href="#acordeones"
+  actionLabel="Continuar"
+>
+  Los banners funcionan muy bien en landings, guias grandes y notas de lanzamiento cuando un parrafo normal no alcanza.
+</Banner>
+
+<CardGrid cols={2}>
+  <Card title="Homes de docs" description="Orienta a lectores nuevos y marca la identidad visual del sitio." />
+  <Card title="Secciones de guia" description="Agrupa contenido largo en bloques mas escaneables." />
+</CardGrid>
+
+## Acordeones
+
+<Accordion>
+  <AccordionItem title="Que deberia ir en un acordeon?" defaultOpen>
+    FAQ, ramas opcionales de setup, notas de migracion o detalles que no deben romper el flujo principal.
+  </AccordionItem>
+  <AccordionItem title="Sigue funcionando con markdown normal?">
+    Si. Puedes mezclar codigo fenced, headings, listas, tablas y JSX dentro del mismo archivo.
+  </AccordionItem>
+  <AccordionItem title="Por que no otro paquete UI?">
+    Porque EmcyDocs quiere seguir siendo una sola libreria. Estos componentes son pequenos, enfocados en docs y comparten el mismo stylesheet.
+  </AccordionItem>
+</Accordion>
+
+## Arboles de archivos
+
+<Files title="site/content/docs">
+  <Folder name="reference">
+    <File name="component-library/es.mdx" meta="Español" />
+    <File name="component-library/en.mdx" meta="English" />
+    <File name="component-library/zh.mdx" meta="中文" />
+    <File name="theme-configuration/es.mdx" meta="Tema" />
+  </Folder>
+  <Folder name="layouts">
+    <File name="docs-layout/es.mdx" meta="Layout clasico" />
+    <File name="notebook-layout/es.mdx" meta="Layout denso" />
+    <File name="minimal-layout/es.mdx" meta="Layout de lectura" />
+  </Folder>
+</Files>
+
+## Tabs y steps
+
+<Tabs defaultValue="adoptar">
+  <TabsList>
+    <TabsTrigger value="adoptar">Adoptar</TabsTrigger>
+    <TabsTrigger value="publicar">Publicar</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="adoptar">
+    <Steps>
+      <Step title="Importa el paquete una vez">
+        Agrega `@emcy/docs/styles.css` de forma global y deja el contenido dentro del repo.
+      </Step>
+      <Step title="Usa los layouts compartidos">
+        Empieza con `DocsLayout`, `NotebookLayout` o `MinimalLayout`.
+      </Step>
+      <Step title="Usa componentes dentro del MDX">
+        Recurre a banners, cards, acordeones, archivos, tabs y steps cuando markdown puro se vea plano.
+      </Step>
+    </Steps>
+  </TabsContent>
+
+  <TabsContent value="publicar">
+    <Callout type="tip" title="Dogfooding real">
+      El sitio de ejemplo y los docs de SqlOS deben usar exactamente la misma superficie de componentes.
+    </Callout>
+  </TabsContent>
+</Tabs>
+
+## Bloques de codigo
+
+<CodeBlock title="layout.tsx" language="tsx">{`<DocsLayout
+  navigation={docsSource.getNavigation()}
+  theme={{
+    preset: "neutral",
+    mode: "light",
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+    radius: "xl",
+  }}
+  themeSwitcher={<ThemeSwitcher />}
+>
+  {children}
+</DocsLayout>`}</CodeBlock>
+
+El objetivo es simple: un solo paquete, un solo lenguaje visual y suficientes primitivas para que las paginas de docs se sientan intencionales.

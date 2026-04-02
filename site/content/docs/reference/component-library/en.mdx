@@ -1,0 +1,141 @@
+---
+title: "Component Library"
+description: "Opinionated MDX components for banners, cards, accordions, file trees, tabs, and polished code blocks."
+order: 1
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="Shared primitives"
+  title="Ship polished docs pages from the same package you publish"
+  href="theme-configuration"
+  actionLabel="Open theme guide"
+>
+  EmcyDocs now ships a compact component library so your docs home, product guides, and reference pages can share one visual language instead of drifting repo by repo.
+</Banner>
+
+<InlineToc items='[{"href":"#why-it-exists","label":"Why it exists"},{"href":"#banner-and-cards","label":"Banner and cards"},{"href":"#accordions","label":"Accordions"},{"href":"#file-trees","label":"File trees"},{"href":"#tabs-and-steps","label":"Tabs and steps"},{"href":"#code-blocks","label":"Code blocks"}]' />
+
+## Why it exists
+
+<CardGrid cols={3}>
+  <Card
+    title="Shared chrome"
+    description="Use the same building blocks in the example app, embedded docs, and production docs."
+  />
+  <Card
+    title="Better defaults"
+    description="Stop re-inventing card grids, migration banners, and code block wrappers in every repo."
+  />
+  <Card
+    title="MDX-native"
+    description="All components register through `getDefaultMdxComponents()` so they work in plain content files."
+  />
+</CardGrid>
+
+## Banner and cards
+
+<Banner
+  eyebrow="Hero surface"
+  title="Use banners to frame a guide, migration, or docs-home announcement"
+  href="#accordions"
+  actionLabel="Continue"
+>
+  Banners work well at the top of landing pages, major product guides, and release notes when you need more emphasis than a plain paragraph can provide.
+</Banner>
+
+<CardGrid cols={2}>
+  <Card
+    title="Docs homes"
+    description="Point new readers at the right namespace, showcase major capabilities, and anchor the docs visual identity."
+  />
+  <Card
+    title="Guide sections"
+    description="Break long pages into scannable clusters without falling back to plain unordered lists."
+  />
+</CardGrid>
+
+## Accordions
+
+<Accordion>
+  <AccordionItem title="What belongs in an accordion?" defaultOpen>
+    Put FAQs, optional setup branches, migration caveats, or product-specific notes here. Keep the title short and action-oriented.
+  </AccordionItem>
+  <AccordionItem title="Does it still work with normal markdown?">
+    Yes. You can mix fenced code blocks, headings, lists, tables, and JSX components in the same `.mdx` file.
+  </AccordionItem>
+  <AccordionItem title="Why not depend on another UI package?">
+    EmcyDocs keeps everything in one library on purpose. The components are small, docs-focused, and styled by the same shared stylesheet.
+  </AccordionItem>
+</Accordion>
+
+## File trees
+
+<Files title="site/content/docs">
+  <Folder name="reference">
+    <File name="component-library/en.mdx" meta="English" />
+    <File name="component-library/es.mdx" meta="Spanish" />
+    <File name="component-library/zh.mdx" meta="Chinese" />
+    <File name="theme-configuration/en.mdx" meta="Theme docs" />
+  </Folder>
+  <Folder name="layouts">
+    <File name="docs-layout/en.mdx" meta="Classic layout" />
+    <File name="notebook-layout/en.mdx" meta="Dense layout" />
+    <File name="minimal-layout/en.mdx" meta="Reading layout" />
+  </Folder>
+</Files>
+
+## Tabs and steps
+
+<Tabs defaultValue="adopt">
+  <TabsList>
+    <TabsTrigger value="adopt">Adopt</TabsTrigger>
+    <TabsTrigger value="ship">Ship</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="adopt">
+    <Steps>
+      <Step title="Import the package once">
+        Add `@emcy/docs/styles.css` globally and keep your docs content inside the repo.
+      </Step>
+      <Step title="Use the shared layouts">
+        Start with `DocsLayout`, `NotebookLayout`, or `MinimalLayout` and then add your own search or locale switching.
+      </Step>
+      <Step title="Reach for components in MDX">
+        Use banners, cards, accordions, files, tabs, and steps where a plain markdown block would feel flat.
+      </Step>
+    </Steps>
+  </TabsContent>
+
+  <TabsContent value="ship">
+    <Callout type="tip" title="Dogfood the same primitives">
+      The example app and SqlOS docs should both use the same component set. That is the point of the library surface.
+    </Callout>
+  </TabsContent>
+</Tabs>
+
+## Code blocks
+
+<CodeBlock title="layout.tsx" language="tsx">{`import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
+import "@emcy/docs/styles.css";
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      theme={{
+        preset: "neutral",
+        mode: "light",
+        layoutWidth: "1500px",
+        contentWidth: "48rem",
+        radius: "xl",
+      }}
+      themeSwitcher={<ThemeSwitcher />}
+    >
+      {children}
+    </DocsLayout>
+  );
+}`}</CodeBlock>
+
+The goal is straightforward: one package, one visual language, and enough primitives to make docs pages look intentional without creating another package boundary.

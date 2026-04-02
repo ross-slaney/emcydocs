@@ -1,0 +1,80 @@
+---
+title: "主题配置"
+description: "通过一个 theme 对象统一配置 preset、模式、强调色、布局宽度与圆角。"
+order: 2
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="Theme API"
+  title="用一个 theme 对象和可选 switcher 插槽控制文档外壳"
+  href="../layouts/docs-layout"
+  actionLabel="查看布局用法"
+>
+  主题能力仍然留在同一个包里。你把 `theme` 传给布局组件，然后按需提供 `themeSwitcher` 或 `languageSwitcher`。
+</Banner>
+
+<CardGrid cols={3}>
+  <Card title="Presets" description="从 `neutral`、`dusk`、`ocean` 或 `sqlos` 开始，再按需微调。" />
+  <Card title="布局尺寸" description="统一控制整体宽度、正文宽度、侧边栏宽度和 TOC 宽度。" />
+  <Card title="表面细节" description="调整强调色 hue、明暗模式与圆角，同时保持组件库样式一致。" />
+</CardGrid>
+
+## Theme prop
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  theme={{
+    preset: "neutral",
+    mode: "light",
+    accentHue: 38,
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+    sidebarWidth: "276px",
+    tocWidth: "240px",
+    radius: "xl",
+  }}
+  themeSwitcher={<ThemeSwitcher />}
+/>
+```
+
+## Presets
+
+<Tabs defaultValue="neutral">
+  <TabsList>
+    <TabsTrigger value="neutral">Neutral</TabsTrigger>
+    <TabsTrigger value="dusk">Dusk</TabsTrigger>
+    <TabsTrigger value="ocean">Ocean</TabsTrigger>
+    <TabsTrigger value="sqlos">SqlOS</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="neutral">适合清晰、平衡的浅色文档体验。</TabsContent>
+  <TabsContent value="dusk">适合更有对比度的深色 notebook 风格。</TabsContent>
+  <TabsContent value="ocean">适合技术感更强的嵌入式或深色外壳。</TabsContent>
+  <TabsContent value="sqlos">适合 SqlOS showcase 或强调品牌色的产品文档。</TabsContent>
+</Tabs>
+
+## 参数说明
+
+<Accordion>
+  <AccordionItem title="preset 和 mode" defaultOpen>
+    `preset` 负责基础色板与表面风格，`mode` 用来在支持的 preset 中强制 light 或 dark。
+  </AccordionItem>
+  <AccordionItem title="accentHue">
+    当你想保留同一 preset，只替换品牌强调色时使用。
+  </AccordionItem>
+  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
+    用同一个布局组件覆盖 classic、notebook、embedded 与 minimal 四种体验。
+  </AccordionItem>
+  <AccordionItem title="radius">
+    通过 `md`、`lg` 或 `xl` 调整整体表面的锐利或圆润程度。
+  </AccordionItem>
+</Accordion>
+
+## 可选 switcher 插槽
+
+<Callout type="tip" title="外壳只提供插槽">
+  EmcyDocs 不强制语言切换器或主题切换器的实现。需要时传入 `languageSwitcher` 与 `themeSwitcher`，不需要时直接省略即可。
+</Callout>

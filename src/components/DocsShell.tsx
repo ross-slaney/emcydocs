@@ -3,10 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import type { DocsLayoutCommonProps } from "../types";
+import {
+  getDocsThemeStyle,
+  resolveDocsThemeMode,
+  resolveDocsThemePreset,
+} from "../theme";
 import DocsSearch from "./DocsSearch";
 import DocsSidebar from "./DocsSidebar";
 import MobileDocsChrome from "./MobileDocsChrome";
-import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function DocsShell({
   navigation,
@@ -14,8 +18,10 @@ export default function DocsShell({
   brand,
   topLinks,
   languageSwitcher,
+  themeSwitcher,
   searchAction,
   locale,
+  theme,
   mode = "standalone",
   mobileHeaderId,
   className,
@@ -80,6 +86,10 @@ export default function DocsShell({
     return current?.title ?? "Documentation";
   }, [navigation, pathname]);
 
+  const themePreset = resolveDocsThemePreset(theme);
+  const themeMode = resolveDocsThemeMode(theme);
+  const themeStyle = getDocsThemeStyle(theme);
+
   return (
     <div
       className={[
@@ -90,41 +100,55 @@ export default function DocsShell({
       ]
         .filter(Boolean)
         .join(" ")}
+      data-emcydocs-preset={themePreset}
+      data-emcydocs-mode={themeMode}
+      style={themeStyle}
     >
       {mode === "standalone" ? (
         <header className="emcydocs-header">
-          <div className="emcydocs-header-brand">{brand ?? <span>Documentation</span>}</div>
-          <div className="emcydocs-header-search">
-            <DocsSearch searchAction={searchAction} locale={locale} />
+          <div className="emcydocs-header-inner">
+            <div className="emcydocs-header-brand">
+              {brand ?? <span>Documentation</span>}
+            </div>
+            <div className="emcydocs-header-search">
+              <DocsSearch searchAction={searchAction} locale={locale} />
+            </div>
+            {themeSwitcher ? (
+              <div className="emcydocs-header-theme">{themeSwitcher}</div>
+            ) : null}
+            {languageSwitcher ? (
+              <div className="emcydocs-header-language">{languageSwitcher}</div>
+            ) : null}
+            {topLinks?.length ? (
+              <nav className="emcydocs-header-links" aria-label="Top level docs links">
+                {topLinks.map((link) => (
+                  <a key={link.href} href={link.href}>
+                    {link.label}
+                  </a>
+                ))}
+              </nav>
+            ) : null}
           </div>
-          <ThemeSwitcher />
-          {languageSwitcher ? (
-            <div className="emcydocs-header-language">{languageSwitcher}</div>
-          ) : null}
-          {topLinks?.length ? (
-            <nav className="emcydocs-header-links" aria-label="Top level docs links">
-              {topLinks.map((link) => (
-                <a key={link.href} href={link.href}>
-                  {link.label}
-                </a>
-              ))}
-            </nav>
-          ) : null}
         </header>
       ) : null}
 
       <div className="emcydocs-mobile-wrap">
-        <MobileDocsChrome
-          currentTitle={currentTitle}
-          isNavOpen={isNavOpen}
-          onToggleNav={() => setIsNavOpen((current) => !current)}
-          topOffset={topOffset}
-        >
-          <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
-          {languageSwitcher ? (
-            <div className="emcydocs-mobile-language">{languageSwitcher}</div>
-          ) : null}
-        </MobileDocsChrome>
+        <div className="emcydocs-mobile-inner">
+          <MobileDocsChrome
+            currentTitle={currentTitle}
+            isNavOpen={isNavOpen}
+            onToggleNav={() => setIsNavOpen((current) => !current)}
+            topOffset={topOffset}
+          >
+            <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
+            {themeSwitcher ? (
+              <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
+            ) : null}
+            {languageSwitcher ? (
+              <div className="emcydocs-mobile-language">{languageSwitcher}</div>
+            ) : null}
+          </MobileDocsChrome>
+        </div>
       </div>
 
       <div className="emcydocs-frame">

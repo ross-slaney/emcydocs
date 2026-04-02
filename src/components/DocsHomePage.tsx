@@ -52,18 +52,68 @@ export default async function DocsHomePage({
 }) {
   const pageTitle = title ?? entry?.title ?? "Documentation";
   const pageDescription = description ?? entry?.description ?? "";
+  const totalPages = navigation.reduce((count, section) => count + section.items.length, 0);
+  const heroLinks = navigation
+    .flatMap((section) =>
+      section.items.slice(0, 1).map((item) => ({
+        ...item,
+        sectionLabel: section.label,
+      }))
+    )
+    .slice(0, 4);
 
   return (
     <div className="emcydocs-home">
       <section className="emcydocs-home-hero">
-        <span className="emcydocs-badge">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-          EmcyDocs
-        </span>
-        <h1>{pageTitle}</h1>
-        {pageDescription ? <p>{pageDescription}</p> : null}
+        <div className="emcydocs-home-hero-main">
+          <span className="emcydocs-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+            </svg>
+            EmcyDocs
+          </span>
+          <h1>{pageTitle}</h1>
+          {pageDescription ? <p>{pageDescription}</p> : null}
+          <div className="emcydocs-home-metrics">
+            <div className="emcydocs-home-metric">
+              <strong>{navigation.length}</strong>
+              <span>Namespaces</span>
+            </div>
+            <div className="emcydocs-home-metric">
+              <strong>{totalPages}</strong>
+              <span>Pages</span>
+            </div>
+            <div className="emcydocs-home-metric">
+              <strong>{entry?.availableLocales.length ?? 1}</strong>
+              <span>Locales</span>
+            </div>
+          </div>
+        </div>
+
+        {heroLinks.length ? (
+          <aside className="emcydocs-home-hero-panel">
+            <div className="emcydocs-home-hero-panel-head">
+              <div>
+                <p>Start here</p>
+                <h2>Recommended first stops</h2>
+              </div>
+              <span>{heroLinks.length} picks</span>
+            </div>
+            <div className="emcydocs-home-hero-links">
+              {heroLinks.map((item) => (
+                <Link key={item.href} href={item.href} className="emcydocs-home-hero-link">
+                  <div>
+                    <strong>{item.title}</strong>
+                    <span>{item.sectionLabel}</span>
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M13 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              ))}
+            </div>
+          </aside>
+        ) : null}
       </section>
 
       {entry ? (
@@ -76,42 +126,54 @@ export default async function DocsHomePage({
         {navigation.map((section) => (
           <article key={section.key || "root"} className="emcydocs-home-card">
             <div className="emcydocs-home-card-head">
-              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  width: "1.75rem",
-                  height: "1.75rem",
-                  borderRadius: "0.5rem",
-                  background: "var(--emcydocs-accent-soft)",
-                  color: "var(--emcydocs-accent-light)",
-                }}>
-                  <span style={{ width: "1rem", height: "1rem" }}>
-                    {getSectionIcon(section.label)}
-                  </span>
+              <div className="emcydocs-home-card-heading">
+                <span className="emcydocs-home-card-icon">
+                  <span>{getSectionIcon(section.label)}</span>
                 </span>
-                <h2>{section.label}</h2>
+                <div>
+                  <p className="emcydocs-home-card-eyebrow">Namespace</p>
+                  <h2>{section.label}</h2>
+                </div>
               </div>
-              <span>{section.items.length} pages</span>
+              <span className="emcydocs-home-card-count">{section.items.length} pages</span>
             </div>
-            <ul>
-              {section.items.slice(0, 5).map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href}>{item.title}</Link>
-                </li>
+            {getSectionSummary(section.items) ? (
+              <p className="emcydocs-home-card-summary">{getSectionSummary(section.items)}</p>
+            ) : null}
+            <div className="emcydocs-home-card-links">
+              {section.items.slice(0, 4).map((item) => (
+                <Link key={item.href} href={item.href} className="emcydocs-home-card-link">
+                  <div>
+                    <strong>{item.title}</strong>
+                    {item.description ? <span>{truncateText(item.description, 68)}</span> : null}
+                  </div>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </Link>
               ))}
-              {section.items.length > 5 && (
-                <li>
-                  <Link href={section.items[0].href} style={{ color: "var(--emcydocs-accent-light)" }}>
-                    View all {section.items.length} pages →
-                  </Link>
-                </li>
-              )}
-            </ul>
+            </div>
+            {section.items.length > 4 ? (
+              <Link href={section.items[0].href} className="emcydocs-home-card-more">
+                Browse all {section.items.length} pages
+              </Link>
+            ) : null}
           </article>
         ))}
       </section>
     </div>
   );
+}
+
+function getSectionSummary(items: DocsNavSection["items"]) {
+  const firstWithDescription = items.find((item) => item.description.trim().length > 0);
+  return firstWithDescription ? truncateText(firstWithDescription.description, 140) : "";
+}
+
+function truncateText(value: string, maxLength: number) {
+  if (value.length <= maxLength) {
+    return value;
+  }
+
+  return `${value.slice(0, maxLength - 1).trimEnd()}…`;
 }

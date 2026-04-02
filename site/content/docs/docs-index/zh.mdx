@@ -6,6 +6,33 @@ order: -1
 
 EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库内、使用对 SEO 友好的预渲染路由、内置移动端文档体验，并且在独立文档站和嵌入式文档之间自由切换。
 
+<Banner
+  eyebrow="最新能力"
+  title="文档组件库与主题 API 已成为一等能力"
+  href="reference/component-library"
+  actionLabel="查看组件"
+>
+  这个示例站现在直接使用同一个包里的 banner、card、accordion、文件树、tabs 和更完整的代码块样式。布局主题则通过一个 `theme` 对象统一配置。
+</Banner>
+
+<CardGrid cols={3}>
+  <Card
+    title="组件库"
+    description="为文档首页、指南和参考页准备的五类核心 MDX 组件。"
+    href="reference/component-library"
+  />
+  <Card
+    title="主题配置"
+    description="通过 preset 控制布局宽度、强调色、模式与圆角。"
+    href="reference/theme-configuration"
+  />
+  <Card
+    title="独立模式与嵌入模式"
+    description="同一套内容树既能驱动独立站，也能嵌入到产品外壳中。"
+    href="guides/standalone-vs-embedded"
+  />
+</CardGrid>
+
 ## 核心理念
 
 - 一次 `createDocsSource(...)` 调用即可生成内容模型、导航、元数据、路由辅助函数、标题提取和搜索。
@@ -25,6 +52,8 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
 如果你想快速了解这个包，可以从这里开始：
 
 - [快速开始](getting-started)
+- [组件库](reference/component-library)
+- [主题配置](reference/theme-configuration)
 - [独立模式与嵌入模式](guides/standalone-vs-embedded)
 - [搜索](guides/search)
 - [移动端文档体验](guides/mobile-docs-ux)

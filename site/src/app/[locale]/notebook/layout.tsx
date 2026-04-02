@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { NotebookLayout } from "@emcy/docs";
+import { NotebookLayout, ThemeSwitcher } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchNotebookAction } from "@/app/doc-actions";
 import { notebookSource } from "@/lib/docs-source";
+import { docsNotebookTheme } from "@/lib/docs-themes";
 import {
   buildLocalizedHref,
   docsLocales,
@@ -39,6 +40,8 @@ export default async function LocaleNotebookLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/notebook" />
         }
+        themeSwitcher={<ThemeSwitcher />}
+        theme={docsNotebookTheme}
         brand={
           <Link
             href={buildLocalizedHref("/notebook", locale)}

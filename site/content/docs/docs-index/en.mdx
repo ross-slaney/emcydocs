@@ -6,6 +6,33 @@ order: -1
 
 EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-friendly prerendered routes, built-in mobile docs UX, and a clean way to switch between standalone and embedded docs experiences.
 
+<Banner
+  eyebrow="Now shipping"
+  title="A real component library and theme API for documentation teams"
+  href="reference/component-library"
+  actionLabel="Browse the components"
+>
+  The showcase now dogfoods shared banners, cards, accordions, file trees, tabs, and polished code blocks from the same package. Theme presets and shell sizing live behind one `theme` prop.
+</Banner>
+
+<CardGrid cols={3}>
+  <Card
+    title="Component Library"
+    description="Five opinionated MDX building blocks for docs homes, guides, and references."
+    href="reference/component-library"
+  />
+  <Card
+    title="Theme Configuration"
+    description="Preset-based shell theming for layout width, accent hue, mode, and radius."
+    href="reference/theme-configuration"
+  />
+  <Card
+    title="Standalone vs Embedded"
+    description="Use the same content tree in a dedicated docs site or inside a host product shell."
+    href="guides/standalone-vs-embedded"
+  />
+</CardGrid>
+
 ## Core ideas
 
 - A single `createDocsSource(...)` call builds your content model, navigation, metadata, route helpers, heading extraction, and search.
@@ -25,6 +52,8 @@ EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-frien
 Start here if you want a quick feel for the package:
 
 - [Getting started](getting-started)
+- [Component library](reference/component-library)
+- [Theme configuration](reference/theme-configuration)
 - [Standalone vs embedded](guides/standalone-vs-embedded)
 - [Search](guides/search)
 - [Mobile docs UX](guides/mobile-docs-ux)

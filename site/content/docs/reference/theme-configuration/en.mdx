@@ -1,0 +1,95 @@
+---
+title: "Theme Configuration"
+description: "Configure preset, mode, accent hue, shell sizing, and radii from a single theme object."
+order: 2
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="Theme API"
+  title="Tune docs chrome with one theme object and an optional switcher slot"
+  href="../layouts/docs-layout"
+  actionLabel="See layout usage"
+>
+  The library keeps theming inside the same package. You pass a `theme` object to the layout and optionally render your own `themeSwitcher` or `languageSwitcher` in the shared shell.
+</Banner>
+
+<CardGrid cols={3}>
+  <Card title="Presets" description="Start with `neutral`, `dusk`, `ocean`, or `sqlos` and then refine from there." />
+  <Card title="Layout sizing" description="Control shell width, content width, sidebar width, and TOC width without creating new layout components." />
+  <Card title="Surface details" description="Adjust accent hue, light or dark mode, and radius scale while keeping the component library styles intact." />
+</CardGrid>
+
+## Theme prop
+
+```tsx
+import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
+
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  theme={{
+    preset: "neutral",
+    mode: "light",
+    accentHue: 38,
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+    sidebarWidth: "276px",
+    tocWidth: "240px",
+    radius: "xl",
+  }}
+  themeSwitcher={<ThemeSwitcher />}
+/>
+```
+
+## Presets
+
+<Tabs defaultValue="neutral">
+  <TabsList>
+    <TabsTrigger value="neutral">Neutral</TabsTrigger>
+    <TabsTrigger value="dusk">Dusk</TabsTrigger>
+    <TabsTrigger value="ocean">Ocean</TabsTrigger>
+    <TabsTrigger value="sqlos">SqlOS</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="neutral">
+    Use this for a balanced light docs shell that can still be recolored with the theme switcher or `accentHue`.
+  </TabsContent>
+
+  <TabsContent value="dusk">
+    Use this for a richer dark notebook-style experience with stronger contrast and glow around the accent color.
+  </TabsContent>
+
+  <TabsContent value="ocean">
+    Use this when you want an embedded, technical, darker presentation that still feels bright and sharp.
+  </TabsContent>
+
+  <TabsContent value="sqlos">
+    Use this for the SqlOS showcase or any product whose docs need a lighter shell with a stronger branded accent.
+  </TabsContent>
+</Tabs>
+
+## What the knobs do
+
+<Accordion>
+  <AccordionItem title="preset and mode" defaultOpen>
+    `preset` selects the base palette, surfaces, and contrast model. `mode` lets you force light or dark when the preset supports both.
+  </AccordionItem>
+  <AccordionItem title="accentHue">
+    Use a single hue number when you want to keep the same preset but move the brand accent to blue, teal, rose, orange, or any other value.
+  </AccordionItem>
+  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
+    These values let one layout component cover classic docs, notebook docs, embedded docs, and narrower reading views without splitting the package.
+  </AccordionItem>
+  <AccordionItem title="radius">
+    Choose `md`, `lg`, or `xl` to tighten or soften the overall surface language across cards, banners, tabs, and shell chrome.
+  </AccordionItem>
+</Accordion>
+
+## Optional switcher slots
+
+<Callout type="tip" title="The shell only provides slots">
+  EmcyDocs does not force a specific language picker or theme picker. Pass your own `languageSwitcher` and `themeSwitcher` nodes when you want them, or omit them when the product should stay fixed.
+</Callout>
+
+The example site uses the same layout API to render a neutral classic docs view, a darker notebook view, a quieter minimal view, and an embedded host experience.

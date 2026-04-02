@@ -6,6 +6,33 @@ order: -1
 
 EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MDX dentro del repo, rutas prerenderizadas amigables para SEO, una UX mobile integrada y una forma limpia de alternar entre experiencias standalone y embebidas.
 
+<Banner
+  eyebrow="Nuevo"
+  title="Una libreria de componentes y un API de temas para equipos de documentacion"
+  href="reference/component-library"
+  actionLabel="Ver componentes"
+>
+  El showcase ahora usa banners, cards, acordeones, arboles de archivos, tabs y bloques de codigo pulidos desde el mismo paquete. Los presets visuales viven en una sola prop `theme`.
+</Banner>
+
+<CardGrid cols={3}>
+  <Card
+    title="Libreria de Componentes"
+    description="Bloques MDX opinados para home de docs, guias y referencias."
+    href="reference/component-library"
+  />
+  <Card
+    title="Configuracion de Tema"
+    description="Theming por presets para ancho, acento, modo y radios."
+    href="reference/theme-configuration"
+  />
+  <Card
+    title="Standalone vs Embebido"
+    description="Usa el mismo arbol de contenido en un sitio de docs o dentro de la app anfitriona."
+    href="guides/standalone-vs-embedded"
+  />
+</CardGrid>
+
 ## Ideas principales
 
 - Una sola llamada a `createDocsSource(...)` construye el modelo de contenido, la navegacion, la metadata, los helpers de rutas, la extraccion de headings y la busqueda.
@@ -25,6 +52,8 @@ EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MD
 Empieza aqui si quieres entender rapido el paquete:
 
 - [Primeros pasos](getting-started)
+- [Libreria de componentes](reference/component-library)
+- [Configuracion de tema](reference/theme-configuration)
 - [Standalone vs embebido](guides/standalone-vs-embedded)
 - [Busqueda](guides/search)
 - [UX mobile para docs](guides/mobile-docs-ux)

@@ -1,0 +1,119 @@
+---
+title: "组件库"
+description: "为 banner、card、accordion、文件树、tabs 与代码块提供一套有主张的 MDX 组件。"
+order: 1
+section: reference
+sectionLabel: "Reference"
+---
+
+<Banner
+  eyebrow="共享原语"
+  title="直接用同一个包构建更完整的文档页面"
+  href="theme-configuration"
+  actionLabel="打开主题指南"
+>
+  EmcyDocs 现在内置了一组紧凑的文档组件，让首页、指南页和参考页能够共享一套视觉语言，而不是在不同仓库里各自演化。
+</Banner>
+
+<InlineToc items='[{"href":"#why-it-exists","label":"Why it exists"},{"href":"#banner-and-cards","label":"Banner and cards"},{"href":"#accordions","label":"Accordions"},{"href":"#file-trees","label":"File trees"},{"href":"#tabs-and-steps","label":"Tabs and steps"},{"href":"#code-blocks","label":"Code blocks"}]' />
+
+## Why it exists
+
+<CardGrid cols={3}>
+  <Card title="共享外观" description="示例站、嵌入式文档和真实产品文档都可以复用同一组组件。" />
+  <Card title="更好的默认值" description="不必在每个仓库里重复造 cards、banner 和代码块容器。" />
+  <Card title="MDX 原生" description="这些组件通过 `getDefaultMdxComponents()` 注册，可直接在 `.mdx` 中使用。" />
+</CardGrid>
+
+## Banner and cards
+
+<Banner
+  eyebrow="Hero 区块"
+  title="用 banner 承载迁移说明、重要指南或首页公告"
+  href="#accordions"
+  actionLabel="继续"
+>
+  当普通段落不够醒目时，banner 很适合放在 landing page、核心指南和 release notes 的顶部。
+</Banner>
+
+<CardGrid cols={2}>
+  <Card title="文档首页" description="帮助新读者快速进入正确命名空间，并建立站点的视觉识别。" />
+  <Card title="指南分组" description="把长页面拆成更易扫描的内容块。" />
+</CardGrid>
+
+## Accordions
+
+<Accordion>
+  <AccordionItem title="什么内容适合放进 accordion？" defaultOpen>
+    FAQ、可选安装分支、迁移注意事项，或者不想打断主叙事但又必须说明的补充内容。
+  </AccordionItem>
+  <AccordionItem title="还能和普通 Markdown 一起使用吗？">
+    可以。你仍然可以在同一个 `.mdx` 文件里混合 fenced code、标题、列表、表格和 JSX 组件。
+  </AccordionItem>
+  <AccordionItem title="为什么不再拆一个 UI 包？">
+    因为 EmcyDocs 要保持单一库的边界。这些组件体积小、面向文档、并且由同一份样式系统驱动。
+  </AccordionItem>
+</Accordion>
+
+## File trees
+
+<Files title="site/content/docs">
+  <Folder name="reference">
+    <File name="component-library/zh.mdx" meta="中文" />
+    <File name="component-library/en.mdx" meta="English" />
+    <File name="component-library/es.mdx" meta="Español" />
+    <File name="theme-configuration/zh.mdx" meta="主题配置" />
+  </Folder>
+  <Folder name="layouts">
+    <File name="docs-layout/zh.mdx" meta="Classic 布局" />
+    <File name="notebook-layout/zh.mdx" meta="紧凑布局" />
+    <File name="minimal-layout/zh.mdx" meta="阅读布局" />
+  </Folder>
+</Files>
+
+## Tabs and steps
+
+<Tabs defaultValue="adopt">
+  <TabsList>
+    <TabsTrigger value="adopt">Adopt</TabsTrigger>
+    <TabsTrigger value="ship">Ship</TabsTrigger>
+  </TabsList>
+
+  <TabsContent value="adopt">
+    <Steps>
+      <Step title="一次性引入包">
+        全局导入 `@emcy/docs/styles.css`，并继续把内容留在你的仓库中。
+      </Step>
+      <Step title="从共享布局开始">
+        先用 `DocsLayout`、`NotebookLayout` 或 `MinimalLayout` 搭起文档外壳。
+      </Step>
+      <Step title="在 MDX 中使用组件">
+        当纯 Markdown 显得太平时，就换成 banner、card、accordion、文件树、tabs 和 steps。
+      </Step>
+    </Steps>
+  </TabsContent>
+
+  <TabsContent value="ship">
+    <Callout type="tip" title="真实 dogfooding">
+      示例站与 SqlOS 文档都应该使用完全相同的组件表面，这样组件库才算成立。
+    </Callout>
+  </TabsContent>
+</Tabs>
+
+## Code blocks
+
+<CodeBlock title="layout.tsx" language="tsx">{`<DocsLayout
+  navigation={docsSource.getNavigation()}
+  theme={{
+    preset: "neutral",
+    mode: "light",
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+    radius: "xl",
+  }}
+  themeSwitcher={<ThemeSwitcher />}
+>
+  {children}
+</DocsLayout>`}</CodeBlock>
+
+目标很直接：一个包、一套视觉语言，以及足够的原语，让文档页面无需再引入另一层包边界也能看起来足够完整。

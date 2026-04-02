@@ -27,6 +27,7 @@ export { default as ThemeSwitcher } from "./components/ThemeSwitcher";
 export { StickyAside } from "./components/StickyAside";
 export {
   getDocsThemeStyle,
+  resolveDocsThemeDensity,
   resolveDocsThemeMode,
   resolveDocsThemePreset,
 } from "./theme";
@@ -46,6 +47,7 @@ export type {
   DocsSource,
   DocsSourceConfig,
   DocsThemeConfig,
+  DocsThemeDensity,
   DocsThemeMode,
   DocsThemePreset,
   DocsThemeRadius,

@@ -36,6 +36,28 @@
   --emcydocs-sidebar-width: 276px;
   --emcydocs-toc-width: 240px;
   --emcydocs-radius: 1.25rem;
+  --emcydocs-header-padding-inline: 1.5rem;
+  --emcydocs-mobile-padding-block: 1rem;
+  --emcydocs-mobile-padding-inline: 1rem;
+  --emcydocs-sidebar-padding-block: 1.35rem;
+  --emcydocs-sidebar-padding-inline: 1rem;
+  --emcydocs-sidebar-section-gap: 1.35rem;
+  --emcydocs-sidebar-link-padding-block: 0.72rem;
+  --emcydocs-sidebar-link-padding-inline: 0.8rem;
+  --emcydocs-page-padding-block-mobile: 1.75rem;
+  --emcydocs-page-padding-inline-mobile: 1.2rem;
+  --emcydocs-page-padding-block: 2.35rem;
+  --emcydocs-page-padding-inline: 2.75rem;
+  --emcydocs-page-gap: 3.5rem;
+  --emcydocs-home-padding-block-mobile: 1.8rem;
+  --emcydocs-home-padding-inline-mobile: 1.2rem;
+  --emcydocs-home-padding-block: 2.5rem;
+  --emcydocs-home-padding-inline: 2.75rem;
+  --emcydocs-hero-main-padding-mobile: 1.4rem;
+  --emcydocs-hero-main-padding: 1.8rem;
+  --emcydocs-hero-panel-padding: 1.2rem;
+  --emcydocs-home-card-padding-mobile: 1.05rem;
+  --emcydocs-home-card-padding: 1.25rem;
   --emcydocs-gradient: radial-gradient(
       circle at top left,
       hsl(var(--emcydocs-hue) 90% 55% / 0.08),
@@ -69,6 +91,31 @@
 }
 
 [data-emcydocs-preset="dusk"] {
+  --emcydocs-hue: 270;
+  --emcydocs-bg: #fbf8ff;
+  --emcydocs-bg-subtle: #f3eeff;
+  --emcydocs-surface: rgba(255, 255, 255, 0.9);
+  --emcydocs-surface-elevated: rgba(255, 255, 255, 0.98);
+  --emcydocs-surface-hover: rgba(113, 79, 255, 0.09);
+  --emcydocs-border: rgba(130, 96, 255, 0.14);
+  --emcydocs-border-strong: rgba(130, 96, 255, 0.22);
+  --emcydocs-muted: #85789b;
+  --emcydocs-muted-foreground: #645974;
+  --emcydocs-foreground: #181220;
+  --emcydocs-accent: hsl(var(--emcydocs-hue) 88% 60%);
+  --emcydocs-accent-light: hsl(var(--emcydocs-hue) 74% 43%);
+  --emcydocs-accent-dark: hsl(var(--emcydocs-hue) 84% 52%);
+  --emcydocs-accent-soft: hsl(var(--emcydocs-hue) 88% 60% / 0.12);
+  --emcydocs-accent-glow: hsl(var(--emcydocs-hue) 88% 60% / 0.22);
+  --emcydocs-gradient: radial-gradient(
+      circle at top left,
+      hsl(var(--emcydocs-hue) 88% 60% / 0.12),
+      transparent 34%
+    ),
+    radial-gradient(circle at top right, rgba(165, 110, 255, 0.1), transparent 30%);
+}
+
+[data-emcydocs-preset="dusk"][data-emcydocs-mode="dark"] {
   --emcydocs-hue: 266;
   --emcydocs-bg: #09090c;
   --emcydocs-bg-subtle: #11111a;
@@ -94,6 +141,31 @@
 }
 
 [data-emcydocs-preset="ocean"] {
+  --emcydocs-hue: 196;
+  --emcydocs-bg: #f4fbfd;
+  --emcydocs-bg-subtle: #eaf5f8;
+  --emcydocs-surface: rgba(255, 255, 255, 0.9);
+  --emcydocs-surface-elevated: rgba(255, 255, 255, 0.98);
+  --emcydocs-surface-hover: rgba(0, 137, 196, 0.08);
+  --emcydocs-border: rgba(62, 148, 184, 0.14);
+  --emcydocs-border-strong: rgba(62, 148, 184, 0.22);
+  --emcydocs-muted: #708f98;
+  --emcydocs-muted-foreground: #4b6771;
+  --emcydocs-foreground: #112129;
+  --emcydocs-accent: hsl(var(--emcydocs-hue) 84% 54%);
+  --emcydocs-accent-light: hsl(var(--emcydocs-hue) 82% 36%);
+  --emcydocs-accent-dark: hsl(var(--emcydocs-hue) 78% 48%);
+  --emcydocs-accent-soft: hsl(var(--emcydocs-hue) 84% 54% / 0.12);
+  --emcydocs-accent-glow: hsl(var(--emcydocs-hue) 84% 54% / 0.2);
+  --emcydocs-gradient: radial-gradient(
+      circle at top left,
+      hsl(var(--emcydocs-hue) 84% 54% / 0.11),
+      transparent 34%
+    ),
+    radial-gradient(circle at top right, rgba(90, 207, 255, 0.1), transparent 30%);
+}
+
+[data-emcydocs-preset="ocean"][data-emcydocs-mode="dark"] {
   --emcydocs-hue: 196;
   --emcydocs-bg: #061116;
   --emcydocs-bg-subtle: #0d1820;
@@ -141,6 +213,57 @@
       transparent 34%
     ),
     radial-gradient(circle at top right, rgba(165, 110, 255, 0.12), transparent 30%);
+}
+
+[data-emcydocs-preset="sqlos"][data-emcydocs-mode="dark"] {
+  --emcydocs-hue: 267;
+  --emcydocs-bg: #0e0916;
+  --emcydocs-bg-subtle: #151022;
+  --emcydocs-surface: rgba(255, 255, 255, 0.05);
+  --emcydocs-surface-elevated: rgba(255, 255, 255, 0.08);
+  --emcydocs-surface-hover: rgba(255, 255, 255, 0.09);
+  --emcydocs-border: rgba(170, 142, 255, 0.14);
+  --emcydocs-border-strong: rgba(170, 142, 255, 0.24);
+  --emcydocs-muted: #9286a7;
+  --emcydocs-muted-foreground: #c3bad5;
+  --emcydocs-foreground: #faf7ff;
+  --emcydocs-accent: hsl(var(--emcydocs-hue) 92% 68%);
+  --emcydocs-accent-light: hsl(var(--emcydocs-hue) 96% 80%);
+  --emcydocs-accent-dark: hsl(var(--emcydocs-hue) 84% 58%);
+  --emcydocs-accent-soft: hsl(var(--emcydocs-hue) 92% 68% / 0.16);
+  --emcydocs-accent-glow: hsl(var(--emcydocs-hue) 92% 68% / 0.28);
+  --emcydocs-gradient: radial-gradient(
+      circle at top left,
+      hsl(var(--emcydocs-hue) 92% 68% / 0.15),
+      transparent 36%
+    ),
+    radial-gradient(circle at top right, rgba(177, 128, 255, 0.12), transparent 28%);
+}
+
+.emcydocs-shell[data-emcydocs-density="compact"] {
+  --emcydocs-header-height: 66px;
+  --emcydocs-header-padding-inline: 1.15rem;
+  --emcydocs-mobile-padding-block: 0.85rem;
+  --emcydocs-mobile-padding-inline: 0.9rem;
+  --emcydocs-sidebar-padding-block: 1rem;
+  --emcydocs-sidebar-padding-inline: 0.82rem;
+  --emcydocs-sidebar-section-gap: 1rem;
+  --emcydocs-sidebar-link-padding-block: 0.6rem;
+  --emcydocs-sidebar-link-padding-inline: 0.72rem;
+  --emcydocs-page-padding-block-mobile: 1.4rem;
+  --emcydocs-page-padding-inline-mobile: 1rem;
+  --emcydocs-page-padding-block: 1.9rem;
+  --emcydocs-page-padding-inline: 2rem;
+  --emcydocs-page-gap: 2.5rem;
+  --emcydocs-home-padding-block-mobile: 1.45rem;
+  --emcydocs-home-padding-inline-mobile: 1rem;
+  --emcydocs-home-padding-block: 2rem;
+  --emcydocs-home-padding-inline: 2rem;
+  --emcydocs-hero-main-padding-mobile: 1.15rem;
+  --emcydocs-hero-main-padding: 1.5rem;
+  --emcydocs-hero-panel-padding: 1rem;
+  --emcydocs-home-card-padding-mobile: 0.95rem;
+  --emcydocs-home-card-padding: 1.05rem;
 }
 
 [data-theme="blue"] {
@@ -199,7 +322,7 @@
   width: min(100%, var(--emcydocs-layout-width));
   min-height: var(--emcydocs-header-height);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 var(--emcydocs-header-padding-inline);
 }
 
 .emcydocs-header-brand {
@@ -298,7 +421,10 @@
 .emcydocs-mobile {
   border-bottom: 1px solid var(--emcydocs-border);
   background: color-mix(in srgb, var(--emcydocs-bg) 92%, transparent);
-  padding: 1rem 1rem 1.1rem;
+  padding:
+    var(--emcydocs-mobile-padding-block)
+    var(--emcydocs-mobile-padding-inline)
+    calc(var(--emcydocs-mobile-padding-block) + 0.1rem);
   backdrop-filter: blur(18px);
 }
 
@@ -373,11 +499,14 @@
 
 .emcydocs-sidebar,
 .emcydocs-sidebar-mobile {
-  padding: 1.4rem 0.95rem 1.75rem;
+  padding:
+    calc(var(--emcydocs-sidebar-padding-block) + 0.05rem)
+    calc(var(--emcydocs-sidebar-padding-inline) - 0.05rem)
+    calc(var(--emcydocs-sidebar-padding-block) + 0.65rem);
 }
 
 .emcydocs-sidebar-section + .emcydocs-sidebar-section {
-  margin-top: 1.35rem;
+  margin-top: var(--emcydocs-sidebar-section-gap);
 }
 
 .emcydocs-sidebar-section-toggle {
@@ -426,7 +555,9 @@
 .emcydocs-sidebar-link {
   display: block;
   border-radius: 0.95rem;
-  padding: 0.72rem 0.8rem;
+  padding:
+    var(--emcydocs-sidebar-link-padding-block)
+    var(--emcydocs-sidebar-link-padding-inline);
   color: var(--emcydocs-muted-foreground);
   text-decoration: none;
   font-size: 0.9rem;
@@ -600,7 +731,10 @@
 
 .emcydocs-page {
   display: block;
-  padding: 1.75rem 1.2rem 2.8rem;
+  padding:
+    var(--emcydocs-page-padding-block-mobile)
+    var(--emcydocs-page-padding-inline-mobile)
+    calc(var(--emcydocs-page-padding-block-mobile) + 1.05rem);
 }
 
 .emcydocs-article {
@@ -782,7 +916,10 @@
    ============================================ */
 
 .emcydocs-home {
-  padding: 1.8rem 1.2rem 3rem;
+  padding:
+    var(--emcydocs-home-padding-block-mobile)
+    var(--emcydocs-home-padding-inline-mobile)
+    calc(var(--emcydocs-home-padding-block-mobile) + 1.2rem);
 }
 
 .emcydocs-home-hero {
@@ -801,7 +938,7 @@
 }
 
 .emcydocs-home-hero-main {
-  padding: 1.4rem;
+  padding: var(--emcydocs-hero-main-padding-mobile);
 }
 
 .emcydocs-badge {
@@ -871,7 +1008,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1.2rem;
+  padding: var(--emcydocs-hero-panel-padding);
 }
 
 .emcydocs-home-hero-panel-head {
@@ -975,7 +1112,7 @@
   border: 1px solid var(--emcydocs-border);
   border-radius: var(--emcydocs-radius);
   background: color-mix(in srgb, var(--emcydocs-surface-elevated) 88%, transparent);
-  padding: 1.25rem;
+  padding: var(--emcydocs-home-card-padding);
   box-shadow: var(--emcydocs-shadow-sm);
   transition:
     transform 0.2s ease,
@@ -2152,14 +2289,20 @@
     top: var(--emcydocs-header-height);
     max-height: calc(100vh - var(--emcydocs-header-height));
     overflow: auto;
-    padding: 1.35rem 1rem 2rem;
+    padding:
+      var(--emcydocs-sidebar-padding-block)
+      var(--emcydocs-sidebar-padding-inline)
+      calc(var(--emcydocs-sidebar-padding-block) + 0.65rem);
   }
 
   .emcydocs-page {
     display: grid;
     grid-template-columns: minmax(0, 1fr) var(--emcydocs-toc-width);
-    gap: 3.5rem;
-    padding: 2.35rem 2.75rem 3rem;
+    gap: var(--emcydocs-page-gap);
+    padding:
+      var(--emcydocs-page-padding-block)
+      var(--emcydocs-page-padding-inline)
+      calc(var(--emcydocs-page-padding-block) + 0.65rem);
   }
 
   .emcydocs-page-aside {
@@ -2167,7 +2310,10 @@
   }
 
   .emcydocs-home {
-    padding: 2.5rem 2.75rem 3.2rem;
+    padding:
+      var(--emcydocs-home-padding-block)
+      var(--emcydocs-home-padding-inline)
+      calc(var(--emcydocs-home-padding-block) + 0.7rem);
   }
 
   .emcydocs-home-hero {
@@ -2177,7 +2323,7 @@
   }
 
   .emcydocs-home-hero-main {
-    padding: 1.8rem;
+    padding: var(--emcydocs-hero-main-padding);
   }
 
   .emcydocs-home-grid {
@@ -2244,10 +2390,16 @@
     padding-right: 1rem;
   }
 
-  .emcydocs-home-hero-main,
-  .emcydocs-home-hero-panel,
+  .emcydocs-home-hero-main {
+    padding: var(--emcydocs-hero-main-padding-mobile);
+  }
+
+  .emcydocs-home-hero-panel {
+    padding: var(--emcydocs-hero-panel-padding);
+  }
+
   .emcydocs-home-card {
-    padding: 1.05rem;
+    padding: var(--emcydocs-home-card-padding-mobile);
   }
 
   .emcydocs-home-metrics {

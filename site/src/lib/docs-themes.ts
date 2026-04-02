@@ -1,41 +1,70 @@
 import type { DocsThemeConfig } from "@emcy/docs";
 
+export const docsThemeProfiles = {
+  balanced: {
+    layoutWidth: "1480px",
+    contentWidth: "48rem",
+    sidebarWidth: "276px",
+    tocWidth: "240px",
+  },
+  reading: {
+    layoutWidth: "1420px",
+    contentWidth: "44rem",
+    sidebarWidth: "244px",
+    tocWidth: "220px",
+  },
+  compact: {
+    layoutWidth: "1320px",
+    contentWidth: "41rem",
+    sidebarWidth: "208px",
+    tocWidth: "208px",
+  },
+  showcase: {
+    layoutWidth: "1560px",
+    contentWidth: "50rem",
+    sidebarWidth: "292px",
+    tocWidth: "248px",
+  },
+} satisfies Record<
+  string,
+  Pick<
+    DocsThemeConfig,
+    "layoutWidth" | "contentWidth" | "sidebarWidth" | "tocWidth"
+  >
+>;
+
 export const docsClassicTheme: DocsThemeConfig = {
+  ...docsThemeProfiles.balanced,
   preset: "neutral",
   mode: "light",
-  layoutWidth: "1500px",
-  contentWidth: "48rem",
-  sidebarWidth: "276px",
-  tocWidth: "240px",
+  density: "comfortable",
+  accentHue: 270,
   radius: "xl",
 };
 
 export const docsNotebookTheme: DocsThemeConfig = {
+  ...docsThemeProfiles.reading,
   preset: "dusk",
   mode: "dark",
-  layoutWidth: "1460px",
-  contentWidth: "46rem",
-  sidebarWidth: "228px",
-  tocWidth: "220px",
+  density: "comfortable",
+  accentHue: 266,
   radius: "lg",
 };
 
 export const docsMinimalTheme: DocsThemeConfig = {
+  ...docsThemeProfiles.compact,
   preset: "neutral",
   mode: "light",
-  layoutWidth: "1360px",
-  contentWidth: "42rem",
-  sidebarWidth: "208px",
-  tocWidth: "220px",
+  density: "compact",
+  accentHue: 270,
   radius: "lg",
 };
 
 export const docsEmbeddedTheme: DocsThemeConfig = {
+  ...docsThemeProfiles.showcase,
   preset: "ocean",
   mode: "dark",
-  layoutWidth: "1500px",
-  contentWidth: "46rem",
-  sidebarWidth: "248px",
-  tocWidth: "220px",
+  density: "comfortable",
+  accentHue: 196,
   radius: "lg",
 };

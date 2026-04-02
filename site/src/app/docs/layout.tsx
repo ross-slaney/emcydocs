@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
+import { DocsLayout } from "@emcy/docs";
+import DocsThemeSwitcher from "@/components/DocsThemeSwitcher";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchDocsAction } from "@/app/doc-actions";
@@ -29,7 +30,7 @@ export default function DocsRootLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
         }
-        themeSwitcher={<ThemeSwitcher />}
+        themeSwitcher={<DocsThemeSwitcher defaults={docsClassicTheme} />}
         theme={docsClassicTheme}
         brand={
           <Link

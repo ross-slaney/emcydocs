@@ -14,6 +14,14 @@
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
+    "./theme": {
+      "import": "./dist/theme.js",
+      "types": "./dist/theme.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    },
     "./styles.css": "./dist/styles.css"
   },
   "files": [

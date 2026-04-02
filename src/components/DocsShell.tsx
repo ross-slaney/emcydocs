@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { DocsLayoutCommonProps } from "../types";
 import {
   getDocsThemeStyle,
+  resolveDocsThemeDensity,
   resolveDocsThemeMode,
   resolveDocsThemePreset,
 } from "../theme";
@@ -88,6 +89,7 @@ export default function DocsShell({
 
   const themePreset = resolveDocsThemePreset(theme);
   const themeMode = resolveDocsThemeMode(theme);
+  const themeDensity = resolveDocsThemeDensity(theme);
   const themeStyle = getDocsThemeStyle(theme);
 
   return (
@@ -102,6 +104,7 @@ export default function DocsShell({
         .join(" ")}
       data-emcydocs-preset={themePreset}
       data-emcydocs-mode={themeMode}
+      data-emcydocs-density={themeDensity}
       style={themeStyle}
     >
       {mode === "standalone" ? (

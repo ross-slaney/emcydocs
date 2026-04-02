@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { NotebookLayout, ThemeSwitcher } from "@emcy/docs";
+import { NotebookLayout } from "@emcy/docs";
+import DocsThemeSwitcher from "@/components/DocsThemeSwitcher";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchNotebookAction } from "@/app/doc-actions";
@@ -29,7 +30,7 @@ export default function NotebookRootLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/notebook" />
         }
-        themeSwitcher={<ThemeSwitcher />}
+        themeSwitcher={<DocsThemeSwitcher defaults={docsNotebookTheme} />}
         theme={docsNotebookTheme}
         brand={
           <Link

@@ -123,10 +123,12 @@ export interface DocsLayoutLink {
 export type DocsThemePreset = "neutral" | "dusk" | "ocean" | "sqlos";
 export type DocsThemeMode = "light" | "dark";
 export type DocsThemeRadius = "md" | "lg" | "xl";
+export type DocsThemeDensity = "comfortable" | "compact";
 
 export interface DocsThemeConfig {
   preset?: DocsThemePreset;
   mode?: DocsThemeMode;
+  density?: DocsThemeDensity;
   accentHue?: number;
   layoutWidth?: string;
   contentWidth?: string;

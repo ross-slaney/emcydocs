@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MinimalLayout, ThemeSwitcher } from "@emcy/docs";
+import { MinimalLayout } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
+import DocsThemeSwitcher from "@/components/DocsThemeSwitcher";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchMinimalAction } from "@/app/doc-actions";
 import { minimalSource } from "@/lib/docs-source";
@@ -40,7 +41,7 @@ export default async function LocaleMinimalLayout({
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/minimal" />
         }
-        themeSwitcher={<ThemeSwitcher />}
+        themeSwitcher={<DocsThemeSwitcher defaults={docsMinimalTheme} />}
         theme={docsMinimalTheme}
         brand={
           <Link

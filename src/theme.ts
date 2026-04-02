@@ -1,5 +1,10 @@
 import type { CSSProperties } from "react";
-import type { DocsThemeConfig, DocsThemeMode, DocsThemePreset } from "./types";
+import type {
+  DocsThemeConfig,
+  DocsThemeDensity,
+  DocsThemeMode,
+  DocsThemePreset,
+} from "./types";
 
 const radiusScale = {
   md: "0.875rem",
@@ -18,7 +23,14 @@ export function resolveDocsThemeMode(theme?: DocsThemeConfig): DocsThemeMode {
     return theme.mode;
   }
 
-  return resolveDocsThemePreset(theme) === "dusk" ? "dark" : "light";
+  const preset = resolveDocsThemePreset(theme);
+  return preset === "dusk" || preset === "ocean" ? "dark" : "light";
+}
+
+export function resolveDocsThemeDensity(
+  theme?: DocsThemeConfig
+): DocsThemeDensity {
+  return theme?.density ?? "comfortable";
 }
 
 export function getDocsThemeStyle(

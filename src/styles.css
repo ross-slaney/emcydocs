@@ -1949,6 +1949,32 @@
   color: #dbe5f4;
   font-size: 0.86rem;
   line-height: 1.75;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  tab-size: 2;
+}
+
+.emcydocs-codeblock-body code[data-theme*=" "],
+.emcydocs-codeblock-body code[data-theme*=" "] span,
+.emcydocs-prose pre code[data-theme*=" "],
+.emcydocs-prose pre code[data-theme*=" "] span {
+  color: var(--shiki-light);
+  background-color: transparent;
+}
+
+[data-emcydocs-mode="dark"] .emcydocs-codeblock-body code[data-theme*=" "],
+[data-emcydocs-mode="dark"] .emcydocs-codeblock-body code[data-theme*=" "] span,
+[data-emcydocs-mode="dark"] .emcydocs-prose pre code[data-theme*=" "],
+[data-emcydocs-mode="dark"] .emcydocs-prose pre code[data-theme*=" "] span {
+  color: var(--shiki-dark);
+  background-color: transparent;
+}
+
+.emcydocs-codeblock-body [data-line],
+.emcydocs-prose pre [data-line] {
+  display: block;
+  min-height: 1.75em;
 }
 
 .emcydocs-prose pre {
@@ -1965,6 +1991,10 @@
   color: #dbe5f4;
   font-size: 0.86rem;
   line-height: 1.75;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+  tab-size: 2;
 }
 
 /* ============================================

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
 import type { DocsEntry } from "./types";
 import { slugifyHeading } from "./utils";
@@ -31,6 +32,17 @@ interface DocsMdxProps {
   components?: MdxComponentMap;
 }
 
+const prettyCodeOptions = {
+  theme: {
+    light: "github-light",
+    dark: "github-dark-default",
+  },
+  keepBackground: false,
+  defaultLang: {
+    block: "plaintext",
+  },
+} as const;
+
 export async function DocsMdx({ entry, components }: DocsMdxProps) {
   return (
     <div className="emcydocs-prose">
@@ -39,6 +51,7 @@ export async function DocsMdx({ entry, components }: DocsMdxProps) {
         options={{
           mdxOptions: {
             remarkPlugins: [remarkGfm],
+            rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
           },
         }}
         components={{

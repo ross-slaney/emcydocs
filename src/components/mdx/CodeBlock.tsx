@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import CopyCodeButton from "./CopyCodeButton";
 
 interface CodeBlockProps {
@@ -43,19 +43,60 @@ export default function CodeBlock({
   );
 }
 
-export function Pre({ children }: { children: ReactNode }) {
-  return <CodeBlock>{children}</CodeBlock>;
+export function Pre({
+  children,
+  className,
+  ...props
+}: ComponentPropsWithoutRef<"pre">) {
+  const dataLanguage = (props as { "data-language"?: unknown })["data-language"];
+  const language = inferLanguage(children, {
+    className,
+    dataLanguage: typeof dataLanguage === "string" ? dataLanguage : undefined,
+  });
+
+  return (
+    <CodeBlock language={language}>
+      <pre className={className} {...props}>
+        {children}
+      </pre>
+    </CodeBlock>
+  );
 }
 
-function inferLanguage(children: ReactNode) {
+function inferLanguage(
+  children: ReactNode,
+  preProps?: { className?: string; dataLanguage?: string }
+) {
+  if (preProps?.dataLanguage) {
+    return preProps.dataLanguage;
+  }
+
+  if (typeof preProps?.className === "string") {
+    const match = preProps.className.match(/language-([a-z0-9-]+)/i);
+    if (match?.[1]) {
+      return match[1];
+    }
+  }
+
   if (
     children &&
     typeof children === "object" &&
     "props" in children &&
-    typeof (children as { props?: { className?: string } }).props?.className ===
-      "string"
+    typeof
+      (children as {
+        props?: { className?: string; ["data-language"]?: string };
+      }).props?.className === "string"
   ) {
-    const className = (children as { props: { className?: string } }).props.className ?? "";
+    const childProps = (
+      children as {
+        props: { className?: string; ["data-language"]?: string };
+      }
+    ).props;
+    if (typeof childProps["data-language"] === "string") {
+      return childProps["data-language"];
+    }
+
+    const className = childProps.className ?? "";
     const match = className.match(/language-([a-z0-9-]+)/i);
     return match?.[1];
   }

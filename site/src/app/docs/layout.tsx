@@ -51,20 +51,6 @@ export default function DocsRootLayout({
             <span>{copy.brand}</span>
           </Link>
         }
-        topLinks={[
-          {
-            href: buildLocalizedHref("/notebook", defaultSiteLocale),
-            label: copy.notebook,
-          },
-          {
-            href: buildLocalizedHref("/minimal", defaultSiteLocale),
-            label: copy.minimal,
-          },
-          {
-            href: buildLocalizedHref("/embedded/docs", defaultSiteLocale),
-            label: copy.embedded,
-          },
-        ]}
       >
         {children}
       </DocsLayout>

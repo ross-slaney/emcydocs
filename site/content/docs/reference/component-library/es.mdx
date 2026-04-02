@@ -20,7 +20,7 @@ sectionLabel: "Reference"
 ## Por que existe
 
 <CardGrid cols={3}>
-  <Card title="Chrome compartido" description="Usa los mismos bloques en el sitio de ejemplo, docs embebidos y docs reales." />
+  <Card title="Chrome compartido" description="Usa los mismos bloques en el sitio de ejemplo y en docs reales sin partir otro paquete." />
   <Card title="Mejores defaults" description="Evita reinventar grids de cards, banners y wrappers de codigo en cada repo." />
   <Card title="MDX nativo" description="Todo se registra via `getDefaultMdxComponents()` y funciona directamente en `.mdx`." />
 </CardGrid>
@@ -66,8 +66,7 @@ sectionLabel: "Reference"
   </Folder>
   <Folder name="layouts">
     <File name="docs-layout/es.mdx" meta="Layout clasico" />
-    <File name="notebook-layout/es.mdx" meta="Layout denso" />
-    <File name="minimal-layout/es.mdx" meta="Layout de lectura" />
+    <File name="custom-header-and-sidebar/es.mdx" meta="Overrides de chrome" />
   </Folder>
 </Files>
 
@@ -85,7 +84,7 @@ sectionLabel: "Reference"
         Agrega `@emcy/docs/styles.css` de forma global y deja el contenido dentro del repo.
       </Step>
       <Step title="Usa los layouts compartidos">
-        Empieza con `DocsLayout`, `NotebookLayout` o `MinimalLayout`.
+        Empieza con `DocsLayout` y luego suma tema, busqueda, selector de idioma u overrides de chrome cuando hagan falta.
       </Step>
       <Step title="Usa componentes dentro del MDX">
         Recurre a banners, cards, acordeones, archivos, tabs y steps cuando markdown puro se vea plano.

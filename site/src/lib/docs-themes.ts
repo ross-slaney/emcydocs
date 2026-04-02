@@ -41,30 +41,3 @@ export const docsClassicTheme: DocsThemeConfig = {
   accentHue: 270,
   radius: "xl",
 };
-
-export const docsNotebookTheme: DocsThemeConfig = {
-  ...docsThemeProfiles.reading,
-  preset: "dusk",
-  mode: "dark",
-  density: "comfortable",
-  accentHue: 266,
-  radius: "lg",
-};
-
-export const docsMinimalTheme: DocsThemeConfig = {
-  ...docsThemeProfiles.compact,
-  preset: "neutral",
-  mode: "light",
-  density: "compact",
-  accentHue: 270,
-  radius: "lg",
-};
-
-export const docsEmbeddedTheme: DocsThemeConfig = {
-  ...docsThemeProfiles.showcase,
-  preset: "ocean",
-  mode: "dark",
-  density: "comfortable",
-  accentHue: 196,
-  radius: "lg",
-};

@@ -22,18 +22,3 @@ export const docsSource = createDocsSource({
   ...sharedConfig,
   basePath: "/docs",
 });
-
-export const notebookSource = createDocsSource({
-  ...sharedConfig,
-  basePath: "/notebook",
-});
-
-export const minimalSource = createDocsSource({
-  ...sharedConfig,
-  basePath: "/minimal",
-});
-
-export const embeddedSource = createDocsSource({
-  ...sharedConfig,
-  basePath: "/embedded/docs",
-});

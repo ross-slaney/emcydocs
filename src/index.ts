@@ -17,8 +17,6 @@ export { default as DocsShell } from "./components/DocsShell";
 export { default as DocsSidebar } from "./components/DocsSidebar";
 export { default as DocsToc } from "./components/DocsToc";
 export { default as DocsLayout } from "./components/DocsLayout";
-export { default as NotebookLayout } from "./components/NotebookLayout";
-export { default as MinimalLayout } from "./components/MinimalLayout";
 export { default as DocsPage } from "./components/DocsPage";
 export { default as DocsHomePage } from "./components/DocsHomePage";
 export { default as HeadingLinks } from "./components/HeadingLinks";
@@ -34,9 +32,11 @@ export {
 export type {
   DocsEntry,
   DocsEntryMeta,
+  DocsHeaderSlotProps,
   DocsHeading,
   DocsLayoutCommonProps,
   DocsLayoutLink,
+  DocsLayoutSlot,
   DocsMetadata,
   DocsNavItem,
   DocsNavSection,
@@ -44,6 +44,7 @@ export type {
   DocsSearchAction,
   DocsSearchResponse,
   DocsSearchResult,
+  DocsSidebarSlotProps,
   DocsSource,
   DocsSourceConfig,
   DocsThemeConfig,

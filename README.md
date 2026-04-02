@@ -2,12 +2,12 @@
 
 `@emcy/docs` is an App Router-native MDX documentation library for Next.js.
 
-It is designed for teams that want docs in the repo, SEO-friendly prerendered routes, folder-based locale variants, built-in mobile docs UX, and layouts that work either as a standalone docs site or embedded inside a larger SaaS app.
+It is designed for teams that want docs in the repo, SEO-friendly prerendered routes, folder-based locale variants, built-in mobile docs UX, and a single docs layout that can be restyled and extended through theme configuration and custom chrome slots.
 
 ## What ships in v0
 
 - `createDocsSource(config)` for content loading, locale-aware routing, nav generation, TOC extraction, metadata helpers, and search
-- `DocsLayout`, `NotebookLayout`, `MinimalLayout`
+- `DocsLayout`
 - `DocsPage` and `DocsHomePage`
 - `DocsSearch`, `DocsSidebar`, `DocsToc`, `HeadingLinks`, `MobileDocsChrome`
 - `@emcy/docs/styles.css`

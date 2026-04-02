@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import type { DocsLayoutCommonProps } from "../types";
+import type {
+  DocsHeaderSlotProps,
+  DocsLayoutCommonProps,
+  DocsLayoutSlot,
+  DocsSidebarSlotProps,
+} from "../types";
 import {
   getDocsThemeStyle,
   resolveDocsThemeDensity,
@@ -18,46 +23,17 @@ export default function DocsShell({
   children,
   brand,
   topLinks,
+  header,
+  sidebar,
   languageSwitcher,
   themeSwitcher,
   searchAction,
   locale,
   theme,
-  mode = "standalone",
-  mobileHeaderId,
   className,
-  variant = "docs",
-}: DocsLayoutCommonProps & {
-  variant?: "docs" | "notebook" | "minimal";
-}) {
+}: DocsLayoutCommonProps) {
   const pathname = usePathname();
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const [topOffset, setTopOffset] = useState(0);
-
-  useEffect(() => {
-    const updateTopOffset = () => {
-      if (!mobileHeaderId) {
-        setTopOffset(0);
-        return;
-      }
-
-      const header = document.getElementById(mobileHeaderId);
-      if (!header) {
-        setTopOffset(0);
-        return;
-      }
-
-      setTopOffset(Math.max(0, Math.round(header.getBoundingClientRect().bottom)));
-    };
-
-    updateTopOffset();
-    window.addEventListener("scroll", updateTopOffset, { passive: true });
-    window.addEventListener("resize", updateTopOffset);
-    return () => {
-      window.removeEventListener("scroll", updateTopOffset);
-      window.removeEventListener("resize", updateTopOffset);
-    };
-  }, [mobileHeaderId]);
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -91,13 +67,94 @@ export default function DocsShell({
   const themeMode = resolveDocsThemeMode(theme);
   const themeDensity = resolveDocsThemeDensity(theme);
   const themeStyle = getDocsThemeStyle(theme);
+  const hasSidebar = sidebar !== null;
+
+  const headerSlotProps: Omit<DocsHeaderSlotProps, "isMobile"> = {
+    navigation,
+    brand,
+    topLinks,
+    languageSwitcher,
+    themeSwitcher,
+    searchAction,
+    locale,
+    currentTitle,
+    isNavigationOpen: isNavOpen,
+    openNavigation: () => setIsNavOpen(true),
+    closeNavigation: () => setIsNavOpen(false),
+    toggleNavigation: () => setIsNavOpen((current) => !current),
+  };
+
+  const sidebarSlotProps: Omit<DocsSidebarSlotProps, "isMobile"> = {
+    navigation,
+    locale,
+    currentTitle,
+    closeNavigation: () => setIsNavOpen(false),
+  };
+
+  const desktopHeader = renderSlot(header, { ...headerSlotProps, isMobile: false }, () => (
+    <div className="emcydocs-header-inner">
+      <div className="emcydocs-header-brand">
+        {brand ?? <span>Documentation</span>}
+      </div>
+      <div className="emcydocs-header-search">
+        <DocsSearch searchAction={searchAction} locale={locale} />
+      </div>
+      {themeSwitcher ? (
+        <div className="emcydocs-header-theme">{themeSwitcher}</div>
+      ) : null}
+      {languageSwitcher ? (
+        <div className="emcydocs-header-language">{languageSwitcher}</div>
+      ) : null}
+      {topLinks?.length ? (
+        <nav className="emcydocs-header-links" aria-label="Top level docs links">
+          {topLinks.map((link) => (
+            <a key={link.href} href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      ) : null}
+    </div>
+  ));
+
+  const mobileHeader = renderSlot(header, { ...headerSlotProps, isMobile: true }, () => (
+    <MobileDocsChrome
+      currentTitle={currentTitle}
+      isNavOpen={isNavOpen}
+      onToggleNav={() => setIsNavOpen((current) => !current)}
+      showNavigationToggle={hasSidebar}
+    >
+      <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
+      {themeSwitcher ? (
+        <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
+      ) : null}
+      {languageSwitcher ? (
+        <div className="emcydocs-mobile-language">{languageSwitcher}</div>
+      ) : null}
+    </MobileDocsChrome>
+  ));
+
+  const desktopSidebar = hasSidebar
+    ? renderSlot(sidebar, { ...sidebarSlotProps, isMobile: false }, () => (
+        <DocsSidebar navigation={navigation} />
+      ))
+    : null;
+
+  const mobileSidebar = hasSidebar
+    ? renderSlot(sidebar, { ...sidebarSlotProps, isMobile: true }, () => (
+        <DocsSidebar
+          navigation={navigation}
+          variant="mobile"
+          onNavigate={() => setIsNavOpen(false)}
+        />
+      ))
+    : null;
 
   return (
     <div
       className={[
         "emcydocs-shell",
-        `emcydocs-shell-${variant}`,
-        mode === "embedded" ? "emcydocs-shell-embedded" : "",
+        hasSidebar ? "" : "emcydocs-shell-sidebarless",
         className ?? "",
       ]
         .filter(Boolean)
@@ -107,61 +164,22 @@ export default function DocsShell({
       data-emcydocs-density={themeDensity}
       style={themeStyle}
     >
-      {mode === "standalone" ? (
-        <header className="emcydocs-header">
-          <div className="emcydocs-header-inner">
-            <div className="emcydocs-header-brand">
-              {brand ?? <span>Documentation</span>}
-            </div>
-            <div className="emcydocs-header-search">
-              <DocsSearch searchAction={searchAction} locale={locale} />
-            </div>
-            {themeSwitcher ? (
-              <div className="emcydocs-header-theme">{themeSwitcher}</div>
-            ) : null}
-            {languageSwitcher ? (
-              <div className="emcydocs-header-language">{languageSwitcher}</div>
-            ) : null}
-            {topLinks?.length ? (
-              <nav className="emcydocs-header-links" aria-label="Top level docs links">
-                {topLinks.map((link) => (
-                  <a key={link.href} href={link.href}>
-                    {link.label}
-                  </a>
-                ))}
-              </nav>
-            ) : null}
-          </div>
-        </header>
+      {desktopHeader ? <header className="emcydocs-header">{desktopHeader}</header> : null}
+
+      {mobileHeader ? (
+        <div className="emcydocs-mobile-wrap">
+          <div className="emcydocs-mobile-inner">{mobileHeader}</div>
+        </div>
       ) : null}
 
-      <div className="emcydocs-mobile-wrap">
-        <div className="emcydocs-mobile-inner">
-          <MobileDocsChrome
-            currentTitle={currentTitle}
-            isNavOpen={isNavOpen}
-            onToggleNav={() => setIsNavOpen((current) => !current)}
-            topOffset={topOffset}
-          >
-            <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
-            {themeSwitcher ? (
-              <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
-            ) : null}
-            {languageSwitcher ? (
-              <div className="emcydocs-mobile-language">{languageSwitcher}</div>
-            ) : null}
-          </MobileDocsChrome>
-        </div>
-      </div>
-
       <div className="emcydocs-frame">
-        <aside className="emcydocs-desktop-nav">
-          <DocsSidebar navigation={navigation} />
-        </aside>
+        {desktopSidebar ? (
+          <aside className="emcydocs-desktop-nav">{desktopSidebar}</aside>
+        ) : null}
         <main className="emcydocs-main">{children}</main>
       </div>
 
-      {isNavOpen ? (
+      {isNavOpen && mobileSidebar ? (
         <>
           <button
             type="button"
@@ -169,15 +187,29 @@ export default function DocsShell({
             className="emcydocs-overlay"
             onClick={() => setIsNavOpen(false)}
           />
-          <div className="emcydocs-drawer" style={{ top: topOffset + 116 }}>
-            <DocsSidebar
-              navigation={navigation}
-              variant="mobile"
-              onNavigate={() => setIsNavOpen(false)}
-            />
-          </div>
+          <div className="emcydocs-drawer">{mobileSidebar}</div>
         </>
       ) : null}
     </div>
   );
+}
+
+function renderSlot<Props>(
+  slot: DocsLayoutSlot<Props> | undefined,
+  props: Props,
+  fallback: () => ReactNode
+) {
+  if (slot === undefined) {
+    return fallback();
+  }
+
+  if (slot === null) {
+    return null;
+  }
+
+  if (typeof slot === "function") {
+    return slot(props);
+  }
+
+  return slot;
 }

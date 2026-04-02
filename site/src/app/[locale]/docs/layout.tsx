@@ -47,11 +47,6 @@ export default async function LocaleDocsLayout({
             {copy.brand}
           </Link>
         }
-        topLinks={[
-          { href: buildLocalizedHref("/docs", locale), label: copy.defaultDocs },
-          { href: buildLocalizedHref("/notebook", locale), label: copy.notebook },
-          { href: buildLocalizedHref("/minimal", locale), label: copy.minimal },
-        ]}
       >
         {children}
       </DocsLayout>

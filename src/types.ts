@@ -120,6 +120,35 @@ export interface DocsLayoutLink {
   label: string;
 }
 
+export interface DocsHeaderSlotProps {
+  navigation: DocsNavSection[];
+  brand?: ReactNode;
+  topLinks?: DocsLayoutLink[];
+  languageSwitcher?: ReactNode;
+  themeSwitcher?: ReactNode;
+  searchAction?: DocsSearchAction;
+  locale?: string;
+  currentTitle: string;
+  isMobile: boolean;
+  isNavigationOpen: boolean;
+  openNavigation: () => void;
+  closeNavigation: () => void;
+  toggleNavigation: () => void;
+}
+
+export interface DocsSidebarSlotProps {
+  navigation: DocsNavSection[];
+  locale?: string;
+  currentTitle: string;
+  isMobile: boolean;
+  closeNavigation: () => void;
+}
+
+export type DocsLayoutSlot<Props> =
+  | ReactNode
+  | ((props: Props) => ReactNode)
+  | null;
+
 export type DocsThemePreset = "neutral" | "dusk" | "ocean" | "sqlos";
 export type DocsThemeMode = "light" | "dark";
 export type DocsThemeRadius = "md" | "lg" | "xl";
@@ -147,12 +176,12 @@ export interface DocsLayoutCommonProps {
   children: ReactNode;
   brand?: ReactNode;
   topLinks?: DocsLayoutLink[];
+  header?: DocsLayoutSlot<DocsHeaderSlotProps>;
+  sidebar?: DocsLayoutSlot<DocsSidebarSlotProps>;
   languageSwitcher?: ReactNode;
   themeSwitcher?: ReactNode;
   searchAction?: DocsSearchAction;
   locale?: string;
   theme?: DocsThemeConfig;
-  mode?: "standalone" | "embedded";
-  mobileHeaderId?: string;
   className?: string;
 }

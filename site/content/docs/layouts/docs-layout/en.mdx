@@ -76,16 +76,15 @@ export default function Page() {
 | `navigation` | `DocsNavSection[]` | Sidebar navigation structure |
 | `brand` | `ReactNode` | Logo or brand for the header |
 | `topLinks` | `DocsLayoutLink[]` | Links in the header |
+| `header` | `ReactNode \| ((props) => ReactNode) \| null` | Replace the default docs header or remove it entirely |
+| `sidebar` | `ReactNode \| ((props) => ReactNode) \| null` | Replace the default docs sidebar or remove it entirely |
 | `languageSwitcher` | `ReactNode` | Optional language switcher slot in the shared shell |
+| `themeSwitcher` | `ReactNode` | Optional theme switcher slot in the shared shell |
+| `theme` | `DocsThemeConfig` | Preset, mode, density, accent, radius, and shell sizing |
 | `searchAction` | `DocsSearchAction` | Server action for search |
-| `mode` | `"standalone" \| "embedded"` | Deployment mode |
-| `mobileHeaderId` | `string` | ID of host header for embedded mode |
 
 ## Try it
 
 You are viewing this layout right now at [docs](../../docs).
 
-Compare with:
-
-- [Notebook layout](../../notebook) - Denser, app-like experience
-- [Minimal layout](../../minimal) - Reading-focused, no sidebar distractions
+Use [Theme configuration](../reference/theme-configuration) to restyle the same layout, or [Custom header and sidebar](../guides/custom-header-and-sidebar) when you need to substitute the chrome.

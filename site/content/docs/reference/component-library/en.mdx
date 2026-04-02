@@ -22,7 +22,7 @@ sectionLabel: "Reference"
 <CardGrid cols={3}>
   <Card
     title="Shared chrome"
-    description="Use the same building blocks in the example app, embedded docs, and production docs."
+    description="Use the same building blocks in the example app and production docs without splitting another package."
   />
   <Card
     title="Better defaults"
@@ -81,8 +81,7 @@ sectionLabel: "Reference"
   </Folder>
   <Folder name="layouts">
     <File name="docs-layout/en.mdx" meta="Classic layout" />
-    <File name="notebook-layout/en.mdx" meta="Dense layout" />
-    <File name="minimal-layout/en.mdx" meta="Reading layout" />
+    <File name="custom-header-and-sidebar/en.mdx" meta="Chrome overrides" />
   </Folder>
 </Files>
 
@@ -100,7 +99,7 @@ sectionLabel: "Reference"
         Add `@emcy/docs/styles.css` globally and keep your docs content inside the repo.
       </Step>
       <Step title="Use the shared layouts">
-        Start with `DocsLayout`, `NotebookLayout`, or `MinimalLayout` and then add your own search or locale switching.
+        Start with `DocsLayout`, then add your own theme, search, locale switching, or chrome overrides as needed.
       </Step>
       <Step title="Reach for components in MDX">
         Use banners, cards, accordions, files, tabs, and steps where a plain markdown block would feel flat.

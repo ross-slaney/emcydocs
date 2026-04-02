@@ -4,7 +4,7 @@ description: "EmcyDocs empaqueta MDX dentro del repo, rutas SEO con App Router, 
 order: -1
 ---
 
-EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MDX dentro del repo, rutas prerenderizadas amigables para SEO, una UX mobile integrada y una forma limpia de alternar entre experiencias standalone y embebidas.
+EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MDX dentro del repo, rutas prerenderizadas amigables para SEO, una UX mobile integrada y un solo shell de docs que puede cambiar mediante temas y chrome personalizado.
 
 <Banner
   eyebrow="Nuevo"
@@ -27,25 +27,25 @@ EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MD
     href="reference/theme-configuration"
   />
   <Card
-    title="Standalone vs Embebido"
-    description="Usa el mismo arbol de contenido en un sitio de docs o dentro de la app anfitriona."
-    href="guides/standalone-vs-embedded"
+    title="Header y sidebar personalizados"
+    description="Mantiene el shell por defecto, reemplaza partes concretas o deja el header y el sidebar en blanco."
+    href="guides/custom-header-and-sidebar"
   />
 </CardGrid>
 
 ## Ideas principales
 
 - Una sola llamada a `createDocsSource(...)` construye el modelo de contenido, la navegacion, la metadata, los helpers de rutas, la extraccion de headings y la busqueda.
-- El mismo paquete puede alimentar un sitio de documentacion standalone o docs embebidos dentro de una app mas grande.
-- Los layouts son intercambiables. El sitio de ejemplo expone vistas clasicas, notebook y minimal desde el mismo arbol de contenido.
+- Un unico `DocsLayout` controla el shell mientras el sistema de temas maneja presets, densidad, tamanos y color de acento.
+- Cuando el header o el sidebar por defecto no bastan, puedes sustituirlos por tu propio componente o por `null`.
 - Carpetas por idioma como `entry/en.mdx`, `entry/es.mdx` y `entry/zh.mdx` se convierten directamente en URLs localizadas.
 
 ## Lo que muestra este sitio de ejemplo
 
-- Una experiencia clasica en `docs`
-- Un layout `notebook` mas denso
-- Un layout `minimal` enfocado en lectura
-- Un modo `embedded/docs` que renderiza los docs dentro de un shell anfitrion
+- Una sola ruta `docs` con un unico layout
+- Presets visuales, densidad, radios y tamanos desde un theme studio
+- Rutas localizadas para ingles, espanol y chino
+- Una libreria de componentes para homes, guias y referencias
 
 ## Recorrido recomendado
 
@@ -54,7 +54,7 @@ Empieza aqui si quieres entender rapido el paquete:
 - [Primeros pasos](getting-started)
 - [Libreria de componentes](reference/component-library)
 - [Configuracion de tema](reference/theme-configuration)
-- [Standalone vs embebido](guides/standalone-vs-embedded)
+- [Header y sidebar personalizados](guides/custom-header-and-sidebar)
 - [Busqueda](guides/search)
 - [UX mobile para docs](guides/mobile-docs-ux)
 - [Carpetas por idioma](internationalization/locale-folders)

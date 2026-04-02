@@ -1,0 +1,94 @@
+---
+title: "Custom Header and Sidebar"
+description: "Replace the default docs header or sidebar with your own component, or remove either one entirely."
+order: 1
+section: guides
+sectionLabel: "Guides"
+---
+
+EmcyDocs now ships one docs layout. When you need different chrome, override the `header` or `sidebar` props instead of switching to another layout wrapper.
+
+## Default shell
+
+By default, `DocsLayout` provides:
+
+- A sticky header with brand, search, switcher slots, and top links
+- A section-aware sidebar navigation
+- Mobile docs chrome with a drawer
+- A content frame that works with the shared page and home components
+
+```tsx
+import { DocsLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+## Remove the default header
+
+Pass `header={null}` when your product already owns the top chrome:
+
+```tsx
+<DocsLayout navigation={docsSource.getNavigation()} header={null}>
+  {children}
+</DocsLayout>
+```
+
+## Replace the header with your own component
+
+Use a render prop when you want access to the current title or mobile navigation state:
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  header={({ isMobile, currentTitle, toggleNavigation, isNavigationOpen }) => (
+    <div className={isMobile ? "my-mobile-header" : "my-desktop-header"}>
+      <strong>{isMobile ? currentTitle : "My product docs"}</strong>
+      {isMobile ? (
+        <button type="button" onClick={toggleNavigation}>
+          {isNavigationOpen ? "Close" : "Browse"}
+        </button>
+      ) : null}
+    </div>
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## Replace or remove the sidebar
+
+If you want the default content frame but a custom navigation component, pass `sidebar`. If your product should not render a sidebar at all, pass `sidebar={null}`.
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  sidebar={({ navigation, isMobile, closeNavigation }) => (
+    <MySidebar
+      items={navigation}
+      compact={isMobile}
+      onNavigate={closeNavigation}
+    />
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## When to override chrome
+
+- Your product shell already owns the global header
+- Your team needs a branded sidebar component
+- A guide should run with no sidebar distractions
+- You want custom mobile chrome while keeping the same docs page components
+
+## Next steps
+
+- [Mobile docs UX](mobile-docs-ux) - See how the shared mobile shell behaves
+- [Docs layout](../layouts/docs-layout) - Full layout API reference
+- [Theme configuration](../reference/theme-configuration) - Change the look without changing the layout

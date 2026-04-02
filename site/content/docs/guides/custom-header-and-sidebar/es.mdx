@@ -1,0 +1,94 @@
+---
+title: "Header y Sidebar personalizados"
+description: "Sustituye el header o el sidebar por defecto por tus propios componentes, o elimina cualquiera de los dos."
+order: 1
+section: guides
+sectionLabel: "Guias"
+---
+
+EmcyDocs ahora ofrece un solo layout. Cuando necesitas otro chrome, sustituye `header` o `sidebar` en lugar de cambiar a otro wrapper.
+
+## Shell por defecto
+
+Por defecto, `DocsLayout` incluye:
+
+- Un header sticky con marca, buscador, slots para switchers y enlaces superiores
+- Un sidebar con navegacion por secciones
+- Chrome mobile con drawer
+- Un frame de contenido compatible con los componentes compartidos
+
+```tsx
+import { DocsLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+## Quita el header por defecto
+
+Pasa `header={null}` cuando tu producto ya tenga su propio chrome superior:
+
+```tsx
+<DocsLayout navigation={docsSource.getNavigation()} header={null}>
+  {children}
+</DocsLayout>
+```
+
+## Sustituye el header
+
+Usa una render prop cuando necesites el titulo actual o el estado del drawer mobile:
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  header={({ isMobile, currentTitle, toggleNavigation, isNavigationOpen }) => (
+    <div>
+      <strong>{isMobile ? currentTitle : "Mis docs"}</strong>
+      {isMobile ? (
+        <button type="button" onClick={toggleNavigation}>
+          {isNavigationOpen ? "Cerrar" : "Explorar"}
+        </button>
+      ) : null}
+    </div>
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## Sustituye o elimina el sidebar
+
+Si quieres conservar el frame de contenido pero con una navegacion propia, pasa `sidebar`. Si no quieres sidebar, usa `sidebar={null}`.
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  sidebar={({ navigation, isMobile, closeNavigation }) => (
+    <MySidebar
+      items={navigation}
+      compact={isMobile}
+      onNavigate={closeNavigation}
+    />
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## Cuando merece la pena hacerlo
+
+- Tu producto ya tiene su propio header global
+- Tu equipo necesita un sidebar totalmente propio
+- Quieres una guia sin sidebar
+- Necesitas un chrome mobile distinto sin cambiar de layout
+
+## Siguientes pasos
+
+- [UX mobile para docs](mobile-docs-ux) - Como funciona el shell mobile
+- [Layout de docs](../layouts/docs-layout) - Referencia completa del layout
+- [Configuracion de tema](../reference/theme-configuration) - Cambia la apariencia sin cambiar el layout

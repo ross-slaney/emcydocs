@@ -20,7 +20,7 @@ sectionLabel: "Reference"
 ## Why it exists
 
 <CardGrid cols={3}>
-  <Card title="共享外观" description="示例站、嵌入式文档和真实产品文档都可以复用同一组组件。" />
+  <Card title="共享外观" description="示例站与真实产品文档都可以复用同一组组件，而不必再拆分另一个包。" />
   <Card title="更好的默认值" description="不必在每个仓库里重复造 cards、banner 和代码块容器。" />
   <Card title="MDX 原生" description="这些组件通过 `getDefaultMdxComponents()` 注册，可直接在 `.mdx` 中使用。" />
 </CardGrid>
@@ -66,8 +66,7 @@ sectionLabel: "Reference"
   </Folder>
   <Folder name="layouts">
     <File name="docs-layout/zh.mdx" meta="Classic 布局" />
-    <File name="notebook-layout/zh.mdx" meta="紧凑布局" />
-    <File name="minimal-layout/zh.mdx" meta="阅读布局" />
+    <File name="custom-header-and-sidebar/zh.mdx" meta="Chrome 覆盖" />
   </Folder>
 </Files>
 
@@ -85,7 +84,7 @@ sectionLabel: "Reference"
         全局导入 `@emcy/docs/styles.css`，并继续把内容留在你的仓库中。
       </Step>
       <Step title="从共享布局开始">
-        先用 `DocsLayout`、`NotebookLayout` 或 `MinimalLayout` 搭起文档外壳。
+        先用 `DocsLayout` 搭起文档外壳，再按需加入主题、搜索、语言切换或 chrome 覆盖。
       </Step>
       <Step title="在 MDX 中使用组件">
         当纯 Markdown 显得太平时，就换成 banner、card、accordion、文件树、tabs 和 steps。

@@ -6,10 +6,7 @@
   },
   "header": {
     "nav": {
-      "docs": "Docs",
-      "notebook": "Notebook",
-      "minimal": "Minimal",
-      "embedded": "Embebido"
+      "docs": "Docs"
     },
     "menu": {
       "openAria": "Abrir menu de navegacion",
@@ -21,15 +18,12 @@
   "footer": {
     "tagline": "Documentacion MDX nativa de App Router para Next.js",
     "sections": {
-      "layouts": "Layouts",
+      "layouts": "Docs",
       "resources": "Recursos",
       "legal": "Legal"
     },
     "links": {
       "classicDocs": "Docs clasicos",
-      "notebook": "Notebook",
-      "minimal": "Minimal",
-      "embedded": "Embebido",
       "documentation": "Documentacion",
       "license": "Licencia MIT"
     },
@@ -39,10 +33,7 @@
     "layout": {
       "brand": "EmcyDocs",
       "classicDocs": "Docs clasicos",
-      "defaultDocs": "Docs por defecto",
-      "notebook": "Notebook",
-      "minimal": "Minimal",
-      "embedded": "Embebido"
+      "defaultDocs": "Docs por defecto"
     }
   },
   "pages": {
@@ -50,31 +41,31 @@
       "heroBadge": "Ya disponible en npm",
       "heroTitlePrimary": "Documentacion que",
       "heroTitleAccent": "vive en tu app",
-      "heroDescription": "EmcyDocs es una libreria de documentacion MDX nativa de App Router para Next.js. Contenido basado en archivos, rutas por idioma, multiples layouts y una UX pensada para mobile en un solo paquete.",
+      "heroDescription": "EmcyDocs es una libreria de documentacion MDX nativa de App Router para Next.js. Contenido basado en archivos, rutas por idioma, un sistema de temas flexible y una UX pensada para mobile en un solo paquete.",
       "primaryCta": "Empezar",
       "secondaryCta": "Ver en GitHub",
       "terminalLabel": "Terminal",
       "installCommand": "npm install @emcy/docs",
-      "layoutsHeading": "Multiples layouts, un solo paquete",
-      "layoutsDescription": "Elige el layout que mejor encaje con tu caso de uso. Puedes usarlo solo o integrarlo dentro de tu app actual.",
+      "layoutsHeading": "Un layout, chrome flexible",
+      "layoutsDescription": "Moldea la experiencia con presets de tema, densidad, tamano del shell y overrides opcionales para header o sidebar.",
       "exploreLabel": "Explorar",
       "layoutCards": [
         {
           "title": "Clasico",
-          "description": "Shell completo con sidebar, buscador y tabla de contenidos.",
+          "description": "La experiencia principal con sidebar, buscador, TOC y UX mobile compartida.",
           "badge": "Popular"
         },
         {
-          "title": "Notebook",
-          "description": "Experiencia mas densa y cercana a una app."
+          "title": "Sistema de temas",
+          "description": "Preset, modo, densidad, radio, hue de acento y tamano del shell desde un solo objeto."
         },
         {
-          "title": "Minimal",
-          "description": "Markdown centrado en lectura con menos chrome."
+          "title": "Chrome personalizado",
+          "description": "Sustituye el header o sidebar por tus propios componentes o dejalos vacios."
         },
         {
-          "title": "Embebido",
-          "description": "Inserta los docs dentro de tu app o del shell de marketing."
+          "title": "Rutas por idioma",
+          "description": "Mantiene limpio el locale por defecto mientras `es` y `zh` viven bajo prefijos explicitos."
         }
       ],
       "featuresHeading": "Hecho para Next.js moderno",
@@ -102,7 +93,7 @@
         },
         {
           "title": "Probado en produccion",
-          "description": "Se usa en apps reales, por eso la API maneja docs embebidos, rutas complejas y contenido de verdad."
+          "description": "Se usa en apps reales, por eso la API maneja rutas complejas, chrome personalizado y contenido de verdad."
         }
       ],
       "ctaHeading": "Listo para crear mejores docs?",
@@ -113,18 +104,6 @@
     "docsClassicHome": {
       "title": "Docs localizados con prefijos de idioma conscientes de la ruta",
       "description": "El idioma por defecto se mantiene limpio en /docs mientras los idiomas secundarios viven bajo prefijos sin cambiar el modelo de contenido."
-    },
-    "docsNotebookHome": {
-      "title": "Layout Notebook",
-      "description": "Un shell compacto para equipos de producto que quieren docs con navegacion y busqueda persistentes."
-    },
-    "docsMinimalHome": {
-      "title": "Layout minimal",
-      "description": "Una experiencia de lectura en markdown con el menor chrome posible."
-    },
-    "docsEmbeddedHome": {
-      "title": "Modo embebido con cambio de idioma por ruta",
-      "description": "La demo embebida conserva el mismo shell de docs mientras las rutas localizadas cambian entre URLs embebidas."
     }
   }
 }

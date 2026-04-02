@@ -4,7 +4,7 @@ description: "EmcyDocs 将仓库内 MDX、面向 SEO 的 App Router 文档、移
 order: -1
 ---
 
-EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库内、使用对 SEO 友好的预渲染路由、内置移动端文档体验，并且在独立文档站和嵌入式文档之间自由切换。
+EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库内、使用对 SEO 友好的预渲染路由、内置移动端文档体验，并且通过主题与自定义 chrome 来塑造同一套文档外壳。
 
 <Banner
   eyebrow="最新能力"
@@ -27,25 +27,25 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
     href="reference/theme-configuration"
   />
   <Card
-    title="独立模式与嵌入模式"
-    description="同一套内容树既能驱动独立站，也能嵌入到产品外壳中。"
-    href="guides/standalone-vs-embedded"
+    title="自定义 Header 与 Sidebar"
+    description="保留默认外壳、替换其中一部分，或直接把 header 和 sidebar 留空。"
+    href="guides/custom-header-and-sidebar"
   />
 </CardGrid>
 
 ## 核心理念
 
 - 一次 `createDocsSource(...)` 调用即可生成内容模型、导航、元数据、路由辅助函数、标题提取和搜索。
-- 同一个包既可以驱动独立文档站，也可以驱动嵌入在更大应用中的文档。
-- 布局可以互换。示例站点基于同一套内容树展示了 classic、notebook 和 minimal 三种视图。
+- 一个 `DocsLayout` 负责文档外壳，主题系统负责 preset、密度、尺寸与强调色。
+- 当默认 header 或 sidebar 不够用时，你可以用自己的组件或 `null` 来替换它们。
 - 像 `entry/en.mdx`、`entry/es.mdx`、`entry/zh.mdx` 这样的语言文件夹会直接映射到带语言感知的 URL。
 
 ## 这个示例站点展示了什么
 
-- 经典的 `docs` 体验
-- 更紧凑的 `notebook` 布局
-- 更专注阅读的 `minimal` 布局
-- 在宿主外壳中渲染文档的 `embedded/docs` 模式
+- 一个由单一布局组件驱动的 `docs` 路由
+- 通过主题工作室调整 preset、密度、圆角和壳层尺寸
+- 英文、西班牙文与中文的本地化路由
+- 适用于首页、指南和参考页的组件库
 
 ## 推荐浏览顺序
 
@@ -54,7 +54,7 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
 - [快速开始](getting-started)
 - [组件库](reference/component-library)
 - [主题配置](reference/theme-configuration)
-- [独立模式与嵌入模式](guides/standalone-vs-embedded)
+- [自定义 Header 与 Sidebar](guides/custom-header-and-sidebar)
 - [搜索](guides/search)
 - [移动端文档体验](guides/mobile-docs-ux)
 - [语言文件夹](internationalization/locale-folders)

@@ -11,7 +11,6 @@ export default async function DocsPage({
   nextEntry,
   backHref,
   backLabel = "All docs",
-  variant = "docs",
   components,
 }: {
   entry: DocsEntry;
@@ -19,14 +18,13 @@ export default async function DocsPage({
   nextEntry?: DocsEntryMeta | null;
   backHref?: string;
   backLabel?: string;
-  variant?: "docs" | "notebook" | "minimal";
   components?: Record<string, React.ComponentType<any>>;
 }) {
   const headingCount = entry.headings.filter((heading) => heading.level === 2).length;
   const localeCount = entry.availableLocales.length;
 
   return (
-    <div className={["emcydocs-page", `emcydocs-page-${variant}`].join(" ")}>
+    <div className="emcydocs-page">
       <article className="emcydocs-article">
         <div className="emcydocs-page-toolbar">
           {backHref ? <Link href={backHref}>{backLabel}</Link> : <span />}
@@ -64,11 +62,9 @@ export default async function DocsPage({
         </nav>
       </article>
 
-      {variant !== "minimal" ? (
-        <aside className="emcydocs-page-aside">
-          <DocsToc headings={entry.headings} />
-        </aside>
-      ) : null}
+      <aside className="emcydocs-page-aside">
+        <DocsToc headings={entry.headings} />
+      </aside>
     </div>
   );
 }

@@ -43,18 +43,6 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
   const copy = getSiteChromeDictionary(locale);
   const layoutLinks = [
     { href: buildLocalizedHref("/docs", locale), label: copy.footer.links.classicDocs },
-    {
-      href: buildLocalizedHref("/notebook", locale),
-      label: copy.footer.links.notebook,
-    },
-    {
-      href: buildLocalizedHref("/minimal", locale),
-      label: copy.footer.links.minimal,
-    },
-    {
-      href: buildLocalizedHref("/embedded/docs", locale),
-      label: copy.footer.links.embedded,
-    },
   ];
   const marketingHomeHref = buildLocalizedHref("/", locale);
   const docsHomeHref = buildLocalizedHref("/docs", locale);

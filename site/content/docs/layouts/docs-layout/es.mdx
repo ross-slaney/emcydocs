@@ -76,16 +76,15 @@ export default function Page() {
 | `navigation` | `DocsNavSection[]` | Estructura de navegacion lateral |
 | `brand` | `ReactNode` | Logo o marca del header |
 | `topLinks` | `DocsLayoutLink[]` | Enlaces del header |
+| `header` | `ReactNode \| ((props) => ReactNode) \| null` | Sustituye el header por defecto o eliminalo |
+| `sidebar` | `ReactNode \| ((props) => ReactNode) \| null` | Sustituye el sidebar por defecto o eliminalo |
 | `languageSwitcher` | `ReactNode` | Slot opcional para un selector de idioma en el shell compartido |
+| `themeSwitcher` | `ReactNode` | Slot opcional para un selector de tema en el shell compartido |
+| `theme` | `DocsThemeConfig` | Preset, modo, densidad, acento, radio y tamanos del shell |
 | `searchAction` | `DocsSearchAction` | Server action para la busqueda |
-| `mode` | `"standalone" \| "embedded"` | Modo de despliegue |
-| `mobileHeaderId` | `string` | ID del header anfitrion en modo embebido |
 
 ## Pruebalo
 
 Estas viendo este layout ahora mismo en [docs](../../docs).
 
-Compáralo con:
-
-- [Layout notebook](../../notebook) - Mas denso y parecido a una app
-- [Layout minimal](../../minimal) - Enfocado en lectura y sin distracciones laterales
+Usa [Configuracion de tema](../reference/theme-configuration) para cambiar la apariencia del mismo layout o [Header y sidebar personalizados](../guides/custom-header-and-sidebar) para sustituir el chrome.

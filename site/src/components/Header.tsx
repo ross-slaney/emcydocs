@@ -64,18 +64,6 @@ export default function Header({
 
   const navLinks = [
     { href: buildLocalizedHref("/docs", currentLocale), label: copy.header.nav.docs },
-    {
-      href: buildLocalizedHref("/notebook", currentLocale),
-      label: copy.header.nav.notebook,
-    },
-    {
-      href: buildLocalizedHref("/minimal", currentLocale),
-      label: copy.header.nav.minimal,
-    },
-    {
-      href: buildLocalizedHref("/embedded/docs", currentLocale),
-      label: copy.header.nav.embedded,
-    },
   ];
   const docsHomeHref = buildLocalizedHref("/docs", currentLocale);
   const marketingHomeHref = isSupportedMarketingLocale(currentLocale)

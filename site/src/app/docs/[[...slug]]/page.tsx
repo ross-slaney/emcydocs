@@ -46,7 +46,6 @@ export default async function DocsRoutePage({ params }: PageProps) {
       previousEntry={resolved.previousEntry}
       nextEntry={resolved.nextEntry}
       backHref={docsSource.getHref()}
-      variant="docs"
     />
   );
 }

@@ -76,16 +76,15 @@ export default function Page() {
 | `navigation` | `DocsNavSection[]` | 侧边栏导航结构 |
 | `brand` | `ReactNode` | Header 中的品牌或 Logo |
 | `topLinks` | `DocsLayoutLink[]` | Header 中的链接 |
+| `header` | `ReactNode \| ((props) => ReactNode) \| null` | 替换默认 header，或直接移除 |
+| `sidebar` | `ReactNode \| ((props) => ReactNode) \| null` | 替换默认 sidebar，或直接移除 |
 | `languageSwitcher` | `ReactNode` | 共享 shell 中可选的语言切换插槽 |
+| `themeSwitcher` | `ReactNode` | 共享 shell 中可选的主题切换插槽 |
+| `theme` | `DocsThemeConfig` | preset、mode、density、accent、radius 与壳层尺寸 |
 | `searchAction` | `DocsSearchAction` | 用于搜索的 server action |
-| `mode` | `"standalone" \| "embedded"` | 部署模式 |
-| `mobileHeaderId` | `string` | 嵌入模式下宿主 header 的 ID |
 
 ## 立即体验
 
 你现在看到的就是这个布局，位于 [docs](../../docs)。
 
-你也可以对比：
-
-- [Notebook 布局](../../notebook) - 更紧凑，更像应用界面
-- [Minimal 布局](../../minimal) - 更专注阅读，没有侧边栏干扰
+如果你想改变同一个布局的外观，请看 [主题配置](../reference/theme-configuration)；如果你想替换 shell 的结构，请看 [自定义 Header 与 Sidebar](../guides/custom-header-and-sidebar)。

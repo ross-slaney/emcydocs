@@ -51,7 +51,7 @@ sectionLabel: "Reference"
   </TabsList>
 
   <TabsContent value="neutral">适合清晰、平衡的浅色文档体验。</TabsContent>
-  <TabsContent value="dusk">适合更有对比度的深色 notebook 风格。</TabsContent>
+  <TabsContent value="dusk">适合更有对比度的深色视觉风格。</TabsContent>
   <TabsContent value="ocean">适合技术感更强的嵌入式或深色外壳。</TabsContent>
   <TabsContent value="sqlos">适合 SqlOS showcase 或强调品牌色的产品文档。</TabsContent>
 </Tabs>
@@ -66,7 +66,7 @@ sectionLabel: "Reference"
     当你想保留同一 preset，只替换品牌强调色时使用。
   </AccordionItem>
   <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
-    用同一个布局组件覆盖 classic、notebook、embedded 与 minimal 四种体验。
+    用同一个布局组件覆盖更宽的产品文档、更紧凑的参考页与更聚焦阅读的页面，而不必拆分包。
   </AccordionItem>
   <AccordionItem title="radius">
     通过 `md`、`lg` 或 `xl` 调整整体表面的锐利或圆润程度。
@@ -78,3 +78,5 @@ sectionLabel: "Reference"
 <Callout type="tip" title="外壳只提供插槽">
   EmcyDocs 不强制语言切换器或主题切换器的实现。需要时传入 `languageSwitcher` 与 `themeSwitcher`，不需要时直接省略即可。
 </Callout>
+
+示例站点使用同一个布局 API，通过 preset、mode、density、radius 与壳层尺寸来完全改变观感。

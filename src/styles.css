@@ -395,14 +395,6 @@
   position: relative;
 }
 
-.emcydocs-shell-embedded .emcydocs-frame {
-  width: min(100%, calc(var(--emcydocs-layout-width) - 2rem));
-}
-
-.emcydocs-shell-embedded .emcydocs-main {
-  min-height: calc(100vh - 1px);
-}
-
 /* ============================================
    Mobile Chrome
    ============================================ */
@@ -2276,6 +2268,10 @@
     grid-template-columns: var(--emcydocs-sidebar-width) minmax(0, 1fr);
   }
 
+  .emcydocs-shell-sidebarless .emcydocs-frame {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .emcydocs-desktop-nav {
     min-height: calc(100vh - var(--emcydocs-header-height));
     border-right: 1px solid var(--emcydocs-border);
@@ -2345,25 +2341,6 @@
     left: -1.45rem;
   }
 
-  .emcydocs-shell-notebook .emcydocs-frame {
-    --emcydocs-sidebar-width: 228px;
-  }
-
-  .emcydocs-page-notebook .emcydocs-article {
-    max-width: min(42rem, var(--emcydocs-content-width));
-  }
-
-  .emcydocs-shell-minimal .emcydocs-frame {
-    --emcydocs-sidebar-width: 208px;
-  }
-
-  .emcydocs-page-minimal {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .emcydocs-shell-embedded .emcydocs-frame {
-    width: min(100%, calc(var(--emcydocs-layout-width) - 2.5rem));
-  }
 }
 
 @media (min-width: 1280px) {

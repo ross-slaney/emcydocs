@@ -87,7 +87,12 @@ function LayoutCard({
   );
 }
 
-const layoutBases = ["/docs", "/notebook", "/minimal", "/embedded/docs"] as const;
+const showcaseLinks = [
+  "/docs",
+  "/docs/reference/theme-configuration",
+  "/docs/guides/custom-header-and-sidebar",
+  "/docs/internationalization/locale-folders",
+] as const;
 
 const featureIcons = [
   <svg key="app-router" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -220,7 +225,7 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
                 title={card.title}
                 description={card.description}
                 badge={card.badge}
-                href={buildLocalizedHref(layoutBases[index], locale)}
+                href={buildLocalizedHref(showcaseLinks[index] ?? "/docs", locale)}
                 exploreLabel={copy.exploreLabel}
               />
             ))}

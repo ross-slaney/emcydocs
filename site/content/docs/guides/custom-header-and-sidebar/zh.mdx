@@ -1,0 +1,94 @@
+---
+title: "自定义 Header 与 Sidebar"
+description: "用你自己的组件替换默认 header 或 sidebar，或直接移除其中任意一个。"
+order: 1
+section: guides
+sectionLabel: "指南"
+---
+
+EmcyDocs 现在提供一个统一布局。当你需要不同的 chrome 时，覆盖 `header` 或 `sidebar` 即可，不再需要切换布局包装器。
+
+## 默认外壳
+
+默认情况下，`DocsLayout` 提供：
+
+- 含品牌、搜索、切换器插槽和顶部链接的 sticky header
+- 带分组导航的 sidebar
+- 带抽屉的移动端文档 chrome
+- 与共享页面组件配合良好的内容框架
+
+```tsx
+import { DocsLayout } from "@emcy/docs";
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout navigation={docsSource.getNavigation()}>
+      {children}
+    </DocsLayout>
+  );
+}
+```
+
+## 移除默认 Header
+
+当应用本身已经拥有顶部 chrome 时，可以传入 `header={null}`：
+
+```tsx
+<DocsLayout navigation={docsSource.getNavigation()} header={null}>
+  {children}
+</DocsLayout>
+```
+
+## 替换 Header
+
+如果你需要访问当前标题或移动端导航状态，可以传入 render prop：
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  header={({ isMobile, currentTitle, toggleNavigation, isNavigationOpen }) => (
+    <div>
+      <strong>{isMobile ? currentTitle : "我的文档"}</strong>
+      {isMobile ? (
+        <button type="button" onClick={toggleNavigation}>
+          {isNavigationOpen ? "关闭" : "浏览"}
+        </button>
+      ) : null}
+    </div>
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## 替换或移除 Sidebar
+
+如果你想保留内容区框架但换成自己的导航组件，可以传入 `sidebar`。如果不想显示侧边栏，就传 `sidebar={null}`。
+
+```tsx
+<DocsLayout
+  navigation={docsSource.getNavigation()}
+  sidebar={({ navigation, isMobile, closeNavigation }) => (
+    <MySidebar
+      items={navigation}
+      compact={isMobile}
+      onNavigate={closeNavigation}
+    />
+  )}
+>
+  {children}
+</DocsLayout>
+```
+
+## 适合这样做的场景
+
+- 产品本身已经有全局 header
+- 团队需要完全自定义的 sidebar
+- 某些指南页不想显示 sidebar
+- 想保留页面组件，但需要不同的移动端 chrome
+
+## 下一步
+
+- [移动端文档体验](mobile-docs-ux) - 了解移动端 shell
+- [Docs 布局](../layouts/docs-layout) - 查看完整布局 API
+- [主题配置](../reference/theme-configuration) - 在不更换布局的情况下改变外观

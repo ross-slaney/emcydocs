@@ -53,7 +53,6 @@ export default async function LocaleDocsRoutePage({ params }: PageProps) {
       previousEntry={resolved.previousEntry}
       nextEntry={resolved.nextEntry}
       backHref={docsSource.getHref([], locale)}
-      variant="docs"
     />
   );
 }

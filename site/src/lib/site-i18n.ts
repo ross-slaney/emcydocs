@@ -22,10 +22,7 @@ export const defaultSiteLocale: RouteLocale = isSupportedRouteLocale(
 export const hideDefaultSiteLocaleInUrl = true;
 
 const localizedRouteBases = [
-  "/embedded/docs",
   "/docs",
-  "/notebook",
-  "/minimal",
   "/",
 ] as const;
 
@@ -39,18 +36,12 @@ const docsDictionaries = {
     layout: siteDictionaries.en.docs.layout,
     pages: {
       docsClassicHome: siteDictionaries.en.pages.docsClassicHome,
-      docsNotebookHome: siteDictionaries.en.pages.docsNotebookHome,
-      docsMinimalHome: siteDictionaries.en.pages.docsMinimalHome,
-      docsEmbeddedHome: siteDictionaries.en.pages.docsEmbeddedHome,
     },
   },
   es: {
     layout: siteDictionaries.es.docs.layout,
     pages: {
       docsClassicHome: siteDictionaries.es.pages.docsClassicHome,
-      docsNotebookHome: siteDictionaries.es.pages.docsNotebookHome,
-      docsMinimalHome: siteDictionaries.es.pages.docsMinimalHome,
-      docsEmbeddedHome: siteDictionaries.es.pages.docsEmbeddedHome,
     },
   },
   zh: {
@@ -58,30 +49,12 @@ const docsDictionaries = {
       brand: "EmcyDocs",
       classicDocs: "经典文档",
       defaultDocs: "默认文档",
-      notebook: "Notebook",
-      minimal: "Minimal",
-      embedded: "嵌入式",
     },
     pages: {
       docsClassicHome: {
         title: "带有路由感知语言前缀的本地化文档",
         description:
           "默认语言可以保持在 docs 下的简洁路径中，而非默认语言可以通过带前缀的路径暴露出来，同时不改变内容模型。",
-      },
-      docsNotebookHome: {
-        title: "Notebook 布局",
-        description:
-          "适合产品团队的紧凑型文档外壳，保留持久化导航和搜索，同时拥有更强的应用感。",
-      },
-      docsMinimalHome: {
-        title: "Minimal 布局",
-        description:
-          "一个尽可能减少 chrome 的 Markdown 阅读体验，适合希望把注意力完全放在内容上的文档。",
-      },
-      docsEmbeddedHome: {
-        title: "支持路由级语言切换的嵌入式文档模式",
-        description:
-          "嵌入式演示保留同一套文档外壳，同时让本地化路由在嵌入式文档 URL 之间切换。",
       },
     },
   },

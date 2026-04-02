@@ -4,7 +4,7 @@ description: "EmcyDocs packages repo-local MDX, SEO-friendly App Router docs, mo
 order: -1
 ---
 
-EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-friendly prerendered routes, built-in mobile docs UX, and a clean way to switch between standalone and embedded docs experiences.
+EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-friendly prerendered routes, built-in mobile docs UX, and one docs shell that can be shaped through theme configuration and custom chrome.
 
 <Banner
   eyebrow="Now shipping"
@@ -27,25 +27,25 @@ EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-frien
     href="reference/theme-configuration"
   />
   <Card
-    title="Standalone vs Embedded"
-    description="Use the same content tree in a dedicated docs site or inside a host product shell."
-    href="guides/standalone-vs-embedded"
+    title="Custom Header And Sidebar"
+    description="Keep the default shell, replace pieces of it, or leave header and sidebar blank when your app owns the chrome."
+    href="guides/custom-header-and-sidebar"
   />
 </CardGrid>
 
 ## Core ideas
 
 - A single `createDocsSource(...)` call builds your content model, navigation, metadata, route helpers, heading extraction, and search.
-- The same package can power a standalone docs site or docs embedded inside a larger app.
-- Layouts are interchangeable. The example site exposes classic docs, notebook, and minimal views from the same content tree.
+- A single `DocsLayout` owns the docs shell while the theme system handles presets, density, sizing, and accent changes.
+- When the default header or sidebar is not enough, you can replace either one with your own component or `null`.
 - Locale folders like `entry/en.mdx`, `entry/es.mdx`, and `entry/zh.mdx` map directly into locale-aware URLs.
 
 ## What this example site shows
 
-- A classic `docs` experience
-- A denser `notebook` layout
-- A stripped-down `minimal` layout
-- An `embedded/docs` mode that renders docs inside a host shell
+- A single `docs` route powered by one layout component
+- Theme presets, density, radius, and shell sizing in one theme studio
+- Locale-aware routes for English, Spanish, and Chinese
+- A component library for docs homes, guides, and references
 
 ## Recommended tour
 
@@ -54,7 +54,7 @@ Start here if you want a quick feel for the package:
 - [Getting started](getting-started)
 - [Component library](reference/component-library)
 - [Theme configuration](reference/theme-configuration)
-- [Standalone vs embedded](guides/standalone-vs-embedded)
+- [Custom header and sidebar](guides/custom-header-and-sidebar)
 - [Search](guides/search)
 - [Mobile docs UX](guides/mobile-docs-ux)
 - [Locale folders](internationalization/locale-folders)

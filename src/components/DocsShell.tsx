@@ -43,18 +43,6 @@ export default function DocsShell({
     return () => window.clearTimeout(timeoutId);
   }, [pathname]);
 
-  useEffect(() => {
-    if (!isNavOpen) {
-      return;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isNavOpen]);
-
   const currentTitle = useMemo(() => {
     const current = navigation
       .flatMap((section) => section.items)
@@ -167,8 +155,25 @@ export default function DocsShell({
       {desktopHeader ? <header className="emcydocs-header">{desktopHeader}</header> : null}
 
       {mobileHeader ? (
-        <div className="emcydocs-mobile-wrap">
+        <div
+          className={["emcydocs-mobile-wrap", isNavOpen ? "is-open" : ""]
+            .filter(Boolean)
+            .join(" ")}
+        >
           <div className="emcydocs-mobile-inner">{mobileHeader}</div>
+          {mobileSidebar ? (
+            <div className="emcydocs-mobile-inner">
+              <div
+                id="emcydocs-mobile-nav"
+                className={["emcydocs-mobile-nav-panel", isNavOpen ? "is-open" : ""]
+                  .filter(Boolean)
+                  .join(" ")}
+                aria-hidden={!isNavOpen}
+              >
+                {mobileSidebar}
+              </div>
+            </div>
+          ) : null}
         </div>
       ) : null}
 
@@ -178,18 +183,6 @@ export default function DocsShell({
         ) : null}
         <main className="emcydocs-main">{children}</main>
       </div>
-
-      {isNavOpen && mobileSidebar ? (
-        <>
-          <button
-            type="button"
-            aria-label="Close mobile documentation navigation"
-            className="emcydocs-overlay"
-            onClick={() => setIsNavOpen(false)}
-          />
-          <div className="emcydocs-drawer">{mobileSidebar}</div>
-        </>
-      ) : null}
     </div>
   );
 }

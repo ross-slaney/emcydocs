@@ -23,8 +23,23 @@ export default function MobileDocsChrome({
           <span className="emcydocs-mobile-title">{currentTitle}</span>
         </div>
         {showNavigationToggle ? (
-          <button type="button" className="emcydocs-button" onClick={onToggleNav}>
-            {isNavOpen ? "Close" : "Browse"}
+          <button
+            type="button"
+            className="emcydocs-button emcydocs-mobile-toggle"
+            aria-controls="emcydocs-mobile-nav"
+            aria-expanded={isNavOpen}
+            aria-label={
+              isNavOpen
+                ? "Collapse documentation contents"
+                : "Expand documentation contents"
+            }
+            data-state={isNavOpen ? "open" : "closed"}
+            onClick={onToggleNav}
+          >
+            <span>Contents</span>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.75">
+              <path strokeLinecap="round" strokeLinejoin="round" d="m4 6 4 4 4-4" />
+            </svg>
           </button>
         ) : null}
       </div>

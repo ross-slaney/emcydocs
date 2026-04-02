@@ -4,7 +4,12 @@
   "description": "App Router-native MDX documentation for Next.js with reusable layouts, search, TOC, and locale-aware routing.",
   "type": "module",
   "main": "dist/index.js",
+  "style": "styles.css",
   "types": "dist/index.d.ts",
+  "sideEffects": [
+    "./styles.css",
+    "./dist/styles.css"
+  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -22,10 +27,11 @@
       "import": "./dist/types.js",
       "types": "./dist/types.d.ts"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./styles.css"
   },
   "files": [
     "dist",
+    "styles.css",
     "README.md",
     "LICENSE"
   ],

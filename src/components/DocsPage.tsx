@@ -33,16 +33,14 @@ export default async function DocsPage({
   return (
     <div className="emcydocs-page">
       <article className="emcydocs-article">
-        <div className="emcydocs-page-toolbar">
-          {backHref ? <Link href={backHref}>{backLabel}</Link> : <span />}
-          <CopyPageButton />
-        </div>
-
         <header className="emcydocs-page-header">
           {entry.sectionLabel ? (
             <p className="emcydocs-page-kicker">{entry.sectionLabel}</p>
           ) : null}
-          <h1>{entry.title}</h1>
+          <div className="emcydocs-page-title-row">
+            <h1>{entry.title}</h1>
+            <CopyPageButton />
+          </div>
           {entry.description ? <p>{entry.description}</p> : null}
           {headingCount > 0 || localeCount > 1 ? (
             <div className="emcydocs-page-meta">

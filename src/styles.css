@@ -219,12 +219,13 @@
   }
 
   .emcydocs-desktop-nav {
-    display: block;
+    display: flex;
+    flex-direction: column;
     position: sticky;
     top: var(--emcydocs-header-height);
     height: calc(100vh - var(--emcydocs-header-height));
-    overflow-y: auto;
-    padding: var(--emcydocs-sidebar-padding) 0;
+    overflow: visible;
+    padding: 0;
   }
 }
 
@@ -434,12 +435,49 @@
 .emcydocs-sidebar-mobile {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  height: 100%;
   padding: var(--emcydocs-sidebar-padding);
 }
 
 .emcydocs-sidebar-mobile {
   padding: 1rem;
+}
+
+.emcydocs-sidebar-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+}
+
+.emcydocs-sidebar-scroll:not(:hover) {
+  scrollbar-color: transparent transparent;
+}
+
+.emcydocs-sidebar-scroll:hover {
+  scrollbar-color: hsl(var(--emcydocs-border)) transparent;
+}
+
+/* WebKit auto-hide scrollbar */
+.emcydocs-sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.emcydocs-sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.emcydocs-sidebar-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+
+.emcydocs-sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background: hsl(var(--emcydocs-border));
 }
 
 .emcydocs-sidebar-section {
@@ -506,14 +544,19 @@
 }
 
 .emcydocs-sidebar-header {
+  flex-shrink: 0;
   padding-bottom: 0.75rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   border-bottom: 1px solid hsl(var(--emcydocs-border));
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .emcydocs-sidebar-footer {
+  flex-shrink: 0;
   padding-top: 0.75rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   border-top: 1px solid hsl(var(--emcydocs-border));
 }
 
@@ -721,11 +764,12 @@
   display: grid;
   gap: 2rem;
   padding: var(--emcydocs-page-padding);
+  padding-top: 0;
 }
 
 @media (min-width: 1024px) {
   .emcydocs-page {
-    padding: 2rem 2.5rem;
+    padding: 0 2.5rem 2rem;
   }
 }
 
@@ -740,22 +784,21 @@
   min-width: 0;
 }
 
-.emcydocs-page-toolbar {
+.emcydocs-page-title-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.8125rem;
 }
 
-.emcydocs-page-toolbar a {
-  color: hsl(var(--emcydocs-muted-foreground));
-  transition: color 0.15s;
+.emcydocs-page-title-row h1 {
+  flex: 1;
+  min-width: 0;
 }
 
-.emcydocs-page-toolbar a:hover {
-  color: hsl(var(--emcydocs-foreground));
+.emcydocs-page-title-row .emcydocs-copymenu {
+  flex-shrink: 0;
+  margin-top: 0.25rem;
 }
 
 .emcydocs-page-header {
@@ -819,7 +862,6 @@
     position: sticky;
     top: var(--emcydocs-header-height);
     max-height: calc(100vh - var(--emcydocs-header-height) - 2rem);
-    margin-top: -2rem;
     padding-top: calc(var(--emcydocs-sidebar-padding) * 2);
     overflow-y: auto;
     align-self: start;
@@ -1825,7 +1867,7 @@
 }
 
 /* ============================================
-   Copy Button
+   Copy Button (inline, e.g. code blocks)
    ============================================ */
 
 .emcydocs-copy-btn {
@@ -1850,6 +1892,143 @@
 .emcydocs-copy-btn svg {
   width: 1rem;
   height: 1rem;
+}
+
+/* ============================================
+   Copy Page Menu
+   ============================================ */
+
+.emcydocs-copymenu {
+  position: relative;
+}
+
+.emcydocs-copymenu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: var(--radius);
+  background: hsl(var(--emcydocs-background));
+  color: hsl(var(--emcydocs-muted-foreground));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s, border-color 0.15s;
+}
+
+.emcydocs-copymenu-trigger:hover {
+  color: hsl(var(--emcydocs-foreground));
+  background: hsl(var(--emcydocs-accent));
+  border-color: hsl(var(--emcydocs-border));
+}
+
+.emcydocs-copymenu-trigger > svg {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.emcydocs-copymenu-chevron {
+  width: 0.75rem !important;
+  height: 0.75rem !important;
+  transition: transform 0.2s;
+}
+
+.emcydocs-copymenu-chevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.emcydocs-copymenu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.375rem);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: 17rem;
+  padding: 0.375rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: calc(var(--radius) + 2px);
+  background: hsl(var(--emcydocs-background));
+  box-shadow: 0 4px 24px hsl(var(--emcydocs-foreground) / 0.08),
+              0 1px 3px hsl(var(--emcydocs-foreground) / 0.04);
+  animation: emcydocs-copymenu-in 0.15s ease-out;
+}
+
+@keyframes emcydocs-copymenu-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.emcydocs-copymenu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.625rem 0.625rem;
+  border: none;
+  border-radius: var(--radius);
+  background: transparent;
+  color: hsl(var(--emcydocs-foreground));
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.emcydocs-copymenu-item:hover {
+  background: hsl(var(--emcydocs-accent));
+}
+
+.emcydocs-copymenu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: calc(var(--radius) - 1px);
+  background: hsl(var(--emcydocs-muted));
+  color: hsl(var(--emcydocs-muted-foreground));
+}
+
+.emcydocs-copymenu-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.emcydocs-copymenu-icon-accent {
+  background: hsl(var(--emcydocs-primary) / 0.1);
+  color: hsl(var(--emcydocs-primary));
+}
+
+.emcydocs-copymenu-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.0625rem;
+  min-width: 0;
+}
+
+.emcydocs-copymenu-title {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.emcydocs-copymenu-desc {
+  font-size: 0.6875rem;
+  color: hsl(var(--emcydocs-muted-foreground));
+  line-height: 1.3;
+}
+
+.emcydocs-copymenu-external {
+  width: 0.75rem;
+  height: 0.75rem;
+  opacity: 0.5;
 }
 
 /* ============================================
@@ -1911,6 +2090,260 @@
 
 .emcydocs-theme-dot.is-active {
   border-color: hsl(var(--emcydocs-foreground));
+}
+
+/* ============================================
+   Theme Editor (popout panel)
+   ============================================ */
+
+.emcydocs-te-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: var(--radius);
+  background: hsl(var(--emcydocs-background));
+  color: hsl(var(--emcydocs-foreground));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.emcydocs-te-trigger:hover {
+  background: hsl(var(--emcydocs-accent));
+}
+
+.emcydocs-te-dot {
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.emcydocs-te-chevron {
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+
+.emcydocs-te-chevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.emcydocs-te-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+}
+
+.emcydocs-te-panel {
+  position: fixed;
+  z-index: 9999;
+  top: var(--emcydocs-header-height, 3.5rem);
+  left: var(--emcydocs-sidebar-width, 16rem);
+  width: 36rem;
+  max-width: calc(100vw - 2rem);
+  max-height: calc(100vh - var(--emcydocs-header-height, 3.5rem) - 1rem);
+  overflow-y: auto;
+  margin: 1rem 0 0 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: calc(var(--radius) + 4px);
+  background: hsl(var(--emcydocs-background));
+  box-shadow:
+    0 8px 40px hsl(var(--emcydocs-foreground) / 0.08),
+    0 2px 8px hsl(var(--emcydocs-foreground) / 0.04);
+  animation: emcydocs-te-in 0.2s ease-out;
+}
+
+@keyframes emcydocs-te-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* On smaller screens, center the panel */
+@media (max-width: 1023px) {
+  .emcydocs-te-panel {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    width: calc(100vw - 2rem);
+    max-height: calc(100vh - 4rem);
+  }
+
+  .emcydocs-te-backdrop {
+    background: hsl(var(--emcydocs-foreground) / 0.2);
+    backdrop-filter: blur(2px);
+  }
+
+  @keyframes emcydocs-te-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+.emcydocs-te-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid hsl(var(--emcydocs-border));
+}
+
+.emcydocs-te-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--emcydocs-foreground));
+}
+
+.emcydocs-te-subtitle {
+  font-size: 0.6875rem;
+  color: hsl(var(--emcydocs-muted-foreground));
+  margin-top: 0.125rem;
+}
+
+.emcydocs-te-actions {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.emcydocs-te-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: calc(var(--radius) - 1px);
+  background: transparent;
+  color: hsl(var(--emcydocs-muted-foreground));
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.emcydocs-te-action:hover {
+  background: hsl(var(--emcydocs-accent));
+  color: hsl(var(--emcydocs-foreground));
+}
+
+.emcydocs-te-action svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+/* Controls grid - 2 columns on wide panels */
+.emcydocs-te-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.875rem 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .emcydocs-te-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.emcydocs-te-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.emcydocs-te-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: hsl(var(--emcydocs-muted-foreground));
+}
+
+.emcydocs-te-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.emcydocs-te-chip {
+  padding: 0.25rem 0.5rem;
+  border: 1px solid hsl(var(--emcydocs-border));
+  border-radius: calc(var(--radius) - 1px);
+  background: hsl(var(--emcydocs-background));
+  color: hsl(var(--emcydocs-muted-foreground));
+  font-size: 0.6875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.emcydocs-te-chip:hover {
+  background: hsl(var(--emcydocs-accent));
+  color: hsl(var(--emcydocs-foreground));
+}
+
+.emcydocs-te-chip.is-active {
+  background: hsl(var(--emcydocs-foreground));
+  color: hsl(var(--emcydocs-background));
+  border-color: hsl(var(--emcydocs-foreground));
+}
+
+.emcydocs-te-hues {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.emcydocs-te-hue {
+  width: 1.375rem;
+  height: 1.375rem;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.emcydocs-te-hue:hover {
+  transform: scale(1.15);
+}
+
+.emcydocs-te-hue.is-active {
+  border-color: hsl(var(--emcydocs-foreground));
+}
+
+.emcydocs-te-json {
+  margin-top: 0.875rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid hsl(var(--emcydocs-border));
+}
+
+.emcydocs-te-json pre {
+  max-height: 8rem;
+  overflow: auto;
+  padding: 0.625rem;
+  border-radius: calc(var(--radius) - 1px);
+  background: hsl(var(--emcydocs-muted));
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  color: hsl(var(--emcydocs-muted-foreground));
 }
 
 /* ============================================

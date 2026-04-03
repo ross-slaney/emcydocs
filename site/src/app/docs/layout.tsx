@@ -29,13 +29,15 @@ export default function DocsRootLayout({
         themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
         theme={docsClassicTheme}
         sidebarHeader={
-          <DocsSearch
-            searchAction={searchDocsAction}
-            locale={defaultSiteLocale}
-            placeholder="Search..."
-          />
+          <>
+            <DocsSearch
+              searchAction={searchDocsAction}
+              locale={defaultSiteLocale}
+              placeholder="Search..."
+            />
+            <DocsThemeEditor defaults={docsClassicTheme} />
+          </>
         }
-        sidebarFooter={<DocsThemeEditor defaults={docsClassicTheme} />}
       >
         {children}
       </DocsLayout>

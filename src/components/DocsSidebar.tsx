@@ -38,58 +38,62 @@ export default function DocsSidebar({
     setCollapsed(getInitialCollapsedState(sections, pathname, variant));
   }, [pathname, sections, variant]);
 
-  return (
-    <nav
-      aria-label="Documentation navigation"
-      className={variant === "desktop" ? "emcydocs-sidebar" : "emcydocs-sidebar-mobile"}
-    >
-      {header ? <div className="emcydocs-sidebar-header">{header}</div> : null}
-      {sections.map((section) => {
-        const isCollapsed = collapsed[section.key] ?? false;
-        const sectionId = `emcydocs-sidebar-section-${section.key || "root"}`;
+  const isDesktop = variant === "desktop";
 
-        return (
-          <section key={section.key || "root"} className="emcydocs-sidebar-section">
-            <button
-              type="button"
-              className="emcydocs-sidebar-section-toggle"
-              aria-controls={sectionId}
-              aria-expanded={!isCollapsed}
-              onClick={() =>
-                setCollapsed((current) => ({
-                  ...current,
-                  [section.key]: !current[section.key],
-                }))
-              }
-            >
-              <span>{section.label}</span>
-              <span aria-hidden="true">{isCollapsed ? "+" : "−"}</span>
-            </button>
-            {!isCollapsed ? (
-              <ul id={sectionId} className="emcydocs-sidebar-list">
-                {section.items.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className={["emcydocs-sidebar-link", isActive ? "is-active" : ""]
-                          .filter(Boolean)
-                          .join(" ")}
-                        onClick={onNavigate}
-                      >
-                        {item.title}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : null}
-          </section>
-        );
-      })}
+  return (
+    <div className={isDesktop ? "emcydocs-sidebar" : "emcydocs-sidebar-mobile"}>
+      {header ? <div className="emcydocs-sidebar-header">{header}</div> : null}
+      <nav
+        aria-label="Documentation navigation"
+        className="emcydocs-sidebar-scroll"
+      >
+        {sections.map((section) => {
+          const isCollapsed = collapsed[section.key] ?? false;
+          const sectionId = `emcydocs-sidebar-section-${section.key || "root"}`;
+
+          return (
+            <section key={section.key || "root"} className="emcydocs-sidebar-section">
+              <button
+                type="button"
+                className="emcydocs-sidebar-section-toggle"
+                aria-controls={sectionId}
+                aria-expanded={!isCollapsed}
+                onClick={() =>
+                  setCollapsed((current) => ({
+                    ...current,
+                    [section.key]: !current[section.key],
+                  }))
+                }
+              >
+                <span>{section.label}</span>
+                <span aria-hidden="true">{isCollapsed ? "+" : "−"}</span>
+              </button>
+              {!isCollapsed ? (
+                <ul id={sectionId} className="emcydocs-sidebar-list">
+                  {section.items.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <li key={item.href}>
+                        <Link
+                          href={item.href}
+                          className={["emcydocs-sidebar-link", isActive ? "is-active" : ""]
+                            .filter(Boolean)
+                            .join(" ")}
+                          onClick={onNavigate}
+                        >
+                          {item.title}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
+            </section>
+          );
+        })}
+      </nav>
       {footer ? <div className="emcydocs-sidebar-footer">{footer}</div> : null}
-    </nav>
+    </div>
   );
 }
 

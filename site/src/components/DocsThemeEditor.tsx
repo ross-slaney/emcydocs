@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { getDocsThemeStyle } from "@emcy/docs/theme";
-import type { DocsThemeConfig, DocsThemePreset, DocsThemeMode, DocsThemeDensity, DocsThemeRadius } from "@emcy/docs/types";
-import { Copy, Check, RotateCcw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import type {
+  DocsThemeConfig,
+  DocsThemePreset,
+  DocsThemeMode,
+  DocsThemeDensity,
+  DocsThemeRadius,
+} from "@emcy/docs/types";
 
 const STORAGE_KEY = "emcydocs-theme-editor";
 
@@ -29,9 +34,27 @@ const densities: DocsThemeDensity[] = ["comfortable", "compact"];
 const radii: DocsThemeRadius[] = ["md", "lg", "xl"];
 
 const layouts = [
-  { label: "Compact", layoutWidth: "1280px", sidebarWidth: "220px", contentWidth: "42rem", tocWidth: "200px" },
-  { label: "Balanced", layoutWidth: "1440px", sidebarWidth: "260px", contentWidth: "48rem", tocWidth: "220px" },
-  { label: "Spacious", layoutWidth: "1600px", sidebarWidth: "300px", contentWidth: "52rem", tocWidth: "240px" },
+  {
+    label: "Compact",
+    layoutWidth: "1280px",
+    sidebarWidth: "220px",
+    contentWidth: "42rem",
+    tocWidth: "200px",
+  },
+  {
+    label: "Balanced",
+    layoutWidth: "1440px",
+    sidebarWidth: "260px",
+    contentWidth: "48rem",
+    tocWidth: "220px",
+  },
+  {
+    label: "Spacious",
+    layoutWidth: "1600px",
+    sidebarWidth: "300px",
+    contentWidth: "52rem",
+    tocWidth: "240px",
+  },
 ];
 
 interface Props {
@@ -43,7 +66,6 @@ export default function DocsThemeEditor({ defaults }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Load saved config on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -56,7 +78,6 @@ export default function DocsThemeEditor({ defaults }: Props) {
     }
   }, [defaults]);
 
-  // Apply theme changes to all shells
   useEffect(() => {
     applyTheme(config);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
@@ -78,21 +99,16 @@ export default function DocsThemeEditor({ defaults }: Props) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const configJson = JSON.stringify(config, null, 2);
-
   return (
-    <div className="relative">
+    <>
+      {/* Trigger */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-all hover:bg-accent"
-        style={{
-          borderColor: "hsl(var(--border))",
-          background: "hsl(var(--background))",
-        }}
+        className="emcydocs-te-trigger"
       >
         <span
-          className="h-4 w-4 rounded-full"
+          className="emcydocs-te-dot"
           style={{
             background: `linear-gradient(135deg, hsl(${config.accentHue ?? 270} 80% 60%), hsl(${config.accentHue ?? 270} 70% 45%))`,
           }}
@@ -100,87 +116,129 @@ export default function DocsThemeEditor({ defaults }: Props) {
         <span>Theme Editor</span>
         <svg
           viewBox="0 0 20 20"
-          className={`h-4 w-4 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          className="emcydocs-te-chevron"
+          data-open={isOpen}
           fill="none"
           stroke="currentColor"
           strokeWidth="1.5"
         >
-          <path d="M5 7.5 10 12.5 15 7.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M5 7.5 10 12.5 15 7.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </button>
 
-      {isOpen && (
+      {/* Panel (portalled to body to escape stacking contexts) */}
+      {isOpen ? createPortal(
         <>
           <div
-            className="fixed inset-0 z-40"
+            className="emcydocs-te-backdrop"
             onClick={() => setIsOpen(false)}
           />
-          <div
-            className="absolute right-0 top-full z-50 mt-2 w-[420px] max-w-[calc(100vw-2rem)] rounded-xl border bg-popover p-4 shadow-xl"
-            style={{ borderColor: "hsl(var(--border))" }}
-          >
-            <div className="mb-4 flex items-center justify-between">
+          <div className="emcydocs-te-panel">
+            {/* Header */}
+            <div className="emcydocs-te-header">
               <div>
-                <h3 className="font-semibold">DocsThemeConfig</h3>
-                <p className="text-xs text-muted-foreground">
+                <div className="emcydocs-te-title">DocsThemeConfig</div>
+                <div className="emcydocs-te-subtitle">
                   Customize and export your theme
-                </p>
+                </div>
               </div>
-              <div className="flex gap-1">
-                <Button variant="ghost" size="icon" onClick={resetConfig} title="Reset to defaults">
-                  <RotateCcw className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={copyConfig} title="Copy config">
-                  {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                </Button>
+              <div className="emcydocs-te-actions">
+                <button
+                  type="button"
+                  onClick={resetConfig}
+                  className="emcydocs-te-action"
+                  title="Reset"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8" />
+                    <path d="M3 3v5h5" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={copyConfig}
+                  className="emcydocs-te-action"
+                  title="Copy config"
+                >
+                  {copied ? (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  ) : (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <rect x="9" y="9" width="13" height="13" rx="2" />
+                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </div>
 
-            <div className="space-y-4">
-              {/* Preset */}
-              <div>
-                <Label>preset</Label>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {/* Controls grid */}
+            <div className="emcydocs-te-grid">
+              <Field label="preset">
+                <div className="emcydocs-te-chips">
                   {presets.map((p) => (
-                    <OptionButton
+                    <Chip
                       key={p.id}
                       active={config.preset === p.id}
-                      onClick={() => updateConfig({ preset: p.id, accentHue: p.hue })}
+                      onClick={() =>
+                        updateConfig({ preset: p.id, accentHue: p.hue })
+                      }
                     >
                       {p.label}
-                    </OptionButton>
+                    </Chip>
                   ))}
                 </div>
-              </div>
+              </Field>
 
-              {/* Mode */}
-              <div>
-                <Label>mode</Label>
-                <div className="mt-1.5 flex gap-1.5">
+              <Field label="mode">
+                <div className="emcydocs-te-chips">
                   {modes.map((m) => (
-                    <OptionButton
+                    <Chip
                       key={m}
                       active={config.mode === m}
                       onClick={() => updateConfig({ mode: m })}
                     >
                       {m}
-                    </OptionButton>
+                    </Chip>
                   ))}
                 </div>
-              </div>
+              </Field>
 
-              {/* Accent */}
-              <div>
-                <Label>accentHue: {config.accentHue}</Label>
-                <div className="mt-1.5 flex flex-wrap gap-1.5">
+              <Field label={`accentHue: ${config.accentHue}`}>
+                <div className="emcydocs-te-hues">
                   {accents.map((a) => (
                     <button
                       key={a.hue}
                       type="button"
                       onClick={() => updateConfig({ accentHue: a.hue })}
-                      className={`h-7 w-7 rounded-full border-2 transition-transform hover:scale-110 ${
-                        config.accentHue === a.hue ? "border-foreground" : "border-transparent"
-                      }`}
+                      className={`emcydocs-te-hue ${config.accentHue === a.hue ? "is-active" : ""}`}
                       style={{
                         background: `linear-gradient(135deg, hsl(${a.hue} 80% 60%), hsl(${a.hue} 70% 45%))`,
                       }}
@@ -188,85 +246,88 @@ export default function DocsThemeEditor({ defaults }: Props) {
                     />
                   ))}
                 </div>
-              </div>
+              </Field>
 
-              {/* Density */}
-              <div>
-                <Label>density</Label>
-                <div className="mt-1.5 flex gap-1.5">
+              <Field label="density">
+                <div className="emcydocs-te-chips">
                   {densities.map((d) => (
-                    <OptionButton
+                    <Chip
                       key={d}
                       active={config.density === d}
                       onClick={() => updateConfig({ density: d })}
                     >
                       {d}
-                    </OptionButton>
+                    </Chip>
                   ))}
                 </div>
-              </div>
+              </Field>
 
-              {/* Radius */}
-              <div>
-                <Label>radius</Label>
-                <div className="mt-1.5 flex gap-1.5">
+              <Field label="radius">
+                <div className="emcydocs-te-chips">
                   {radii.map((r) => (
-                    <OptionButton
+                    <Chip
                       key={r}
                       active={config.radius === r}
                       onClick={() => updateConfig({ radius: r })}
                     >
                       {r}
-                    </OptionButton>
+                    </Chip>
                   ))}
                 </div>
-              </div>
+              </Field>
 
-              {/* Layout */}
-              <div>
-                <Label>layout</Label>
-                <div className="mt-1.5 flex gap-1.5">
+              <Field label="layout">
+                <div className="emcydocs-te-chips">
                   {layouts.map((l) => (
-                    <OptionButton
+                    <Chip
                       key={l.label}
                       active={config.layoutWidth === l.layoutWidth}
-                      onClick={() => updateConfig({
-                        layoutWidth: l.layoutWidth,
-                        sidebarWidth: l.sidebarWidth,
-                        contentWidth: l.contentWidth,
-                        tocWidth: l.tocWidth,
-                      })}
+                      onClick={() =>
+                        updateConfig({
+                          layoutWidth: l.layoutWidth,
+                          sidebarWidth: l.sidebarWidth,
+                          contentWidth: l.contentWidth,
+                          tocWidth: l.tocWidth,
+                        })
+                      }
                     >
                       {l.label}
-                    </OptionButton>
+                    </Chip>
                   ))}
                 </div>
-              </div>
+              </Field>
+            </div>
 
-              {/* JSON Preview */}
-              <div>
-                <Label>Config JSON</Label>
-                <pre className="mt-1.5 max-h-32 overflow-auto rounded-lg border bg-muted p-3 text-xs">
-                  <code>{configJson}</code>
-                </pre>
-              </div>
+            {/* JSON */}
+            <div className="emcydocs-te-json">
+              <pre>
+                <code>{JSON.stringify(config, null, 2)}</code>
+              </pre>
             </div>
           </div>
-        </>
-      )}
+        </>,
+        document.body
+      ) : null}
+    </>
+  );
+}
+
+function Field({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="emcydocs-te-field">
+      <span className="emcydocs-te-label">{label}</span>
+      {children}
     </div>
   );
 }
 
-function Label({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-xs font-medium text-muted-foreground">
-      {children}
-    </span>
-  );
-}
-
-function OptionButton({
+function Chip({
   children,
   active,
   onClick,
@@ -279,11 +340,7 @@ function OptionButton({
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-md border px-2.5 py-1.5 text-xs font-medium transition-colors ${
-        active
-          ? "border-foreground bg-foreground text-background"
-          : "border-border bg-background hover:bg-accent"
-      }`}
+      className={`emcydocs-te-chip ${active ? "is-active" : ""}`}
     >
       {children}
     </button>
@@ -297,12 +354,10 @@ function applyTheme(config: DocsThemeConfig) {
   const density = config.density ?? "comfortable";
 
   document.querySelectorAll<HTMLElement>(".emcydocs-shell").forEach((shell) => {
-    // Set data attributes
     shell.dataset.emcydocsPreset = preset;
     shell.dataset.emcydocsMode = mode;
     shell.dataset.emcydocsDensity = density;
 
-    // Clear existing custom properties
     shell.style.removeProperty("--emcydocs-hue");
     shell.style.removeProperty("--emcydocs-layout-width");
     shell.style.removeProperty("--emcydocs-content-width");
@@ -310,7 +365,6 @@ function applyTheme(config: DocsThemeConfig) {
     shell.style.removeProperty("--emcydocs-toc-width");
     shell.style.removeProperty("--emcydocs-radius");
 
-    // Apply new style properties
     if (style) {
       Object.entries(style).forEach(([key, value]) => {
         if (typeof value === "string") {

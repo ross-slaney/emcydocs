@@ -39,13 +39,15 @@ export default async function LocaleDocsLayout({
         themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
         theme={docsClassicTheme}
         sidebarHeader={
-          <DocsSearch
-            searchAction={searchDocsAction}
-            locale={locale}
-            placeholder="Search..."
-          />
+          <>
+            <DocsSearch
+              searchAction={searchDocsAction}
+              locale={locale}
+              placeholder="Search..."
+            />
+            <DocsThemeEditor defaults={docsClassicTheme} />
+          </>
         }
-        sidebarFooter={<DocsThemeEditor defaults={docsClassicTheme} />}
       >
         {children}
       </DocsLayout>

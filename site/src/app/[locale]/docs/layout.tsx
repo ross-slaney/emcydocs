@@ -1,18 +1,14 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import { DocsLayout } from "@emcy/docs";
+import { DocsLayout, DocsSearch } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
-import DocsThemeSwitcher from "@/components/DocsThemeSwitcher";
+import DocsThemeEditor from "@/components/DocsThemeEditor";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { docsSource } from "@/lib/docs-source";
 import { docsClassicTheme } from "@/lib/docs-themes";
 import { searchDocsAction } from "@/app/doc-actions";
-import {
-  buildLocalizedHref,
-  docsLocales,
-  getDocsDictionary,
-  isSupportedDocsLocale,
-} from "@/lib/site-i18n";
+import { docsLocales, isSupportedDocsLocale } from "@/lib/site-i18n";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,28 +24,32 @@ export default async function LocaleDocsLayout({
     notFound();
   }
 
-  const copy = getDocsDictionary(locale).layout;
-
   return (
     <>
       <DocumentLanguage locale={locale} />
+      <Header locale={locale} />
       <DocsLayout
         navigation={docsSource.getNavigation(locale)}
         searchAction={searchDocsAction}
         locale={locale}
+        variant="embedded"
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
         }
-        themeSwitcher={<DocsThemeSwitcher defaults={docsClassicTheme} />}
+        themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
         theme={docsClassicTheme}
-        brand={
-          <Link href={buildLocalizedHref("/docs", locale)} className="font-semibold">
-            {copy.brand}
-          </Link>
+        sidebarHeader={
+          <DocsSearch
+            searchAction={searchDocsAction}
+            locale={locale}
+            placeholder="Search..."
+          />
         }
+        sidebarFooter={<DocsThemeEditor defaults={docsClassicTheme} />}
       >
         {children}
       </DocsLayout>
+      <Footer locale={locale} />
     </>
   );
 }

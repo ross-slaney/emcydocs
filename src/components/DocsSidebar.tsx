@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
@@ -9,10 +10,16 @@ export default function DocsSidebar({
   navigation,
   variant = "desktop",
   onNavigate,
+  header,
+  footer,
 }: {
   navigation: DocsNavSection[];
   variant?: "desktop" | "mobile";
   onNavigate?: () => void;
+  /** Content rendered above the navigation (e.g., search box) */
+  header?: ReactNode;
+  /** Content rendered below the navigation */
+  footer?: ReactNode;
 }) {
   const pathname = usePathname();
   const sections = useMemo(
@@ -36,6 +43,7 @@ export default function DocsSidebar({
       aria-label="Documentation navigation"
       className={variant === "desktop" ? "emcydocs-sidebar" : "emcydocs-sidebar-mobile"}
     >
+      {header ? <div className="emcydocs-sidebar-header">{header}</div> : null}
       {sections.map((section) => {
         const isCollapsed = collapsed[section.key] ?? false;
         const sectionId = `emcydocs-sidebar-section-${section.key || "root"}`;
@@ -80,6 +88,7 @@ export default function DocsSidebar({
           </section>
         );
       })}
+      {footer ? <div className="emcydocs-sidebar-footer">{footer}</div> : null}
     </nav>
   );
 }

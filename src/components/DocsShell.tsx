@@ -21,10 +21,13 @@ import MobileDocsChrome from "./MobileDocsChrome";
 export default function DocsShell({
   navigation,
   children,
+  variant = "full",
   brand,
   topLinks,
   header,
   sidebar,
+  sidebarHeader,
+  sidebarFooter,
   languageSwitcher,
   themeSwitcher,
   searchAction,
@@ -34,6 +37,7 @@ export default function DocsShell({
 }: DocsLayoutCommonProps) {
   const pathname = usePathname();
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const isEmbedded = variant === "embedded";
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -79,52 +83,58 @@ export default function DocsShell({
     closeNavigation: () => setIsNavOpen(false),
   };
 
-  const desktopHeader = renderSlot(header, { ...headerSlotProps, isMobile: false }, () => (
-    <div className="emcydocs-header-inner">
-      <div className="emcydocs-header-brand">
-        {brand ?? <span>Documentation</span>}
-      </div>
-      <div className="emcydocs-header-search">
-        <DocsSearch searchAction={searchAction} locale={locale} />
-      </div>
-      {themeSwitcher ? (
-        <div className="emcydocs-header-theme">{themeSwitcher}</div>
-      ) : null}
-      {languageSwitcher ? (
-        <div className="emcydocs-header-language">{languageSwitcher}</div>
-      ) : null}
-      {topLinks?.length ? (
-        <nav className="emcydocs-header-links" aria-label="Top level docs links">
-          {topLinks.map((link) => (
-            <a key={link.href} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      ) : null}
-    </div>
-  ));
+  // In embedded mode, skip rendering the docs header
+  const desktopHeader = isEmbedded
+    ? null
+    : renderSlot(header, { ...headerSlotProps, isMobile: false }, () => (
+        <div className="emcydocs-header-inner">
+          <div className="emcydocs-header-brand">
+            {brand ?? <span>Documentation</span>}
+          </div>
+          <div className="emcydocs-header-search">
+            <DocsSearch searchAction={searchAction} locale={locale} />
+          </div>
+          {themeSwitcher ? (
+            <div className="emcydocs-header-theme">{themeSwitcher}</div>
+          ) : null}
+          {languageSwitcher ? (
+            <div className="emcydocs-header-language">{languageSwitcher}</div>
+          ) : null}
+          {topLinks?.length ? (
+            <nav className="emcydocs-header-links" aria-label="Top level docs links">
+              {topLinks.map((link) => (
+                <a key={link.href} href={link.href}>
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          ) : null}
+        </div>
+      ));
 
-  const mobileHeader = renderSlot(header, { ...headerSlotProps, isMobile: true }, () => (
-    <MobileDocsChrome
-      currentTitle={currentTitle}
-      isNavOpen={isNavOpen}
-      onToggleNav={() => setIsNavOpen((current) => !current)}
-      showNavigationToggle={hasSidebar}
-    >
-      <DocsSearch searchAction={searchAction} locale={locale} variant="mobile" />
-      {themeSwitcher ? (
-        <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
-      ) : null}
-      {languageSwitcher ? (
-        <div className="emcydocs-mobile-language">{languageSwitcher}</div>
-      ) : null}
-    </MobileDocsChrome>
-  ));
+  // In embedded mode, use a simpler mobile header (just nav toggle)
+  const mobileHeader = isEmbedded
+    ? null
+    : renderSlot(header, { ...headerSlotProps, isMobile: true }, () => (
+        <MobileDocsChrome
+          currentTitle={currentTitle}
+          isNavOpen={isNavOpen}
+          onToggleNav={() => setIsNavOpen((current) => !current)}
+          showNavigationToggle={hasSidebar}
+        >
+          {themeSwitcher ? (
+            <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
+          ) : null}
+        </MobileDocsChrome>
+      ));
 
   const desktopSidebar = hasSidebar
     ? renderSlot(sidebar, { ...sidebarSlotProps, isMobile: false }, () => (
-        <DocsSidebar navigation={navigation} />
+        <DocsSidebar
+          navigation={navigation}
+          header={sidebarHeader}
+          footer={sidebarFooter}
+        />
       ))
     : null;
 
@@ -134,6 +144,8 @@ export default function DocsShell({
           navigation={navigation}
           variant="mobile"
           onNavigate={() => setIsNavOpen(false)}
+          header={sidebarHeader}
+          footer={sidebarFooter}
         />
       ))
     : null;
@@ -142,6 +154,7 @@ export default function DocsShell({
     <div
       className={[
         "emcydocs-shell",
+        isEmbedded ? "emcydocs-shell-embedded" : "",
         hasSidebar ? "" : "emcydocs-shell-sidebarless",
         className ?? "",
       ]
@@ -173,6 +186,30 @@ export default function DocsShell({
                 {mobileSidebar}
               </div>
             </div>
+          ) : null}
+        </div>
+      ) : null}
+
+      {/* In embedded mode on mobile, show a simple nav toggle */}
+      {isEmbedded && hasSidebar ? (
+        <div className="emcydocs-embedded-mobile-bar">
+          <button
+            type="button"
+            className="emcydocs-embedded-nav-toggle"
+            onClick={() => setIsNavOpen(!isNavOpen)}
+            aria-expanded={isNavOpen}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              {isNavOpen ? (
+                <path d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+            <span>{isNavOpen ? "Close" : "Menu"}</span>
+          </button>
+          {isNavOpen && mobileSidebar ? (
+            <div className="emcydocs-embedded-nav-panel">{mobileSidebar}</div>
           ) : null}
         </div>
       ) : null}

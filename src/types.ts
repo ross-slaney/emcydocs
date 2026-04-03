@@ -171,13 +171,25 @@ export type DocsSearchAction = (
   locale?: string
 ) => Promise<DocsSearchResponse>;
 
+export type DocsLayoutVariant = "full" | "embedded";
+
 export interface DocsLayoutCommonProps {
   navigation: DocsNavSection[];
   children: ReactNode;
+  /**
+   * Layout variant:
+   * - "full": Renders complete docs shell with header (default)
+   * - "embedded": No header, designed to be wrapped by your site's header/footer
+   */
+  variant?: DocsLayoutVariant;
   brand?: ReactNode;
   topLinks?: DocsLayoutLink[];
   header?: DocsLayoutSlot<DocsHeaderSlotProps>;
   sidebar?: DocsLayoutSlot<DocsSidebarSlotProps>;
+  /** Content rendered above the sidebar navigation (e.g., search box) */
+  sidebarHeader?: ReactNode;
+  /** Content rendered below the sidebar navigation (e.g., theme editor) */
+  sidebarFooter?: ReactNode;
   languageSwitcher?: ReactNode;
   themeSwitcher?: ReactNode;
   searchAction?: DocsSearchAction;

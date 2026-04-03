@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import type { DocsEntry, DocsEntryMeta } from "../types";
 import { DocsMdx } from "../mdx";
@@ -12,6 +13,8 @@ export default async function DocsPage({
   backHref,
   backLabel = "All docs",
   components,
+  asideHeader,
+  asideFooter,
 }: {
   entry: DocsEntry;
   previousEntry?: DocsEntryMeta | null;
@@ -19,6 +22,10 @@ export default async function DocsPage({
   backHref?: string;
   backLabel?: string;
   components?: Record<string, React.ComponentType<any>>;
+  /** Content rendered above the TOC (e.g., search box) */
+  asideHeader?: ReactNode;
+  /** Content rendered below the TOC (e.g., theme editor) */
+  asideFooter?: ReactNode;
 }) {
   const headingCount = entry.headings.filter((heading) => heading.level === 2).length;
   const localeCount = entry.availableLocales.length;
@@ -63,7 +70,13 @@ export default async function DocsPage({
       </article>
 
       <aside className="emcydocs-page-aside">
+        {asideHeader ? (
+          <div className="emcydocs-aside-header">{asideHeader}</div>
+        ) : null}
         <DocsToc headings={entry.headings} />
+        {asideFooter ? (
+          <div className="emcydocs-aside-footer">{asideFooter}</div>
+        ) : null}
       </aside>
     </div>
   );

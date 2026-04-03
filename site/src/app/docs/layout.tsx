@@ -1,59 +1,45 @@
-import Link from "next/link";
-import { DocsLayout } from "@emcy/docs";
-import DocsThemeSwitcher from "@/components/DocsThemeSwitcher";
+import { DocsLayout, DocsSearch } from "@emcy/docs";
+import DocsThemeEditor from "@/components/DocsThemeEditor";
 import DocumentLanguage from "@/components/DocumentLanguage";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { searchDocsAction } from "@/app/doc-actions";
 import { docsSource } from "@/lib/docs-source";
 import { docsClassicTheme } from "@/lib/docs-themes";
-import {
-  buildLocalizedHref,
-  defaultSiteLocale,
-  docsLocales,
-  getDocsDictionary,
-} from "@/lib/site-i18n";
+import { defaultSiteLocale, docsLocales } from "@/lib/site-i18n";
 
 export default function DocsRootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const copy = getDocsDictionary(defaultSiteLocale).layout;
-
   return (
     <>
       <DocumentLanguage locale={defaultSiteLocale} />
+      <Header locale={defaultSiteLocale} />
       <DocsLayout
         navigation={docsSource.getNavigation()}
         searchAction={searchDocsAction}
         locale={defaultSiteLocale}
+        variant="embedded"
         languageSwitcher={
           <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
         }
-        themeSwitcher={<DocsThemeSwitcher defaults={docsClassicTheme} />}
+        themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
         theme={docsClassicTheme}
-        brand={
-          <Link
-            href={buildLocalizedHref("/docs", defaultSiteLocale)}
-            className="flex items-center gap-2 font-semibold"
-          >
-            <svg viewBox="0 0 32 32" className="h-6 w-6" fill="none">
-              <rect width="32" height="32" rx="8" fill="url(#logo-grad)" />
-              <path d="M8 10h16M8 16h12M8 22h14" stroke="white" strokeWidth="2.5" strokeLinecap="round" />
-              <circle cx="24" cy="22" r="3" fill="white" fillOpacity="0.9" />
-              <defs>
-                <linearGradient id="logo-grad" x1="0" y1="0" x2="32" y2="32">
-                  <stop stopColor="hsl(var(--emcydocs-hue, 270) 80% 65%)" />
-                  <stop offset="1" stopColor="hsl(var(--emcydocs-hue, 270) 75% 50%)" />
-                </linearGradient>
-              </defs>
-            </svg>
-            <span>{copy.brand}</span>
-          </Link>
+        sidebarHeader={
+          <DocsSearch
+            searchAction={searchDocsAction}
+            locale={defaultSiteLocale}
+            placeholder="Search..."
+          />
         }
+        sidebarFooter={<DocsThemeEditor defaults={docsClassicTheme} />}
       >
         {children}
       </DocsLayout>
+      <Footer locale={defaultSiteLocale} />
     </>
   );
 }

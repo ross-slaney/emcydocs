@@ -1,0 +1,40 @@
+---
+title: "Rutas del blog conscientes del idioma"
+description: "Como las rutas del blog mantienen limpio el locale por defecto y a la vez soportan rutas localizadas con prefijos."
+publishedAt: "2026-03-29"
+updatedAt: "2026-03-30"
+author: "Equipo Emcy"
+authorRole: "Sistemas de rutas y contenido"
+image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1400&q=80"
+category: "Localizacion"
+tags:
+  - "i18n"
+  - "routing"
+  - "nextjs"
+relatedSlugs:
+  - "blog-as-a-first-class-surface"
+  - "search-categories-and-suggested-posts"
+---
+
+# Rutas del blog conscientes del idioma
+
+El blog sigue el mismo modelo de rutas que docs: el locale por defecto se mantiene limpio y los locales secundarios usan prefijos explicitos.
+
+## Los defaults limpios importan
+
+Para el locale por defecto, el directorio vive en `/blog` y cada publicacion vive en `/blog/[slug]`.
+
+## Los locales secundarios siguen siendo explicitos
+
+Las rutas en espanol y chino viven bajo prefijos:
+
+- `/es/blog`
+- `/es/blog/[slug]`
+- `/zh/blog`
+- `/zh/blog/[slug]`
+
+## Como cambia el switch de idioma
+
+En el detalle de una publicacion, el cambio de idioma preserva el mismo slug.
+
+En el directorio, el cambio de idioma limpia la busqueda y la categoria porque ambos valores dependen del texto localizado.

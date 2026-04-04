@@ -104,15 +104,22 @@ sectionLabel: "Reference"
 <CodeBlock title="layout.tsx" language="tsx">{`<DocsLayout
   navigation={docsSource.getNavigation()}
   theme={{
-    preset: "neutral",
-    mode: "light",
-    layoutWidth: "1500px",
-    contentWidth: "48rem",
-    radius: "xl",
+    color: {
+      preset: "neutral",
+      mode: "light",
+      accentStrength: "balanced",
+    },
+    layout: {
+      density: "comfortable",
+      layoutWidth: "1500px",
+      contentWidth: "48rem",
+    },
+    shape: {
+      radius: "xl",
+    },
   }}
-  themeSwitcher={<ThemeSwitcher />}
 >
   {children}
 </DocsLayout>`}</CodeBlock>
 
-目标很直接：一个包、一套视觉语言，以及足够的原语，让文档页面无需再引入另一层包边界也能看起来足够完整。
+目标很直接：一个包、一套视觉语言，以及足够的原语，让文档页面无需再引入另一层包边界也能看起来足够完整。如果后面需要实时主题切换，保留同一个 `DocsLayout`，再在外层加上 `DocsThemeProvider` 即可。

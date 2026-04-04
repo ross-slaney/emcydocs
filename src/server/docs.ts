@@ -46,6 +46,7 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
     locales: Array.from(new Set(input.locales?.length ? input.locales : ["en"])),
     hideDefaultLocaleInUrl: input.hideDefaultLocaleInUrl ?? true,
     docsIndexSlug: input.docsIndexSlug ?? "docs-index",
+    homeRedirectSlugs: normalizeSlugs(input.homeRedirect),
     siteTitle: input.siteTitle,
     titleSuffix: input.titleSuffix ?? input.siteTitle,
     sectionLabels: input.sectionLabels ?? {},
@@ -152,6 +153,15 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
   const getHomeEntry = (locale: string = config.defaultLocale) =>
     getAllEntries(locale).find((entry) => entry.isHome) ?? null;
 
+  const getHomeRedirectEntry = (locale: string = config.defaultLocale) => {
+    if (config.homeRedirectSlugs.length === 0) {
+      return null;
+    }
+
+    const entry = getEntry(config.homeRedirectSlugs, locale);
+    return entry && !entry.isHome ? entry : null;
+  };
+
   const getHref = (slugs?: string[] | string, locale: string = config.defaultLocale) =>
     buildDocsHref({
       basePath: config.basePath,
@@ -167,6 +177,17 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
     locale: string = config.defaultLocale
   ): DocsRouteResolution => {
     const normalized = normalizeSlugs(slugs);
+
+    if (normalized.length === 0) {
+      const redirectEntry = getHomeRedirectEntry(locale);
+      if (redirectEntry) {
+        return {
+          type: "redirect",
+          href: redirectEntry.href,
+        };
+      }
+    }
+
     const entry = getEntry(normalized, locale);
 
     if (entry) {
@@ -194,7 +215,20 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
     slugs?: string[] | string,
     locale: string = config.defaultLocale
   ): DocsMetadata => {
-    const entry = getEntry(slugs, locale);
+    const normalized = normalizeSlugs(slugs);
+    if (normalized.length === 0) {
+      const redirectEntry = getHomeRedirectEntry(locale);
+      if (redirectEntry) {
+        return {
+          title: config.titleSuffix
+            ? `${redirectEntry.title} | ${config.titleSuffix}`
+            : redirectEntry.title,
+          description: redirectEntry.description,
+        };
+      }
+    }
+
+    const entry = getEntry(normalized, locale);
 
     if (!entry) {
       return {
@@ -216,18 +250,25 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
     };
   };
 
-  const getStaticParams = (locale: string = config.defaultLocale) =>
-    getAllEntries(locale).map((entry) => ({
+  const getStaticParams = (locale: string = config.defaultLocale) => {
+    const params = getAllEntries(locale).map((entry) => ({
       slug: entry.isHome ? [] : entry.slugs,
     }));
+
+    if (params.some((param) => param.slug.length === 0) || !getHomeRedirectEntry(locale)) {
+      return params;
+    }
+
+    return [{ slug: [] }, ...params];
+  };
 
   const getLocaleStaticParams = () =>
     config.locales
       .filter((locale) => locale !== config.defaultLocale)
       .flatMap((locale) =>
-        getAllEntries(locale).map((entry) => ({
+        getStaticParams(locale).map((entry) => ({
           locale,
-          slug: entry.isHome ? [] : entry.slugs,
+          slug: entry.slug,
         }))
       );
 

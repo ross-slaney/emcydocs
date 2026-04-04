@@ -1,0 +1,41 @@
+---
+title: "文档与博客共用一套 MDX 管线"
+description: "复用相同的 MDX 渲染器和组件映射，可以让文档与博客在创作体验和主题表现上保持一致。"
+publishedAt: "2026-03-23"
+author: "Emcy 团队"
+authorRole: "内容创作系统"
+image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1400&q=80"
+category: "架构"
+tags:
+  - "mdx"
+  - "组件"
+  - "主题"
+relatedSlugs:
+  - "blog-as-a-first-class-surface"
+  - "search-categories-and-suggested-posts"
+---
+
+# 文档与博客共用一套 MDX 管线
+
+当博客正式进入库以后，再维护第二套 MDX 渲染器就没有意义了。
+
+## 共享渲染让创作保持一致
+
+作者可以继续在文档和博客中使用相同的 callout、card、tab 和代码块。
+
+<CardGrid columns={2}>
+  <Card title="同一套语法" href="#同一套语法">
+    不需要学习两套接近却不同的组件约定。
+  </Card>
+  <Card title="同一套主题" href="#同一套主题">
+    默认就能共享间距、边框和 prose 风格。
+  </Card>
+</CardGrid>
+
+## 同一套语法
+
+复用同一个组件映射，意味着库只需要维护一份 MDX 契约。
+
+## 同一套主题
+
+文档主题变量已经定义了表面、边框、前景色和密度。博客应该直接消费这些 token。

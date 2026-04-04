@@ -1,5 +1,12 @@
 export { createDocsSource, extractHeadings } from "./server/docs";
+export { createBlogSource } from "./server/blog";
 export { DocsMdx, getDefaultMdxComponents } from "./mdx";
+export { default as BlogCard } from "./components/BlogCard";
+export { default as BlogCategories } from "./components/BlogCategories";
+export { default as BlogDirectoryPage } from "./components/BlogDirectoryPage";
+export { default as BlogPagination } from "./components/BlogPagination";
+export { default as BlogPostPage } from "./components/BlogPostPage";
+export { default as BlogSearch } from "./components/BlogSearch";
 export { default as CopyPageButton } from "./components/CopyPageButton";
 export { default as DocsSearch } from "./components/DocsSearch";
 
@@ -21,15 +28,30 @@ export { default as DocsPage } from "./components/DocsPage";
 export { default as DocsHomePage } from "./components/DocsHomePage";
 export { default as HeadingLinks } from "./components/HeadingLinks";
 export { default as MobileDocsChrome } from "./components/MobileDocsChrome";
-export { default as ThemeSwitcher } from "./components/ThemeSwitcher";
 export { StickyAside } from "./components/StickyAside";
+export { DocsThemeProvider, useDocsTheme } from "./theme-provider";
 export {
-  getDocsThemeStyle,
-  resolveDocsThemeDensity,
-  resolveDocsThemeMode,
-  resolveDocsThemePreset,
+  docsThemeDefaultConfig,
+  docsThemePresetAccentHues,
+  mergeDocsThemeConfig,
+  resolveDocsTheme,
 } from "./theme";
 export type {
+  BlogCardCopy,
+  BlogDirectoryCopy,
+  BlogDirectoryQuery,
+  BlogDirectoryResponse,
+  BlogEntry,
+  BlogEntryMeta,
+  BlogMetadata,
+  BlogPaginationCopy,
+  BlogPostPageCopy,
+  BlogSearchResponse,
+  BlogSearchResult,
+  BlogSource,
+  BlogSourceConfig,
+  BlogSuggestionOptions,
+  BlogSuggestionStrategy,
   DocsEntry,
   DocsEntryMeta,
   DocsHeaderSlotProps,
@@ -47,9 +69,17 @@ export type {
   DocsSidebarSlotProps,
   DocsSource,
   DocsSourceConfig,
+  DocsResolvedTheme,
+  DocsResolvedThemeConfig,
+  DocsThemeAccentStrength,
+  DocsThemeColorConfig,
   DocsThemeConfig,
   DocsThemeDensity,
+  DocsThemeLayoutConfig,
   DocsThemeMode,
   DocsThemePreset,
   DocsThemeRadius,
+  DocsThemeShapeConfig,
+  DocsThemeSurfaceStyle,
+  DocsThemeTokens,
 } from "./types";

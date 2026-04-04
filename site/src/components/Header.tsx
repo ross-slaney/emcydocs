@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import {
   buildLocalizedHref,
   getLocaleFromPathname,
   getSiteChromeDictionary,
   isSupportedMarketingLocale,
-  marketingLocales,
+  routeLocales,
   type RouteLocale,
 } from "@/lib/site-i18n";
 import { cn } from "@/lib/utils";
@@ -48,6 +49,7 @@ export default function Header({ locale }: HeaderProps) {
   const copy = getSiteChromeDictionary(currentLocale);
 
   const docsHref = buildLocalizedHref("/docs", currentLocale);
+  const blogHref = buildLocalizedHref("/blog", currentLocale);
   const homeHref = isSupportedMarketingLocale(currentLocale)
     ? buildLocalizedHref("/", currentLocale)
     : docsHref;
@@ -87,6 +89,10 @@ export default function Header({ locale }: HeaderProps) {
           <Button variant="ghost" size="sm" asChild>
             <Link href={docsHref}>{copy.header.nav.docs}</Link>
           </Button>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href={blogHref}>{copy.header.nav.blog}</Link>
+          </Button>
+          <LanguageSwitcher locales={routeLocales} fallbackBasePath="/" />
           <ThemeSwitcher />
           <Button variant="ghost" size="icon" asChild>
             <a
@@ -125,6 +131,9 @@ export default function Header({ locale }: HeaderProps) {
               <Link href={docsHref}>{copy.header.nav.docs}</Link>
             </Button>
             <Button variant="ghost" className="justify-start" asChild>
+              <Link href={blogHref}>{copy.header.nav.blog}</Link>
+            </Button>
+            <Button variant="ghost" className="justify-start" asChild>
               <a
                 href="https://github.com/ross-slaney/emcydocs"
                 target="_blank"
@@ -134,6 +143,11 @@ export default function Header({ locale }: HeaderProps) {
               </a>
             </Button>
             <div className="flex items-center gap-2 pt-2">
+              <LanguageSwitcher
+                locales={routeLocales}
+                fallbackBasePath="/"
+                onNavigate={() => setIsMenuOpen(false)}
+              />
               <ThemeSwitcher />
             </div>
             <Button asChild className="mt-2">

@@ -1,6 +1,6 @@
 ---
 title: "Component Library"
-description: "Opinionated MDX components for banners, cards, accordions, file trees, tabs, and polished code blocks."
+description: "Opinionated MDX components for banners, cards, accordions, file trees, tabs, diagrams, and polished code blocks."
 order: 1
 section: reference
 sectionLabel: "Reference"
@@ -15,7 +15,7 @@ sectionLabel: "Reference"
   EmcyDocs now ships a compact component library so your docs home, product guides, and reference pages can share one visual language instead of drifting repo by repo.
 </Banner>
 
-<InlineToc items='[{"href":"#why-it-exists","label":"Why it exists"},{"href":"#banner-and-cards","label":"Banner and cards"},{"href":"#accordions","label":"Accordions"},{"href":"#file-trees","label":"File trees"},{"href":"#tabs-and-steps","label":"Tabs and steps"},{"href":"#code-blocks","label":"Code blocks"}]' />
+<InlineToc items='[{"href":"#why-it-exists","label":"Why it exists"},{"href":"#banner-and-cards","label":"Banner and cards"},{"href":"#accordions","label":"Accordions"},{"href":"#file-trees","label":"File trees"},{"href":"#tabs-and-steps","label":"Tabs and steps"},{"href":"#diagrams","label":"Diagrams"},{"href":"#code-blocks","label":"Code blocks"}]' />
 
 ## Why it exists
 
@@ -114,27 +114,61 @@ sectionLabel: "Reference"
   </TabsContent>
 </Tabs>
 
+## Diagrams
+
+<Mermaid chart={`graph LR
+  A[MDX Content] --> B[createDocsSource]
+  B --> C[Navigation]
+  B --> D[Search Index]
+  B --> E[Route Helpers]
+  C --> F[DocsLayout]
+  D --> F
+  E --> F
+  F --> G[Rendered Page]
+`} caption="How content flows from MDX files to a rendered docs page" />
+
+<Mermaid chart={`sequenceDiagram
+  participant Author
+  participant MDX
+  participant Build
+  participant Browser
+  Author->>MDX: Write content
+  MDX->>Build: Parse frontmatter + headings
+  Build->>Build: Generate navigation tree
+  Build->>Browser: Static HTML + search index
+  Browser->>Browser: Hydrate interactive components
+`} caption="The docs authoring and build lifecycle" />
+
 ## Code blocks
 
-<CodeBlock title="layout.tsx" language="tsx">{`import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
+<CodeBlock title="layout.tsx" language="tsx">{`import { DocsLayout, type DocsThemeConfig } from "@emcy/docs";
 import "@emcy/docs/styles.css";
+
+const docsTheme: DocsThemeConfig = {
+  color: {
+    preset: "neutral",
+    mode: "light",
+    accentStrength: "balanced",
+  },
+  layout: {
+    density: "comfortable",
+    layoutWidth: "1500px",
+    contentWidth: "48rem",
+  },
+  shape: {
+    radius: "xl",
+  },
+};
 
 export default function Layout({ children }) {
   return (
     <DocsLayout
       navigation={docsSource.getNavigation()}
-      theme={{
-        preset: "neutral",
-        mode: "light",
-        layoutWidth: "1500px",
-        contentWidth: "48rem",
-        radius: "xl",
-      }}
-      themeSwitcher={<ThemeSwitcher />}
+      theme={docsTheme}
     >
       {children}
     </DocsLayout>
   );
 }`}</CodeBlock>
 
-The goal is straightforward: one package, one visual language, and enough primitives to make docs pages look intentional without creating another package boundary.
+The goal is straightforward: one package, one visual language, and enough primitives to make docs pages look intentional without creating another package boundary. When you need live theme switching, keep the same `DocsLayout` and add `DocsThemeProvider` around it instead of swapping to a different component.

@@ -1,0 +1,41 @@
+---
+title: "Una sola canalizacion MDX para docs y blog"
+description: "Reutilizar el mismo renderer MDX y el mismo mapa de componentes mantiene consistente la autoria y el tema."
+publishedAt: "2026-03-23"
+author: "Equipo Emcy"
+authorRole: "Sistemas de autoria"
+image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1400&q=80"
+category: "Arquitectura"
+tags:
+  - "mdx"
+  - "componentes"
+  - "tema"
+relatedSlugs:
+  - "blog-as-a-first-class-surface"
+  - "search-categories-and-suggested-posts"
+---
+
+# Una sola canalizacion MDX para docs y blog
+
+Cuando el blog vive dentro de la libreria, duplicar el renderer MDX deja de tener sentido.
+
+## Render compartido para autoria consistente
+
+Las personas autoras pueden seguir usando los mismos callouts, cards, tabs y bloques de codigo en docs y en el blog.
+
+<CardGrid columns={2}>
+  <Card title="Una sintaxis" href="#una-sintaxis">
+    El mismo set de componentes en lugar de dos contratos distintos.
+  </Card>
+  <Card title="Un tema" href="#un-tema">
+    Espaciado, bordes y estilos de prosa alineados por defecto.
+  </Card>
+</CardGrid>
+
+## Una sintaxis
+
+Reutilizar el mismo mapa de componentes significa que la libreria solo mantiene un contrato MDX.
+
+## Un tema
+
+Las variables del tema de docs ya definen superficies, bordes y color. El blog debe consumir esos mismos tokens.

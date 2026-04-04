@@ -1,0 +1,41 @@
+---
+title: "Busqueda, categorias y publicaciones sugeridas"
+description: "El directorio del blog es intencionalmente guiado por la URL para que filtros, paginacion y sugerencias sean predecibles en App Router."
+publishedAt: "2026-03-18"
+updatedAt: "2026-03-21"
+author: "Equipo Emcy"
+authorRole: "Sistemas de descubrimiento"
+image: "https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1400&q=80"
+category: "Busqueda"
+tags:
+  - "busqueda"
+  - "categorias"
+  - "sugerencias"
+relatedSlugs:
+  - "locale-aware-blog-routing"
+  - "one-mdx-pipeline-for-docs-and-blog"
+---
+
+# Busqueda, categorias y publicaciones sugeridas
+
+El directorio debe sentirse simple por fuera y determinista por dentro.
+
+## Filtros guiados por la URL
+
+El directorio usa query params:
+
+- `q` para busqueda
+- `category` para filtro
+- `page` para paginacion
+
+## Reglas de ranking
+
+La busqueda prioriza coincidencias en titulo y descripcion antes que categoria, tags y cuerpo.
+
+## Publicaciones sugeridas
+
+Las sugerencias pueden venir de tres estrategias:
+
+1. relacionadas
+2. recientes
+3. curacion manual con relleno automatico

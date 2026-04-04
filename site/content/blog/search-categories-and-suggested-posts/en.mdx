@@ -1,0 +1,45 @@
+---
+title: "Search, Categories, and Suggested Posts"
+description: "The blog directory is intentionally URL-driven so filtering, pagination, and suggestions remain predictable in App Router."
+publishedAt: "2026-03-18"
+updatedAt: "2026-03-21"
+author: "Emcy Team"
+authorRole: "Discovery systems"
+image: "https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1400&q=80"
+category: "Search"
+tags:
+  - "search"
+  - "categories"
+  - "suggestions"
+relatedSlugs:
+  - "locale-aware-blog-routing"
+  - "one-mdx-pipeline-for-docs-and-blog"
+---
+
+# Search, Categories, and Suggested Posts
+
+The directory needs to feel simple from the outside and deterministic from the inside.
+
+## URL-driven filtering
+
+The directory uses query parameters:
+
+- `q` for search
+- `category` for filtering
+- `page` for pagination
+
+That keeps the state shareable and crawlable.
+
+## Ranking rules
+
+Search ranks title and description matches above category, tags, and body content. That helps obvious results rise to the top.
+
+## Suggested posts
+
+Suggested posts can come from three strategies:
+
+1. related posts
+2. recent posts
+3. manual curation with automatic backfill
+
+The example site defaults to related posts so the demo shows useful relevance out of the box.

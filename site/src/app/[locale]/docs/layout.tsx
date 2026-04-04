@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import { DocsLayout, DocsSearch } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
-import DocsThemeEditor from "@/components/DocsThemeEditor";
+import DocsRouteThemeBoundary from "@/components/DocsRouteThemeBoundary";
+import { DocsThemeStudioSidebarCard } from "@/components/DocsThemeStudio";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -27,31 +28,31 @@ export default async function LocaleDocsLayout({
   return (
     <>
       <DocumentLanguage locale={locale} />
-      <Header locale={locale} />
-      <DocsLayout
-        navigation={docsSource.getNavigation(locale)}
-        searchAction={searchDocsAction}
-        locale={locale}
-        variant="embedded"
-        languageSwitcher={
-          <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
-        }
-        themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
-        theme={docsClassicTheme}
-        sidebarHeader={
-          <>
-            <DocsSearch
-              searchAction={searchDocsAction}
-              locale={locale}
-              placeholder="Search..."
-            />
-            <DocsThemeEditor defaults={docsClassicTheme} />
-          </>
-        }
-      >
-        {children}
-      </DocsLayout>
-      <Footer locale={locale} />
+      <DocsRouteThemeBoundary defaults={docsClassicTheme}>
+        <Header locale={locale} />
+        <DocsLayout
+          navigation={docsSource.getNavigation(locale)}
+          searchAction={searchDocsAction}
+          locale={locale}
+          variant="embedded"
+          languageSwitcher={
+            <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
+          }
+          sidebarHeader={
+            <>
+              <DocsSearch
+                searchAction={searchDocsAction}
+                locale={locale}
+                placeholder="Search..."
+              />
+              <DocsThemeStudioSidebarCard />
+            </>
+          }
+        >
+          {children}
+        </DocsLayout>
+        <Footer locale={locale} />
+      </DocsRouteThemeBoundary>
     </>
   );
 }

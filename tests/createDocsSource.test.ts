@@ -17,6 +17,22 @@ const source = createDocsSource({
   siteTitle: "Fixture Docs",
 });
 
+const redirectedHomeSource = createDocsSource({
+  contentDir: path.join(process.cwd(), "tests/fixtures/docs"),
+  basePath: "/docs",
+  defaultLocale: "en",
+  locales: ["en", "es"],
+  hideDefaultLocaleInUrl: true,
+  homeRedirect: "getting-started",
+  sectionLabels: {
+    "": "Getting Started",
+    "getting-started": "Getting Started",
+    reference: "Reference",
+  },
+  sectionOrder: ["getting-started", "reference"],
+  siteTitle: "Fixture Docs",
+});
+
 describe("createDocsSource", () => {
   it("loads locale folder entries and preserves clean default-locale routes", () => {
     const english = source.getEntry(["getting-started"], "en");
@@ -51,5 +67,31 @@ describe("createDocsSource", () => {
 
     expect(entry?.headings.map((heading) => heading.id)).toContain("authentication");
     expect(search.results[0]?.href).toBe("/docs/getting-started#authentication");
+  });
+
+  it("can redirect the docs root to a configured entry", () => {
+    expect(redirectedHomeSource.resolveRoute([])).toEqual({
+      type: "redirect",
+      href: "/docs/getting-started",
+    });
+    expect(redirectedHomeSource.resolveRoute([], "es")).toEqual({
+      type: "redirect",
+      href: "/es/docs/getting-started",
+    });
+  });
+
+  it("uses the redirect target for root metadata and static params", () => {
+    expect(redirectedHomeSource.getMetadata([])).toEqual({
+      title: "Getting started | Fixture Docs",
+      description: "Learn the first steps.",
+    });
+    expect(
+      redirectedHomeSource.getStaticParams().some((param) => (param.slug ?? []).length === 0)
+    ).toBe(true);
+    expect(
+      redirectedHomeSource
+        .getLocaleStaticParams()
+        .some((param) => param.locale === "es" && (param.slug ?? []).length === 0)
+    ).toBe(true);
   });
 });

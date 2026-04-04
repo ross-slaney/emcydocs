@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
-import type { DocsEntry } from "./types";
+import type { BlogEntry, DocsEntry } from "./types";
 import { slugifyHeading } from "./utils";
 import {
   Accordion,
@@ -16,6 +16,7 @@ import {
   Files,
   Folder,
   InlineToc,
+  Mermaid,
   Pre,
   Step,
   Steps,
@@ -28,7 +29,8 @@ import {
 type MdxComponentMap = Record<string, React.ComponentType<any>>;
 
 interface DocsMdxProps {
-  entry: DocsEntry;
+  entry?: Pick<DocsEntry, "content"> | Pick<BlogEntry, "content">;
+  content?: string;
   components?: MdxComponentMap;
 }
 
@@ -43,11 +45,13 @@ const prettyCodeOptions = {
   },
 } as const;
 
-export async function DocsMdx({ entry, components }: DocsMdxProps) {
+export async function DocsMdx({ entry, content, components }: DocsMdxProps) {
+  const source = content ?? entry?.content ?? "";
+
   return (
     <div className="emcydocs-prose">
       <MDXRemote
-        source={entry.content}
+        source={source}
         options={{
           mdxOptions: {
             remarkPlugins: [remarkGfm],
@@ -80,6 +84,7 @@ export function getDefaultMdxComponents(): MdxComponentMap {
     Files,
     Folder,
     InlineToc,
+    Mermaid,
     pre: Pre,
     Step,
     Steps,

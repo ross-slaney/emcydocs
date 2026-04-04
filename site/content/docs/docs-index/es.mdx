@@ -12,7 +12,7 @@ EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MD
   href="reference/component-library"
   actionLabel="Ver componentes"
 >
-  El showcase ahora usa banners, cards, acordeones, arboles de archivos, tabs y bloques de codigo pulidos desde el mismo paquete. Los presets visuales viven en una sola prop `theme`.
+  El showcase ahora usa banners, cards, acordeones, arboles de archivos, tabs y bloques de codigo pulidos desde el mismo paquete. Los presets visuales, los tamanos del shell y el estado vivo del tema viven en una configuracion `theme` anidada mas un provider headless.
 </Banner>
 
 <CardGrid cols={3}>
@@ -23,7 +23,7 @@ EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MD
   />
   <Card
     title="Configuracion de Tema"
-    description="Theming por presets para ancho, acento, modo y radios."
+    description="Paletas por preset, densidad, tamanos del shell y overrides de tokens desde un solo objeto."
     href="reference/theme-configuration"
   />
   <Card
@@ -36,14 +36,14 @@ EmcyDocs es una libreria de documentacion para equipos de Next.js que quieren MD
 ## Ideas principales
 
 - Una sola llamada a `createDocsSource(...)` construye el modelo de contenido, la navegacion, la metadata, los helpers de rutas, la extraccion de headings y la busqueda.
-- Un unico `DocsLayout` controla el shell mientras el sistema de temas maneja presets, densidad, tamanos y color de acento.
+- Un unico `DocsLayout` controla el shell mientras el sistema de temas maneja presets, densidad, tamanos, acento y overrides opcionales de tokens.
 - Cuando el header o el sidebar por defecto no bastan, puedes sustituirlos por tu propio componente o por `null`.
 - Carpetas por idioma como `entry/en.mdx`, `entry/es.mdx` y `entry/zh.mdx` se convierten directamente en URLs localizadas.
 
 ## Lo que muestra este sitio de ejemplo
 
 - Una sola ruta `docs` con un unico layout
-- Presets visuales, densidad, radios y tamanos desde un theme studio
+- Un motor de temas headless con presets rapidos y un theme studio avanzado
 - Rutas localizadas para ingles, espanol y chino
 - Una libreria de componentes para homes, guias y referencias
 

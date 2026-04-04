@@ -1,6 +1,7 @@
 import { DocsLayout, DocsSearch } from "@emcy/docs";
-import DocsThemeEditor from "@/components/DocsThemeEditor";
 import DocumentLanguage from "@/components/DocumentLanguage";
+import DocsRouteThemeBoundary from "@/components/DocsRouteThemeBoundary";
+import { DocsThemeStudioSidebarCard } from "@/components/DocsThemeStudio";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -17,31 +18,31 @@ export default function DocsRootLayout({
   return (
     <>
       <DocumentLanguage locale={defaultSiteLocale} />
-      <Header locale={defaultSiteLocale} />
-      <DocsLayout
-        navigation={docsSource.getNavigation()}
-        searchAction={searchDocsAction}
-        locale={defaultSiteLocale}
-        variant="embedded"
-        languageSwitcher={
-          <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
-        }
-        themeSwitcher={<DocsThemeEditor defaults={docsClassicTheme} />}
-        theme={docsClassicTheme}
-        sidebarHeader={
-          <>
-            <DocsSearch
-              searchAction={searchDocsAction}
-              locale={defaultSiteLocale}
-              placeholder="Search..."
-            />
-            <DocsThemeEditor defaults={docsClassicTheme} />
-          </>
-        }
-      >
-        {children}
-      </DocsLayout>
-      <Footer locale={defaultSiteLocale} />
+      <DocsRouteThemeBoundary defaults={docsClassicTheme}>
+        <Header locale={defaultSiteLocale} />
+        <DocsLayout
+          navigation={docsSource.getNavigation()}
+          searchAction={searchDocsAction}
+          locale={defaultSiteLocale}
+          variant="embedded"
+          languageSwitcher={
+            <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
+          }
+          sidebarHeader={
+            <>
+              <DocsSearch
+                searchAction={searchDocsAction}
+                locale={defaultSiteLocale}
+                placeholder="Search..."
+              />
+              <DocsThemeStudioSidebarCard />
+            </>
+          }
+        >
+          {children}
+        </DocsLayout>
+        <Footer locale={defaultSiteLocale} />
+      </DocsRouteThemeBoundary>
     </>
   );
 }

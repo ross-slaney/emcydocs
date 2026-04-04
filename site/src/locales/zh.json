@@ -1,0 +1,135 @@
+{
+  "common": {
+    "brand": "EmcyDocs",
+    "github": "GitHub",
+    "npm": "npm"
+  },
+  "header": {
+    "nav": {
+      "docs": "文档",
+      "blog": "博客"
+    },
+    "menu": {
+      "openAria": "打开导航菜单",
+      "closeAria": "关闭导航菜单"
+    },
+    "githubAria": "查看 GitHub",
+    "cta": "开始使用"
+  },
+  "footer": {
+    "tagline": "面向 Next.js 的 App Router 原生 MDX 文档库",
+    "sections": {
+      "layouts": "导航",
+      "resources": "资源",
+      "legal": "法律"
+    },
+    "links": {
+      "classicDocs": "经典文档",
+      "blog": "博客",
+      "documentation": "文档",
+      "license": "MIT 许可证"
+    },
+    "copyright": "EmcyDocs. 保留所有权利。"
+  },
+  "docs": {
+    "layout": {
+      "brand": "EmcyDocs",
+      "classicDocs": "经典文档",
+      "defaultDocs": "默认文档"
+    }
+  },
+  "pages": {
+    "marketingHome": {
+      "heroBadge": "已发布到 npm",
+      "heroTitlePrimary": "真正",
+      "heroTitleAccent": "驻留在应用中的文档",
+      "heroDescription": "EmcyDocs 是一个面向 Next.js 的 App Router 原生 MDX 文档库。文件式内容、按语言感知的路由、灵活的主题系统，以及移动端优先的体验，全部内置。",
+      "primaryCta": "开始使用",
+      "secondaryCta": "查看 GitHub",
+      "terminalLabel": "终端",
+      "installCommand": "npm install @emcy/docs",
+      "layoutsHeading": "一个布局，灵活的文档框架",
+      "layoutsDescription": "通过主题预设、强调色调节、密度、外壳尺寸、token 覆盖，以及可选的自定义头部和侧栏覆盖来塑造体验。",
+      "exploreLabel": "探索",
+      "layoutCards": [
+        {
+          "title": "经典",
+          "description": "带有侧栏、搜索、目录和统一移动端体验的核心文档界面。",
+          "badge": "热门"
+        },
+        {
+          "title": "主题系统",
+          "description": "通过一个嵌套主题配置对象控制预设、模式、密度、圆角、强调色、token 覆盖和布局尺寸。"
+        },
+        {
+          "title": "自定义外壳",
+          "description": "用你自己的组件替换头部或侧栏，或者留空。"
+        },
+        {
+          "title": "多语言路由",
+          "description": "默认语言保持干净路径，同时让 `es` 和 `zh` 使用显式前缀。"
+        }
+      ],
+      "featuresHeading": "为现代 Next.js 构建",
+      "featuresDescription": "构建高质量文档所需的一切，无需样板代码。",
+      "features": [
+        {
+          "title": "原生 App Router",
+          "description": "从同一内容源生成 metadata 和 static params，完整支持 RSC。"
+        },
+        {
+          "title": "文件式多语言",
+          "description": "在同一目录中放置 en.mdx 和 es.mdx，路由会自动处理语言前缀。"
+        },
+        {
+          "title": "移动端优先",
+          "description": "内置移动导航、搜索、吸顶框架和滚动锁定，无需重复搭建。"
+        },
+        {
+          "title": "分段深链",
+          "description": "搜索结果可以直接跳到相关章节，并附带有用的摘要。"
+        },
+        {
+          "title": "渐进式扩展",
+          "description": "常见场景直接使用 createDocsSource，需要时再逐步扩展。"
+        },
+        {
+          "title": "真实项目验证",
+          "description": "已在真实应用中验证，API 能处理复杂路由、自定义框架和真实内容。"
+        }
+      ],
+      "ctaHeading": "准备好构建更好的文档了吗？",
+      "ctaDescription": "几分钟内即可开始。安装包、创建第一个 MDX 文件，然后立即上线。",
+      "ctaPrimary": "阅读文档",
+      "ctaSecondary": "GitHub Star"
+    },
+    "docsClassicHome": {
+      "title": "带有路由感知语言前缀的本地化文档",
+      "description": "默认语言保持在 /docs 的简洁路径中，非默认语言则可以在带前缀的路径下提供，而无需改变内容模型。"
+    },
+    "blogDirectory": {
+      "title": "博客",
+      "description": "关于产品、实现细节以及在 Next.js 中构建原生文档体验的实践笔记。",
+      "categoriesLabel": "分类",
+      "searchLabel": "搜索文章",
+      "searchPlaceholder": "搜索博客文章...",
+      "allCategoriesLabel": "全部",
+      "noResultsTitle": "没有找到文章",
+      "noResultsDescription": "试试其他关键词，或清除当前分类筛选。",
+      "previousLabel": "上一页",
+      "nextLabel": "下一页",
+      "pageLabel": "第"
+    },
+    "blogPost": {
+      "backLabel": "返回博客",
+      "writtenByLabel": "作者",
+      "publishedOnLabel": "发布于",
+      "updatedOnLabel": "更新于",
+      "tagsLabel": "标签",
+      "suggestedLabel": "推荐文章",
+      "suggestedDescription": "继续阅读更多关于 EmcyDocs 示例内容的实现笔记、发布说明和模式整理。",
+      "readMoreLabel": "继续阅读",
+      "readingTimeSuffix": "分钟阅读"
+    }
+  }
+}

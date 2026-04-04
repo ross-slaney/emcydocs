@@ -6,7 +6,8 @@
   },
   "header": {
     "nav": {
-      "docs": "Docs"
+      "docs": "Docs",
+      "blog": "Blog"
     },
     "menu": {
       "openAria": "Open navigation menu",
@@ -18,12 +19,12 @@
   "footer": {
     "tagline": "App Router-native MDX documentation for Next.js",
     "sections": {
-      "layouts": "Docs",
       "resources": "Resources",
       "legal": "Legal"
     },
     "links": {
       "classicDocs": "Classic Docs",
+      "blog": "Blog",
       "documentation": "Documentation",
       "license": "MIT License"
     },
@@ -47,7 +48,7 @@
       "terminalLabel": "Terminal",
       "installCommand": "npm install @emcy/docs",
       "layoutsHeading": "One layout, flexible docs chrome",
-      "layoutsDescription": "Shape the experience with theme presets, density, shell sizing, and optional custom header or sidebar overrides.",
+      "layoutsDescription": "Shape the experience with preset palettes, accent tuning, density, shell sizing, token overrides, and optional custom header or sidebar overrides.",
       "exploreLabel": "Explore",
       "layoutCards": [
         {
@@ -57,7 +58,7 @@
         },
         {
           "title": "Theme system",
-          "description": "Preset, mode, density, radius, accent hue, and shell sizing from one theme object."
+          "description": "Preset palettes, mode, density, radius, accent tuning, token overrides, and shell sizing from one nested theme config."
         },
         {
           "title": "Custom chrome",
@@ -104,6 +105,30 @@
     "docsClassicHome": {
       "title": "Localized docs with route-aware locale prefixes",
       "description": "The default locale stays clean at /docs while non-default locales can live under prefixed routes without changing the content model."
+    },
+    "blogDirectory": {
+      "title": "Blog",
+      "description": "Product notes, implementation details, and practical guides for building docs-native Next.js applications.",
+      "categoriesLabel": "Categories",
+      "searchLabel": "Search posts",
+      "searchPlaceholder": "Search blog posts...",
+      "allCategoriesLabel": "All",
+      "noResultsTitle": "No posts found",
+      "noResultsDescription": "Try a different search or clear the current category filter.",
+      "previousLabel": "Previous",
+      "nextLabel": "Next",
+      "pageLabel": "Page"
+    },
+    "blogPost": {
+      "backLabel": "Back to Blog",
+      "writtenByLabel": "Written by",
+      "publishedOnLabel": "Published",
+      "updatedOnLabel": "Updated",
+      "tagsLabel": "Tags",
+      "suggestedLabel": "Suggested Posts",
+      "suggestedDescription": "More implementation notes, release writeups, and patterns from the EmcyDocs example content.",
+      "readMoreLabel": "Read more",
+      "readingTimeSuffix": "min read"
     }
   }
 }

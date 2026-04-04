@@ -27,7 +27,8 @@
       "import": "./dist/types.js",
       "types": "./dist/types.d.ts"
     },
-    "./styles.css": "./styles.css"
+    "./styles.css": "./styles.css",
+    "./src/styles.css": "./src/styles.css"
   },
   "files": [
     "dist",
@@ -99,6 +100,7 @@
     "geist": "^1.7.0",
     "gray-matter": "^4.0.3",
     "lucide-react": "^1.7.0",
+    "mermaid": "^11.14.0",
     "next-mdx-remote": "^6.0.0",
     "rehype-pretty-code": "^0.14.3",
     "remark-gfm": "^4.0.1",

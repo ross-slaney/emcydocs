@@ -6,7 +6,8 @@
   },
   "header": {
     "nav": {
-      "docs": "Docs"
+      "docs": "Docs",
+      "blog": "Blog"
     },
     "menu": {
       "openAria": "Abrir menu de navegacion",
@@ -24,6 +25,7 @@
     },
     "links": {
       "classicDocs": "Docs clasicos",
+      "blog": "Blog",
       "documentation": "Documentacion",
       "license": "Licencia MIT"
     },
@@ -47,7 +49,7 @@
       "terminalLabel": "Terminal",
       "installCommand": "npm install @emcy/docs",
       "layoutsHeading": "Un layout, chrome flexible",
-      "layoutsDescription": "Moldea la experiencia con presets de tema, densidad, tamano del shell y overrides opcionales para header o sidebar.",
+      "layoutsDescription": "Moldea la experiencia con paletas por preset, ajuste de acento, densidad, tamano del shell, overrides de tokens y overrides opcionales para header o sidebar.",
       "exploreLabel": "Explorar",
       "layoutCards": [
         {
@@ -57,7 +59,7 @@
         },
         {
           "title": "Sistema de temas",
-          "description": "Preset, modo, densidad, radio, hue de acento y tamano del shell desde un solo objeto."
+          "description": "Paletas por preset, modo, densidad, radio, ajuste de acento, overrides de tokens y tamano del shell desde una configuracion anidada."
         },
         {
           "title": "Chrome personalizado",
@@ -104,6 +106,30 @@
     "docsClassicHome": {
       "title": "Docs localizados con prefijos de idioma conscientes de la ruta",
       "description": "El idioma por defecto se mantiene limpio en /docs mientras los idiomas secundarios viven bajo prefijos sin cambiar el modelo de contenido."
+    },
+    "blogDirectory": {
+      "title": "Blog",
+      "description": "Notas de producto, detalles de implementacion y guias practicas para construir aplicaciones Next.js con documentacion integrada.",
+      "categoriesLabel": "Categorias",
+      "searchLabel": "Buscar publicaciones",
+      "searchPlaceholder": "Buscar en el blog...",
+      "allCategoriesLabel": "Todas",
+      "noResultsTitle": "No se encontraron publicaciones",
+      "noResultsDescription": "Prueba otra busqueda o quita el filtro de categoria actual.",
+      "previousLabel": "Anterior",
+      "nextLabel": "Siguiente",
+      "pageLabel": "Pagina"
+    },
+    "blogPost": {
+      "backLabel": "Volver al Blog",
+      "writtenByLabel": "Escrito por",
+      "publishedOnLabel": "Publicado",
+      "updatedOnLabel": "Actualizado",
+      "tagsLabel": "Etiquetas",
+      "suggestedLabel": "Publicaciones sugeridas",
+      "suggestedDescription": "Mas notas de implementacion, articulos de lanzamiento y patrones del contenido de ejemplo de EmcyDocs.",
+      "readMoreLabel": "Leer mas",
+      "readingTimeSuffix": "min de lectura"
     }
   }
 }

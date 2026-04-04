@@ -1,8 +1,9 @@
 import en from "../locales/en.json";
 import es from "../locales/es.json";
+import zh from "../locales/zh.json";
 
 export const routeLocales = ["en", "es", "zh"] as const;
-export const marketingLocales = ["en", "es"] as const;
+export const marketingLocales = ["en", "es", "zh"] as const;
 export const docsLocales = ["en", "es", "zh"] as const;
 
 export type RouteLocale = (typeof routeLocales)[number];
@@ -22,13 +23,16 @@ export const defaultSiteLocale: RouteLocale = isSupportedRouteLocale(
 export const hideDefaultSiteLocaleInUrl = true;
 
 const localizedRouteBases = [
+  "/embedded/docs",
   "/docs",
+  "/blog",
   "/",
 ] as const;
 
 const siteDictionaries = {
   en,
   es,
+  zh,
 } satisfies Record<MarketingLocale, SiteDictionary>;
 
 const docsDictionaries = {
@@ -45,17 +49,9 @@ const docsDictionaries = {
     },
   },
   zh: {
-    layout: {
-      brand: "EmcyDocs",
-      classicDocs: "经典文档",
-      defaultDocs: "默认文档",
-    },
+    layout: siteDictionaries.zh.docs.layout,
     pages: {
-      docsClassicHome: {
-        title: "带有路由感知语言前缀的本地化文档",
-        description:
-          "默认语言可以保持在 docs 下的简洁路径中，而非默认语言可以通过带前缀的路径暴露出来，同时不改变内容模型。",
-      },
+      docsClassicHome: siteDictionaries.zh.pages.docsClassicHome,
     },
   },
 } as const;
@@ -92,7 +88,7 @@ export function getLocaleFromPathname(pathname: string): RouteLocale {
 
 export function getMarketingDictionary(locale?: string): SiteDictionary {
   const resolvedLocale = normalizeRouteLocale(locale);
-  return siteDictionaries[resolvedLocale === "es" ? "es" : "en"];
+  return siteDictionaries[resolvedLocale as MarketingLocale];
 }
 
 export function getPageDictionary<PageKey extends SitePageNamespace>(

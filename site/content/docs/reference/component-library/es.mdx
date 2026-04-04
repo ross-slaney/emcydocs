@@ -104,15 +104,22 @@ sectionLabel: "Reference"
 <CodeBlock title="layout.tsx" language="tsx">{`<DocsLayout
   navigation={docsSource.getNavigation()}
   theme={{
-    preset: "neutral",
-    mode: "light",
-    layoutWidth: "1500px",
-    contentWidth: "48rem",
-    radius: "xl",
+    color: {
+      preset: "neutral",
+      mode: "light",
+      accentStrength: "balanced",
+    },
+    layout: {
+      density: "comfortable",
+      layoutWidth: "1500px",
+      contentWidth: "48rem",
+    },
+    shape: {
+      radius: "xl",
+    },
   }}
-  themeSwitcher={<ThemeSwitcher />}
 >
   {children}
 </DocsLayout>`}</CodeBlock>
 
-El objetivo es simple: un solo paquete, un solo lenguaje visual y suficientes primitivas para que las paginas de docs se sientan intencionales.
+El objetivo es simple: un solo paquete, un solo lenguaje visual y suficientes primitivas para que las paginas de docs se sientan intencionales. Si mas tarde quieres cambio de tema en vivo, mantienes el mismo `DocsLayout` y solo agregas `DocsThemeProvider` alrededor.

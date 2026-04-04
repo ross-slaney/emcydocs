@@ -21,7 +21,13 @@ function Logo({ className }: { className?: string }) {
         strokeLinecap="round"
         stroke="hsl(var(--primary-foreground))"
       />
-      <circle cx="24" cy="22" r="3" fill="hsl(var(--primary-foreground))" fillOpacity="0.9" />
+      <circle
+        cx="24"
+        cy="22"
+        r="3"
+        fill="hsl(var(--primary-foreground))"
+        fillOpacity="0.9"
+      />
     </svg>
   );
 }
@@ -30,7 +36,10 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
   const currentYear = new Date().getFullYear();
   const copy = getSiteChromeDictionary(locale);
   const layoutLinks = [
-    { href: buildLocalizedHref("/docs", locale), label: copy.footer.links.classicDocs },
+    {
+      href: buildLocalizedHref("/blog", locale),
+      label: copy.footer.links.blog,
+    },
   ];
   const marketingHomeHref = buildLocalizedHref("/", locale);
   const docsHomeHref = buildLocalizedHref("/docs", locale);
@@ -40,7 +49,10 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
       <div className="mx-auto max-w-[1400px] px-6 py-12">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href={marketingHomeHref} className="inline-flex items-center gap-2">
+            <Link
+              href={marketingHomeHref}
+              className="inline-flex items-center gap-2"
+            >
               <Logo className="h-6 w-6" />
               <span className="font-semibold">{copy.common.brand}</span>
             </Link>
@@ -50,21 +62,8 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">
-              {copy.footer.sections.layouts}
-            </h3>
-            <ul className="mt-4 space-y-2">
-              {layoutLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-sm font-semibold"></h3>
+            <ul className="mt-4 space-y-2"></ul>
           </div>
 
           <div>
@@ -109,7 +108,9 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
             </h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <span className="text-sm text-muted-foreground">{copy.footer.links.license}</span>
+                <span className="text-sm text-muted-foreground">
+                  {copy.footer.links.license}
+                </span>
               </li>
             </ul>
           </div>

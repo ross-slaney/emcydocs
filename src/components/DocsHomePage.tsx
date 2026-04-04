@@ -52,76 +52,25 @@ export default async function DocsHomePage({
 }) {
   const pageTitle = title ?? entry?.title ?? "Documentation";
   const pageDescription = description ?? entry?.description ?? "";
-  const totalPages = navigation.reduce((count, section) => count + section.items.length, 0);
-  const heroLinks = navigation
-    .flatMap((section) =>
-      section.items.slice(0, 1).map((item) => ({
-        ...item,
-        sectionLabel: section.label,
-      }))
-    )
-    .slice(0, 4);
 
   return (
     <div className="emcydocs-home">
+      {/* Hero — just title + description */}
       <section className="emcydocs-home-hero">
         <div className="emcydocs-home-hero-main">
-          <span className="emcydocs-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            EmcyDocs
-          </span>
           <h1>{pageTitle}</h1>
           {pageDescription ? <p>{pageDescription}</p> : null}
-          <div className="emcydocs-home-metrics">
-            <div className="emcydocs-home-metric">
-              <strong>{navigation.length}</strong>
-              <span>Namespaces</span>
-            </div>
-            <div className="emcydocs-home-metric">
-              <strong>{totalPages}</strong>
-              <span>Pages</span>
-            </div>
-            <div className="emcydocs-home-metric">
-              <strong>{entry?.availableLocales.length ?? 1}</strong>
-              <span>Locales</span>
-            </div>
-          </div>
         </div>
-
-        {heroLinks.length ? (
-          <aside className="emcydocs-home-hero-panel">
-            <div className="emcydocs-home-hero-panel-head">
-              <div>
-                <p>Start here</p>
-                <h2>Recommended first stops</h2>
-              </div>
-              <span>{heroLinks.length} picks</span>
-            </div>
-            <div className="emcydocs-home-hero-links">
-              {heroLinks.map((item) => (
-                <Link key={item.href} href={item.href} className="emcydocs-home-hero-link">
-                  <div>
-                    <strong>{item.title}</strong>
-                    <span>{item.sectionLabel}</span>
-                  </div>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M13 5l7 7-7 7" />
-                  </svg>
-                </Link>
-              ))}
-            </div>
-          </aside>
-        ) : null}
       </section>
 
+      {/* MDX content */}
       {entry ? (
         <section className="emcydocs-home-content">
           <DocsMdx entry={entry} />
         </section>
       ) : null}
 
+      {/* Namespace grid */}
       <section className="emcydocs-home-grid">
         {navigation.map((section) => (
           <article key={section.key || "root"} className="emcydocs-home-card">
@@ -130,10 +79,7 @@ export default async function DocsHomePage({
                 <span className="emcydocs-home-card-icon">
                   <span>{getSectionIcon(section.label)}</span>
                 </span>
-                <div>
-                  <p className="emcydocs-home-card-eyebrow">Namespace</p>
-                  <h2>{section.label}</h2>
-                </div>
+                <h2>{section.label}</h2>
               </div>
               <span className="emcydocs-home-card-count">{section.items.length} pages</span>
             </div>

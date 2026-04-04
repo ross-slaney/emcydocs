@@ -1,6 +1,6 @@
 ---
 title: "主题配置"
-description: "通过一个 theme 对象统一配置 preset、模式、强调色、布局宽度与圆角。"
+description: "通过一个嵌套的 theme 对象统一配置 preset、模式、强调色、密度、布局宽度与 token 覆盖。"
 order: 2
 section: reference
 sectionLabel: "Reference"
@@ -8,36 +8,68 @@ sectionLabel: "Reference"
 
 <Banner
   eyebrow="Theme API"
-  title="用一个 theme 对象和可选 switcher 插槽控制文档外壳"
+  title="用一个嵌套的 theme 对象和可选的 headless 状态控制文档外壳"
   href="../layouts/docs-layout"
   actionLabel="查看布局用法"
 >
-  主题能力仍然留在同一个包里。你把 `theme` 传给布局组件，然后按需提供 `themeSwitcher` 或 `languageSwitcher`。
+  EmcyDocs 现在提供一个 headless 主题引擎。你可以直接把固定 `theme` 传给 `DocsLayout`，也可以在需要实时编辑、持久化或分享链接时使用 `DocsThemeProvider`。
 </Banner>
 
 <CardGrid cols={3}>
-  <Card title="Presets" description="从 `neutral`、`dusk`、`ocean` 或 `sqlos` 开始，再按需微调。" />
-  <Card title="布局尺寸" description="统一控制整体宽度、正文宽度、侧边栏宽度和 TOC 宽度。" />
-  <Card title="表面细节" description="调整强调色 hue、明暗模式与圆角，同时保持组件库样式一致。" />
+  <Card title="颜色系统" description="从 `neutral`、`dusk`、`ocean` 或 `sqlos` 开始，再调整模式、强调色 hue、强度和表面风格。" />
+  <Card title="布局系统" description="统一控制密度、整体宽度、正文宽度、侧边栏宽度和 TOC 宽度。" />
+  <Card title="Token 覆盖" description="当 preset 已经接近目标，但还差最后一点产品品牌语言时，可以用语义 token 精确覆盖。" />
 </CardGrid>
 
-## Theme prop
+## 固定 theme prop
 
 ```tsx
+const docsTheme = {
+  color: {
+    preset: "ocean",
+    mode: "dark",
+    accentHue: 188,
+    accentStrength: "bold",
+    surfaceStyle: "elevated",
+  },
+  layout: {
+    density: "compact",
+    layoutWidth: "1480px",
+    contentWidth: "50rem",
+    sidebarWidth: "272px",
+    tocWidth: "232px",
+  },
+  shape: {
+    radius: "xl",
+  },
+};
+
 <DocsLayout
   navigation={docsSource.getNavigation()}
-  theme={{
-    preset: "neutral",
-    mode: "light",
-    accentHue: 38,
-    layoutWidth: "1500px",
-    contentWidth: "48rem",
-    sidebarWidth: "276px",
-    tocWidth: "240px",
-    radius: "xl",
-  }}
-  themeSwitcher={<ThemeSwitcher />}
+  theme={docsTheme}
 />
+```
+
+<Callout type="tip" title="固定主题与实时主题">
+  `DocsLayout` 会优先读取 `DocsThemeProvider` 中的主题状态；如果没有 provider，才会退回到自己的 `theme` prop。固定站点直接传 prop，需要主题工作室或用户偏好时再加 provider。
+</Callout>
+
+## 实时主题状态
+
+```tsx
+import { DocsThemeProvider, useDocsTheme } from "@emcy/docs";
+
+function ThemeModeToggle() {
+  const { resolvedTheme, updateTheme } = useDocsTheme();
+  const nextMode =
+    resolvedTheme.config.color.mode === "light" ? "dark" : "light";
+
+  return (
+    <button onClick={() => updateTheme({ color: { mode: nextMode } })}>
+      切换模式
+    </button>
+  );
+}
 ```
 
 ## Presets
@@ -50,33 +82,39 @@ sectionLabel: "Reference"
     <TabsTrigger value="sqlos">SqlOS</TabsTrigger>
   </TabsList>
 
-  <TabsContent value="neutral">适合清晰、平衡的浅色文档体验。</TabsContent>
-  <TabsContent value="dusk">适合更有对比度的深色视觉风格。</TabsContent>
-  <TabsContent value="ocean">适合技术感更强的嵌入式或深色外壳。</TabsContent>
-  <TabsContent value="sqlos">适合 SqlOS showcase 或强调品牌色的产品文档。</TabsContent>
+  <TabsContent value="neutral">适合作为产品文档、设计系统和帮助中心的平衡基线，light 和 dark 都很稳。</TabsContent>
+  <TabsContent value="dusk">适合需要更强氛围感和更高对比度的文档外壳。</TabsContent>
+  <TabsContent value="ocean">适合技术感更强、表面更冷、更利落的文档体验。</TabsContent>
+  <TabsContent value="sqlos">适合更温暖的产品文档，或希望默认就有更强金色品牌感的站点。</TabsContent>
 </Tabs>
 
 ## 参数说明
 
 <Accordion>
-  <AccordionItem title="preset 和 mode" defaultOpen>
-    `preset` 负责基础色板与表面风格，`mode` 用来在支持的 preset 中强制 light 或 dark。
+  <AccordionItem title="color.preset 和 color.mode" defaultOpen>
+    `preset` 负责基础色系，`mode` 用来强制 light 或 dark。现在所有 preset 都同时支持两种模式。
   </AccordionItem>
-  <AccordionItem title="accentHue">
-    当你想保留同一 preset，只替换品牌强调色时使用。
+  <AccordionItem title="color.accentHue 和 color.accentStrength">
+    `accentHue` 用来重新设定品牌强调色的色相，`accentStrength` 决定它对按钮、焦点环和强调表面的影响强度。
   </AccordionItem>
-  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
-    用同一个布局组件覆盖更宽的产品文档、更紧凑的参考页与更聚焦阅读的页面，而不必拆分包。
+  <AccordionItem title="color.surfaceStyle">
+    `flat`、`tinted` 和 `elevated` 会改变面板的染色程度、边框对比度和阴影深度。
   </AccordionItem>
-  <AccordionItem title="radius">
-    通过 `md`、`lg` 或 `xl` 调整整体表面的锐利或圆润程度。
+  <AccordionItem title="layout.density 与宽度">
+    `density` 会改变导航、cards、TOC 和页面留白的节奏。宽度配置则让同一个布局既能覆盖更宽的产品文档，也能覆盖更紧凑的参考页面。
+  </AccordionItem>
+  <AccordionItem title="shape.radius">
+    通过 `md`、`lg` 或 `xl` 调整 cards、banner、tabs、dialog 和 shell chrome 的圆润程度。
+  </AccordionItem>
+  <AccordionItem title="tokens">
+    `tokens` 是最后应用的语义覆盖层。当前面的 preset 和旋钮已经接近目标，但你还需要精确匹配背景、边框、card、强调色、代码区或阴影时，就用它。
   </AccordionItem>
 </Accordion>
 
-## 可选 switcher 插槽
+## 示例站工作室 vs 库 API
 
-<Callout type="tip" title="外壳只提供插槽">
-  EmcyDocs 不强制语言切换器或主题切换器的实现。需要时传入 `languageSwitcher` 与 `themeSwitcher`，不需要时直接省略即可。
+<Callout type="tip" title="这个站点里的弹窗只属于示例应用">
+  `DocsThemeStudio` 只存在于 `/site`。库本身只提供 `resolveDocsTheme(theme)`、`DocsThemeProvider` 和 `useDocsTheme()` 这些 headless 原语。你可以自己做切换器，也可以完全不暴露运行时主题控制。
 </Callout>
 
-示例站点使用同一个布局 API，通过 preset、mode、density、radius 与壳层尺寸来完全改变观感。
+示例站点正是基于这些原语实现了预设切换、token 覆盖、可分享链接和持久化偏好，而不是依赖一个内置的库级 switcher 组件。

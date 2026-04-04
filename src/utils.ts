@@ -91,9 +91,42 @@ export function buildDocsHref(args: {
   return `${localizedBase}/${slugs.join("/")}`;
 }
 
+export function buildContentHref(args: {
+  basePath: string;
+  slug?: string;
+  locale: string;
+  defaultLocale: string;
+  hideDefaultLocaleInUrl: boolean;
+}): string {
+  const localizedBase = withLocalePrefix(
+    args.basePath,
+    args.locale,
+    args.defaultLocale,
+    args.hideDefaultLocaleInUrl
+  );
+  const slug = args.slug?.trim();
+
+  return slug ? `${localizedBase}/${slug}` : localizedBase;
+}
+
+export function buildBlogHref(args: {
+  basePath: string;
+  slug?: string;
+  locale: string;
+  defaultLocale: string;
+  hideDefaultLocaleInUrl: boolean;
+}): string {
+  return buildContentHref(args);
+}
+
 export function findHeadingById(
   headings: DocsHeading[],
   id: string
 ): DocsHeading | undefined {
   return headings.find((heading) => heading.id === id);
+}
+
+export function calculateReadingTimeMinutes(content: string): number {
+  const words = stripMarkdown(content).split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.ceil(words / 200));
 }

@@ -1,6 +1,6 @@
 ---
 title: "Theme Configuration"
-description: "Configure preset, mode, accent hue, shell sizing, and radii from a single theme object."
+description: "Configure preset palettes, mode, accent tuning, density, shell sizing, and token overrides from one nested theme object."
 order: 2
 section: reference
 sectionLabel: "Reference"
@@ -8,38 +8,95 @@ sectionLabel: "Reference"
 
 <Banner
   eyebrow="Theme API"
-  title="Tune docs chrome with one theme object and an optional switcher slot"
+  title="Drive docs chrome with one nested theme object and optional headless state"
   href="../layouts/docs-layout"
   actionLabel="See layout usage"
 >
-  The library keeps theming inside the same package. You pass a `theme` object to the layout and optionally render your own `themeSwitcher` or `languageSwitcher` in the shared shell.
+  EmcyDocs ships a headless theme engine. Pass a static `theme` prop to `DocsLayout`, or wrap the layout in `DocsThemeProvider` when users should edit, persist, or share theme state.
 </Banner>
 
 <CardGrid cols={3}>
-  <Card title="Presets" description="Start with `neutral`, `dusk`, `ocean`, or `sqlos` and then refine from there." />
-  <Card title="Layout sizing" description="Control shell width, content width, sidebar width, and TOC width without creating new layout components." />
-  <Card title="Surface details" description="Adjust accent hue, light or dark mode, and radius scale while keeping the component library styles intact." />
+  <Card title="Color system" description="Start with `neutral`, `dusk`, `ocean`, or `sqlos`, then tune mode, accent hue, accent strength, and surface style." />
+  <Card title="Layout system" description="Control density, shell width, content width, sidebar width, and TOC width without creating new layout components." />
+  <Card title="Token overrides" description="Override semantic shell tokens last when a preset gets you close but not all the way to your product's visual language." />
 </CardGrid>
 
-## Theme prop
+## Static theme prop
 
 ```tsx
-import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
+import type { DocsThemeConfig } from "@emcy/docs";
+
+const docsTheme: DocsThemeConfig = {
+  color: {
+    preset: "ocean",
+    mode: "dark",
+    accentHue: 188,
+    accentStrength: "bold",
+    surfaceStyle: "elevated",
+  },
+  layout: {
+    density: "compact",
+    layoutWidth: "1480px",
+    contentWidth: "50rem",
+    sidebarWidth: "272px",
+    tocWidth: "232px",
+  },
+  shape: {
+    radius: "xl",
+  },
+};
 
 <DocsLayout
   navigation={docsSource.getNavigation()}
-  theme={{
+  theme={docsTheme}
+/>
+```
+
+<Callout type="tip" title="Static vs live theming">
+  `DocsLayout` reads theme state from `DocsThemeProvider` when present and falls back to its own `theme` prop otherwise. Use the prop for fixed themes and the provider for a studio, persisted preferences, or share URLs.
+</Callout>
+
+## Live theme state
+
+```tsx
+import {
+  DocsLayout,
+  DocsThemeProvider,
+  useDocsTheme,
+  type DocsThemeConfig,
+} from "@emcy/docs";
+
+const initialTheme: DocsThemeConfig = {
+  color: {
     preset: "neutral",
     mode: "light",
-    accentHue: 38,
-    layoutWidth: "1500px",
-    contentWidth: "48rem",
-    sidebarWidth: "276px",
-    tocWidth: "240px",
-    radius: "xl",
-  }}
-  themeSwitcher={<ThemeSwitcher />}
-/>
+  },
+};
+
+function ThemeModeToggle() {
+  const { resolvedTheme, updateTheme } = useDocsTheme();
+  const nextMode =
+    resolvedTheme.config.color.mode === "light" ? "dark" : "light";
+
+  return (
+    <button onClick={() => updateTheme({ color: { mode: nextMode } })}>
+      Toggle mode
+    </button>
+  );
+}
+
+export default function Layout({ children }) {
+  return (
+    <DocsThemeProvider initialTheme={initialTheme}>
+      <DocsLayout
+        navigation={docsSource.getNavigation()}
+        themeSwitcher={<ThemeModeToggle />}
+      >
+        {children}
+      </DocsLayout>
+    </DocsThemeProvider>
+  );
+}
 ```
 
 ## Presets
@@ -53,43 +110,49 @@ import { DocsLayout, ThemeSwitcher } from "@emcy/docs";
   </TabsList>
 
   <TabsContent value="neutral">
-    Use this for a balanced light docs shell that can still be recolored with the theme switcher or `accentHue`.
+    Use this as the balanced baseline for product docs, design systems, and app-embedded help centers. It works well in both light and dark.
   </TabsContent>
 
   <TabsContent value="dusk">
-    Use this for a richer dark presentation with stronger contrast and glow around the accent color.
+    Use this when you want a moodier, higher-contrast shell with more cinematic color relationships around the accent.
   </TabsContent>
 
   <TabsContent value="ocean">
-    Use this when you want an embedded, technical, darker presentation that still feels bright and sharp.
+    Use this for technical, sharper-looking docs with cooler surfaces and a more obviously productized feel.
   </TabsContent>
 
   <TabsContent value="sqlos">
-    Use this for the SqlOS showcase or any product whose docs need a lighter shell with a stronger branded accent.
+    Use this for warmer product docs, dashboard-adjacent help centers, and brands that want a stronger golden accent by default.
   </TabsContent>
 </Tabs>
 
 ## What the knobs do
 
 <Accordion>
-  <AccordionItem title="preset and mode" defaultOpen>
-    `preset` selects the base palette, surfaces, and contrast model. `mode` lets you force light or dark when the preset supports both.
+  <AccordionItem title="color.preset and color.mode" defaultOpen>
+    `preset` selects the base palette family. `mode` forces light or dark, and every preset now supports both.
   </AccordionItem>
-  <AccordionItem title="accentHue">
-    Use a single hue number when you want to keep the same preset but move the brand accent to blue, teal, rose, orange, or any other value.
+  <AccordionItem title="color.accentHue and color.accentStrength">
+    `accentHue` re-centers the brand hue without abandoning the preset. `accentStrength` decides how hard that hue pushes primary buttons, focus rings, accent surfaces, and soft-highlight states.
   </AccordionItem>
-  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
-    These values let one layout component cover wider product docs, denser reference views, and narrower reading-focused pages without splitting the package.
+  <AccordionItem title="color.surfaceStyle">
+    `flat`, `tinted`, and `elevated` change how much panel tint, border contrast, and shadow depth the shell uses.
   </AccordionItem>
-  <AccordionItem title="radius">
-    Choose `md`, `lg`, or `xl` to tighten or soften the overall surface language across cards, banners, tabs, and shell chrome.
+  <AccordionItem title="layout.density and layout widths">
+    `density` changes spacing rhythm across navigation, cards, TOC items, and page gutters. `layoutWidth`, `contentWidth`, `sidebarWidth`, and `tocWidth` let one layout cover wide product docs, denser references, and narrower reading-focused pages.
+  </AccordionItem>
+  <AccordionItem title="shape.radius">
+    Choose `md`, `lg`, or `xl` to tighten or soften the surface language across cards, banners, tabs, dialogs, and shell chrome.
+  </AccordionItem>
+  <AccordionItem title="tokens">
+    `tokens` are semantic overrides applied last. Use them when the preset plus knobs gets close, but you need exact background, border, card, accent, code, or shadow values to match a product brand.
   </AccordionItem>
 </Accordion>
 
-## Optional switcher slots
+## Site studio vs library API
 
-<Callout type="tip" title="The shell only provides slots">
-  EmcyDocs does not force a specific language picker or theme picker. Pass your own `languageSwitcher` and `themeSwitcher` nodes when you want them, or omit them when the product should stay fixed.
+<Callout type="tip" title="The popup in this site is example-app code">
+  `DocsThemeStudio` only ships inside `/site`. The library ships the headless primitives: `resolveDocsTheme(theme)`, `DocsThemeProvider`, and `useDocsTheme()`. Build your own switcher UI around them, or keep the theme fixed and skip runtime controls entirely.
 </Callout>
 
-The example site uses one layout API and changes the feel entirely through preset, mode, density, radius, and shell sizing.
+The example docs route uses those primitives to power preset switching, live token overrides, shareable URLs, and persisted preferences without requiring a bundled library switcher component.

@@ -1,0 +1,41 @@
+---
+title: "One MDX Pipeline for Docs and Blog"
+description: "Reusing the same MDX renderer and component map keeps authoring and theming coherent across both surfaces."
+publishedAt: "2026-03-23"
+author: "Emcy Team"
+authorRole: "Authoring systems"
+image: "https://images.unsplash.com/photo-1516321497487-e288fb19713f?auto=format&fit=crop&w=1400&q=80"
+category: "Architecture"
+tags:
+  - "mdx"
+  - "components"
+  - "theming"
+relatedSlugs:
+  - "blog-as-a-first-class-surface"
+  - "search-categories-and-suggested-posts"
+---
+
+# One MDX Pipeline for Docs and Blog
+
+The moment blog content lives in the library, duplicating the MDX renderer stops making sense.
+
+## Shared rendering keeps authors productive
+
+Authors can keep using the same callouts, cards, tabs, files, and code blocks across docs and blog posts.
+
+<CardGrid columns={2}>
+  <Card title="One syntax" href="#one-syntax">
+    Reuse the same MDX components instead of teaching two systems.
+  </Card>
+  <Card title="One theme" href="#one-theme">
+    Keep spacing, borders, and prose styles aligned by default.
+  </Card>
+</CardGrid>
+
+## One syntax
+
+Reusing the same component map means the library only needs one place to define the MDX contract.
+
+## One theme
+
+The docs theme variables already define surfaces, borders, foreground colors, and density. Blog pages should consume those same tokens instead of inventing a second theme layer.

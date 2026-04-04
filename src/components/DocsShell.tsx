@@ -8,12 +8,8 @@ import type {
   DocsLayoutSlot,
   DocsSidebarSlotProps,
 } from "../types";
-import {
-  getDocsThemeStyle,
-  resolveDocsThemeDensity,
-  resolveDocsThemeMode,
-  resolveDocsThemePreset,
-} from "../theme";
+import { resolveDocsTheme } from "../theme";
+import { useOptionalDocsTheme } from "../theme-provider";
 import DocsSearch from "./DocsSearch";
 import DocsSidebar from "./DocsSidebar";
 import MobileDocsChrome from "./MobileDocsChrome";
@@ -38,6 +34,7 @@ export default function DocsShell({
   const pathname = usePathname();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const isEmbedded = variant === "embedded";
+  const themeContext = useOptionalDocsTheme();
 
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
@@ -55,10 +52,11 @@ export default function DocsShell({
     return current?.title ?? "Documentation";
   }, [navigation, pathname]);
 
-  const themePreset = resolveDocsThemePreset(theme);
-  const themeMode = resolveDocsThemeMode(theme);
-  const themeDensity = resolveDocsThemeDensity(theme);
-  const themeStyle = getDocsThemeStyle(theme);
+  const resolvedTheme = useMemo(
+    () => themeContext?.resolvedTheme ?? resolveDocsTheme(theme),
+    [theme, themeContext]
+  );
+  const themePreset = resolvedTheme.attributes.preset;
   const hasSidebar = sidebar !== null;
 
   const headerSlotProps: Omit<DocsHeaderSlotProps, "isMobile"> = {
@@ -161,9 +159,11 @@ export default function DocsShell({
         .filter(Boolean)
         .join(" ")}
       data-emcydocs-preset={themePreset}
-      data-emcydocs-mode={themeMode}
-      data-emcydocs-density={themeDensity}
-      style={themeStyle}
+      data-emcydocs-mode={resolvedTheme.attributes.mode}
+      data-emcydocs-density={resolvedTheme.attributes.density}
+      data-emcydocs-surface-style={resolvedTheme.attributes.surfaceStyle}
+      data-emcydocs-accent-strength={resolvedTheme.attributes.accentStrength}
+      style={resolvedTheme.style}
     >
       {desktopHeader ? <header className="emcydocs-header">{desktopHeader}</header> : null}
 

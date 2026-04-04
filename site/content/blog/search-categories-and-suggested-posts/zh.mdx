@@ -1,0 +1,41 @@
+---
+title: "搜索、分类与推荐文章"
+description: "博客目录故意采用 URL 驱动的状态模型，这样筛选、分页和推荐都能在 App Router 中保持可预测。"
+publishedAt: "2026-03-18"
+updatedAt: "2026-03-21"
+author: "Emcy 团队"
+authorRole: "内容发现系统"
+image: "https://images.unsplash.com/photo-1484417894907-623942c8ee29?auto=format&fit=crop&w=1400&q=80"
+category: "搜索"
+tags:
+  - "搜索"
+  - "分类"
+  - "推荐"
+relatedSlugs:
+  - "locale-aware-blog-routing"
+  - "one-mdx-pipeline-for-docs-and-blog"
+---
+
+# 搜索、分类与推荐文章
+
+博客目录对外要简单，对内要可预测。
+
+## URL 驱动的筛选状态
+
+目录使用查询参数：
+
+- `q` 表示搜索词
+- `category` 表示分类
+- `page` 表示分页
+
+## 排序规则
+
+搜索优先匹配标题和摘要，其次是分类、标签和正文内容。
+
+## 推荐文章
+
+推荐可以来自三种策略：
+
+1. 相关文章
+2. 最新文章
+3. 手动指定并自动补齐

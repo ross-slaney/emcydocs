@@ -12,7 +12,7 @@ EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-frien
   href="reference/component-library"
   actionLabel="Browse the components"
 >
-  The showcase now dogfoods shared banners, cards, accordions, file trees, tabs, and polished code blocks from the same package. Theme presets and shell sizing live behind one `theme` prop.
+  The showcase now dogfoods shared banners, cards, accordions, file trees, tabs, and polished code blocks from the same package. Theme presets, shell sizing, and live theme state all live behind one nested `theme` config plus a headless provider.
 </Banner>
 
 <CardGrid cols={3}>
@@ -23,7 +23,7 @@ EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-frien
   />
   <Card
     title="Theme Configuration"
-    description="Preset-based shell theming for layout width, accent hue, mode, and radius."
+    description="Preset palettes, density, shell sizing, and token overrides from one nested config object."
     href="reference/theme-configuration"
   />
   <Card
@@ -36,14 +36,14 @@ EmcyDocs is a docs library for Next.js teams that want repo-local MDX, SEO-frien
 ## Core ideas
 
 - A single `createDocsSource(...)` call builds your content model, navigation, metadata, route helpers, heading extraction, and search.
-- A single `DocsLayout` owns the docs shell while the theme system handles presets, density, sizing, and accent changes.
+- A single `DocsLayout` owns the docs shell while the theme system handles presets, density, sizing, accent tuning, and optional token overrides.
 - When the default header or sidebar is not enough, you can replace either one with your own component or `null`.
 - Locale folders like `entry/en.mdx`, `entry/es.mdx`, and `entry/zh.mdx` map directly into locale-aware URLs.
 
 ## What this example site shows
 
 - A single `docs` route powered by one layout component
-- Theme presets, density, radius, and shell sizing in one theme studio
+- A headless theme engine powering quick presets and an advanced theme studio
 - Locale-aware routes for English, Spanish, and Chinese
 - A component library for docs homes, guides, and references
 

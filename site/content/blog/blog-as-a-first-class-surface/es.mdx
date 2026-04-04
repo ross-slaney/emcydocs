@@ -1,0 +1,44 @@
+---
+title: "El blog como superficie de primera clase"
+date: "2026-04-01"
+author: "Equipo Emcy"
+authorRole: "Mantenedores de la libreria"
+previewImage: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1400&q=80"
+category: "Producto"
+tags:
+  - "blog"
+  - "nextjs"
+  - "producto"
+excerpt: "Por que el sistema de blog ahora vive junto a docs en la misma libreria en lugar de existir como una implementacion aislada."
+relatedSlugs:
+  - "one-mdx-pipeline-for-docs-and-blog"
+  - "locale-aware-blog-routing"
+---
+
+# El blog como superficie de primera clase
+
+Si el contenido del blog se reconstruye en cada nuevo proyecto, el patron ya es evidente: debe vivir dentro de la libreria.
+
+## Por que hacerlo hermano de docs?
+
+El sistema de docs ya resolvio varios problemas dificiles:
+
+- contenido dentro del repo
+- rutas conscientes del idioma
+- metadata apta para prerender
+- una sola canalizacion MDX
+
+El blog debe reutilizar esas decisiones en lugar de crear una segunda pila de contenido con reglas casi iguales.
+
+<Callout type="info" title="La infraestructura compartida importa">
+  La meta no es convertir publicaciones en paginas de docs. La meta es darle a
+  ambas superficies la misma base confiable de contenido y renderizado.
+</Callout>
+
+## Que cambia para quien consume la libreria?
+
+Ahora existe una fuente dedicada para blog, paginas reutilizables para directorio y detalle, y un modelo de rutas que encaja con la filosofia de EmcyDocs.
+
+## Que sigue siendo flexible?
+
+La libreria sigue siendo deliberadamente pequena. Cada app sigue eligiendo su shell, su copy y cualquier chrome adicional alrededor del blog.

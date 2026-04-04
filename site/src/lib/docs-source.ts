@@ -21,4 +21,5 @@ const sharedConfig = {
 export const docsSource = createDocsSource({
   ...sharedConfig,
   basePath: "/docs",
+  homeRedirect: "getting-started",
 });

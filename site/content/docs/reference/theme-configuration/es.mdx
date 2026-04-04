@@ -1,6 +1,6 @@
 ---
 title: "Configuracion de Tema"
-description: "Configura preset, modo, hue de acento, anchos del shell y radios desde un solo objeto."
+description: "Configura presets, modo, acento, densidad, anchos del shell y overrides de tokens desde un solo objeto anidado."
 order: 2
 section: reference
 sectionLabel: "Reference"
@@ -8,36 +8,68 @@ sectionLabel: "Reference"
 
 <Banner
   eyebrow="API de tema"
-  title="Ajusta el chrome de docs con un solo objeto y un slot opcional para switchers"
+  title="Controla el chrome de docs con un objeto `theme` anidado y estado headless opcional"
   href="../layouts/docs-layout"
   actionLabel="Ver layout"
 >
-  El theming vive dentro del mismo paquete. Pasas un objeto `theme` al layout y puedes renderizar `themeSwitcher` o `languageSwitcher` solo cuando lo necesites.
+  EmcyDocs ahora expone un motor de temas headless. Pasa un `theme` fijo a `DocsLayout` o usa `DocsThemeProvider` cuando quieras edicion en vivo, persistencia o URLs compartibles.
 </Banner>
 
 <CardGrid cols={3}>
-  <Card title="Presets" description="Empieza con `neutral`, `dusk`, `ocean` o `sqlos` y ajusta desde ahi." />
-  <Card title="Anchos" description="Controla el ancho total, el contenido, el sidebar y el TOC sin crear otro layout." />
-  <Card title="Detalles visuales" description="Ajusta hue, modo y radios manteniendo intacta la libreria de componentes." />
+  <Card title="Color" description="Empieza con `neutral`, `dusk`, `ocean` o `sqlos` y ajusta modo, hue, intensidad y estilo de superficies." />
+  <Card title="Layout" description="Controla densidad, ancho total, contenido, sidebar y TOC sin crear otro layout." />
+  <Card title="Tokens" description="Aplica overrides semanticos al final cuando el preset base se acerque pero no cierre del todo." />
 </CardGrid>
 
-## Theme prop
+## Theme prop fijo
 
 ```tsx
+const docsTheme = {
+  color: {
+    preset: "ocean",
+    mode: "dark",
+    accentHue: 188,
+    accentStrength: "bold",
+    surfaceStyle: "elevated",
+  },
+  layout: {
+    density: "compact",
+    layoutWidth: "1480px",
+    contentWidth: "50rem",
+    sidebarWidth: "272px",
+    tocWidth: "232px",
+  },
+  shape: {
+    radius: "xl",
+  },
+};
+
 <DocsLayout
   navigation={docsSource.getNavigation()}
-  theme={{
-    preset: "neutral",
-    mode: "light",
-    accentHue: 38,
-    layoutWidth: "1500px",
-    contentWidth: "48rem",
-    sidebarWidth: "276px",
-    tocWidth: "240px",
-    radius: "xl",
-  }}
-  themeSwitcher={<ThemeSwitcher />}
+  theme={docsTheme}
 />
+```
+
+<Callout type="tip" title="Tema fijo o tema vivo">
+  `DocsLayout` lee primero el estado de `DocsThemeProvider` cuando existe y, si no, usa su prop `theme`. Usa la prop para sitios fijos y el provider para un studio o preferencias del usuario.
+</Callout>
+
+## Estado de tema en vivo
+
+```tsx
+import { DocsThemeProvider, useDocsTheme } from "@emcy/docs";
+
+function ThemeModeToggle() {
+  const { resolvedTheme, updateTheme } = useDocsTheme();
+  const nextMode =
+    resolvedTheme.config.color.mode === "light" ? "dark" : "light";
+
+  return (
+    <button onClick={() => updateTheme({ color: { mode: nextMode } })}>
+      Cambiar modo
+    </button>
+  );
+}
 ```
 
 ## Presets
@@ -50,33 +82,39 @@ sectionLabel: "Reference"
     <TabsTrigger value="sqlos">SqlOS</TabsTrigger>
   </TabsList>
 
-  <TabsContent value="neutral">Ideal para una experiencia clara y equilibrada.</TabsContent>
-  <TabsContent value="dusk">Funciona bien para una experiencia oscura con mas contraste.</TabsContent>
-  <TabsContent value="ocean">Encaja en shells tecnicos y embebidos con tono oscuro.</TabsContent>
-  <TabsContent value="sqlos">Pensado para el showcase de SqlOS y marcas con acento fuerte.</TabsContent>
+  <TabsContent value="neutral">Base equilibrada para docs de producto, sistemas de diseno y help centers. Funciona bien en light y dark.</TabsContent>
+  <TabsContent value="dusk">Sirve para una presencia mas cinematica y con mas contraste alrededor del acento.</TabsContent>
+  <TabsContent value="ocean">Encaja en docs tecnicos con superficies frias y una sensacion mas afilada.</TabsContent>
+  <TabsContent value="sqlos">Buena opcion para productos mas calidos o con una marca fuerte alrededor del dorado.</TabsContent>
 </Tabs>
 
 ## Que hace cada opcion
 
 <Accordion>
-  <AccordionItem title="preset y mode" defaultOpen>
-    `preset` define la paleta y las superficies. `mode` fuerza light u dark cuando ese preset lo soporte.
+  <AccordionItem title="color.preset y color.mode" defaultOpen>
+    `preset` define la familia base de color. `mode` fuerza light o dark, y todos los presets soportan ambos.
   </AccordionItem>
-  <AccordionItem title="accentHue">
-    Cambia solo el color de acento sin abandonar el preset base.
+  <AccordionItem title="color.accentHue y color.accentStrength">
+    `accentHue` mueve el color de marca sin abandonar el preset. `accentStrength` decide cuanto peso tiene ese acento en botones, focus rings y superficies suaves.
   </AccordionItem>
-  <AccordionItem title="layoutWidth, contentWidth, sidebarWidth, tocWidth">
-    Permite cubrir docs mas amplios, referencias mas densas y vistas de lectura mas estrechas con el mismo componente de layout.
+  <AccordionItem title="color.surfaceStyle">
+    `flat`, `tinted` y `elevated` cambian cuanto tinte, contraste de borde y profundidad de sombra usa el shell.
   </AccordionItem>
-  <AccordionItem title="radius">
-    Elige `md`, `lg` o `xl` para endurecer o suavizar el lenguaje visual.
+  <AccordionItem title="layout.density y anchos">
+    `density` cambia el ritmo de espaciado en nav, cards, TOC y gutters. Los anchos cubren shells mas amplios, referencias mas densas y vistas mas centradas en lectura.
+  </AccordionItem>
+  <AccordionItem title="shape.radius">
+    `md`, `lg` y `xl` endurecen o suavizan cards, banners, tabs, dialogs y chrome.
+  </AccordionItem>
+  <AccordionItem title="tokens">
+    Los `tokens` son overrides semanticos que se aplican al final. Usalos cuando necesites igualar valores exactos de fondo, borde, card, acento, codigo o sombras.
   </AccordionItem>
 </Accordion>
 
-## Slots opcionales
+## Studio del sitio vs API de libreria
 
-<Callout type="tip" title="El shell solo reserva el lugar">
-  EmcyDocs no obliga un selector de idioma o tema concreto. Puedes pasar `languageSwitcher` y `themeSwitcher` o dejar ambos vacios.
+<Callout type="tip" title="El popup de este sitio vive solo en el ejemplo">
+  `DocsThemeStudio` solo existe en `/site`. La libreria publica `resolveDocsTheme(theme)`, `DocsThemeProvider` y `useDocsTheme()`. Puedes construir tu propio switcher o no tener controles en runtime.
 </Callout>
 
-El sitio de ejemplo usa un solo layout y cambia por completo la sensacion visual mediante preset, modo, densidad, radio y tamanos del shell.
+El sitio de ejemplo usa esas primitivas para presets rapidos, overrides de tokens, URLs compartibles y preferencias persistidas sin depender de un switcher empaquetado por la libreria.

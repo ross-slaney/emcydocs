@@ -12,7 +12,7 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
   href="reference/component-library"
   actionLabel="查看组件"
 >
-  这个示例站现在直接使用同一个包里的 banner、card、accordion、文件树、tabs 和更完整的代码块样式。布局主题则通过一个 `theme` 对象统一配置。
+  这个示例站现在直接使用同一个包里的 banner、card、accordion、文件树、tabs 和更完整的代码块样式。布局主题则通过一个嵌套的 `theme` 配置对象和 headless provider 统一驱动。
 </Banner>
 
 <CardGrid cols={3}>
@@ -23,7 +23,7 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
   />
   <Card
     title="主题配置"
-    description="通过 preset 控制布局宽度、强调色、模式与圆角。"
+    description="通过一个嵌套配置对象控制 preset、密度、布局尺寸和 token 覆盖。"
     href="reference/theme-configuration"
   />
   <Card
@@ -36,14 +36,14 @@ EmcyDocs 是一个面向 Next.js 团队的文档库，适合把 MDX 放在仓库
 ## 核心理念
 
 - 一次 `createDocsSource(...)` 调用即可生成内容模型、导航、元数据、路由辅助函数、标题提取和搜索。
-- 一个 `DocsLayout` 负责文档外壳，主题系统负责 preset、密度、尺寸与强调色。
+- 一个 `DocsLayout` 负责文档外壳，主题系统负责 preset、密度、尺寸、强调色以及可选的 token 覆盖。
 - 当默认 header 或 sidebar 不够用时，你可以用自己的组件或 `null` 来替换它们。
 - 像 `entry/en.mdx`、`entry/es.mdx`、`entry/zh.mdx` 这样的语言文件夹会直接映射到带语言感知的 URL。
 
 ## 这个示例站点展示了什么
 
 - 一个由单一布局组件驱动的 `docs` 路由
-- 通过主题工作室调整 preset、密度、圆角和壳层尺寸
+- 一个 headless 主题引擎，加上快速预设切换和更完整的主题工作室
 - 英文、西班牙文与中文的本地化路由
 - 适用于首页、指南和参考页的组件库
 

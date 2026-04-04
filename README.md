@@ -10,6 +10,15 @@ This repository contains both the published package and the example site that do
 - `tests` contains Vitest coverage
 - `site` is the example Next.js app and the package's own docs/showcase
 
+## Preview
+
+<p align="center">
+  <img src=".github/assets/docs-page.png" alt="EmcyDocs docs page screenshot" width="49%" />
+  <img src=".github/assets/theme-studio.png" alt="EmcyDocs theme studio screenshot" width="49%" />
+</p>
+
+The example site ships with a polished docs shell and an optional live theme studio for tuning presets, density, surface styles, and accent behavior.
+
 ## Why use it
 
 - Keep docs as repo-local MDX instead of a separate CMS

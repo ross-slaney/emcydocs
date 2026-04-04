@@ -12,6 +12,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type CSSProperties,
   type ReactNode,
@@ -74,10 +75,11 @@ function DocsRouteThemeBoundaryInner({
   const pathname = usePathname();
   const { theme, resolvedTheme, setTheme } = useDocsTheme();
   const [isStudioOpen, setIsStudioOpen] = useState(false);
-  const [didLoadStoredTheme, setDidLoadStoredTheme] = useState(false);
+  const didLoadStoredThemeRef = useRef(false);
+  const canPersistThemeRef = useRef(false);
 
   useEffect(() => {
-    if (didLoadStoredTheme || typeof window === "undefined") {
+    if (didLoadStoredThemeRef.current || typeof window === "undefined") {
       return;
     }
 
@@ -87,12 +89,25 @@ function DocsRouteThemeBoundaryInner({
       window.localStorage.getItem(DOCS_THEME_STORAGE_KEY)
     );
 
-    setTheme(nextTheme);
-    setDidLoadStoredTheme(true);
-  }, [defaults, didLoadStoredTheme, setTheme]);
+    let cancelled = false;
+    const frame = window.requestAnimationFrame(() => {
+      if (cancelled || didLoadStoredThemeRef.current) {
+        return;
+      }
+
+      didLoadStoredThemeRef.current = true;
+      canPersistThemeRef.current = true;
+      setTheme(nextTheme);
+    });
+
+    return () => {
+      cancelled = true;
+      window.cancelAnimationFrame(frame);
+    };
+  }, [defaults, setTheme]);
 
   useEffect(() => {
-    if (!didLoadStoredTheme || typeof window === "undefined") {
+    if (!canPersistThemeRef.current || typeof window === "undefined") {
       return;
     }
 
@@ -114,7 +129,7 @@ function DocsRouteThemeBoundaryInner({
     if (nextUrl !== `${window.location.pathname}${window.location.search}`) {
       window.history.replaceState(window.history.state, "", nextUrl);
     }
-  }, [defaults, didLoadStoredTheme, pathname, theme]);
+  }, [defaults, pathname, theme]);
 
   useEffect(() => {
     if (typeof document === "undefined") {

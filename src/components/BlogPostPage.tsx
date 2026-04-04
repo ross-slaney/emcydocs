@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import type { BlogCardCopy, BlogEntry, BlogEntryMeta, BlogPostPageCopy } from "../types";
 import { DocsMdx } from "../mdx";
 import { formatBlogDate } from "./blog-utils";
@@ -51,10 +52,13 @@ export default async function BlogPostPage({
 
           <div className="emcydocs-blog-author">
             {entry.authorImage ? (
-              <img
+              <Image
                 src={entry.authorImage}
                 alt={entry.author}
                 className="emcydocs-blog-author-image"
+                width={48}
+                height={48}
+                unoptimized
               />
             ) : (
               <div className="emcydocs-blog-author-image is-fallback" aria-hidden="true">
@@ -77,10 +81,13 @@ export default async function BlogPostPage({
 
         {entry.image ? (
           <div className="emcydocs-blog-post-image-wrap">
-            <img
+            <Image
               src={entry.image}
               alt={entry.imageAlt || entry.title}
               className="emcydocs-blog-post-image"
+              fill
+              sizes="100vw"
+              unoptimized
             />
           </div>
         ) : null}

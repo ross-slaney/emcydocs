@@ -41,8 +41,14 @@ interface HeaderProps {
   locale?: RouteLocale;
 }
 
+interface HeaderContentProps {
+  copy: ReturnType<typeof getSiteChromeDictionary>;
+  homeHref: string;
+  docsHref: string;
+  blogHref: string;
+}
+
 export default function Header({ locale }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname() ?? "/";
   const currentLocale = locale ?? getLocaleFromPathname(pathname);
@@ -61,10 +67,6 @@ export default function Header({ locale }: HeaderProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
-
   return (
     <header
       className={cn(
@@ -74,6 +76,28 @@ export default function Header({ locale }: HeaderProps) {
           : "bg-transparent"
       )}
     >
+      <HeaderContent
+        key={pathname}
+        copy={copy}
+        homeHref={homeHref}
+        docsHref={docsHref}
+        blogHref={blogHref}
+      />
+    </header>
+  );
+}
+
+function HeaderContent({
+  copy,
+  homeHref,
+  docsHref,
+  blogHref,
+}: HeaderContentProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = () => setIsMenuOpen(false);
+
+  return (
+    <>
       <div className="mx-auto flex h-14 w-full max-w-[1400px] items-center justify-between px-6">
         {/* Brand */}
         <Link
@@ -111,33 +135,36 @@ export default function Header({ locale }: HeaderProps) {
           </Button>
         </nav>
 
-        {/* Mobile menu button */}
         <Button
           variant="ghost"
           size="icon"
           className="md:hidden"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={() => setIsMenuOpen((current) => !current)}
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
           {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </Button>
       </div>
 
-      {/* Mobile nav */}
-      {isMenuOpen && (
+      {isMenuOpen ? (
         <div className="border-t bg-background p-4 md:hidden">
           <nav className="flex flex-col gap-2">
             <Button variant="ghost" className="justify-start" asChild>
-              <Link href={docsHref}>{copy.header.nav.docs}</Link>
+              <Link href={docsHref} onClick={closeMenu}>
+                {copy.header.nav.docs}
+              </Link>
             </Button>
             <Button variant="ghost" className="justify-start" asChild>
-              <Link href={blogHref}>{copy.header.nav.blog}</Link>
+              <Link href={blogHref} onClick={closeMenu}>
+                {copy.header.nav.blog}
+              </Link>
             </Button>
             <Button variant="ghost" className="justify-start" asChild>
               <a
                 href="https://github.com/ross-slaney/emcydocs"
                 target="_blank"
                 rel="noreferrer"
+                onClick={closeMenu}
               >
                 GitHub
               </a>
@@ -146,16 +173,18 @@ export default function Header({ locale }: HeaderProps) {
               <LanguageSwitcher
                 locales={routeLocales}
                 fallbackBasePath="/"
-                onNavigate={() => setIsMenuOpen(false)}
+                onNavigate={closeMenu}
               />
               <ThemeSwitcher />
             </div>
             <Button asChild className="mt-2">
-              <Link href={docsHref}>{copy.header.cta}</Link>
+              <Link href={docsHref} onClick={closeMenu}>
+                {copy.header.cta}
+              </Link>
             </Button>
           </nav>
         </div>
-      )}
-    </header>
+      ) : null}
+    </>
   );
 }

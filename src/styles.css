@@ -2735,6 +2735,7 @@
 }
 
 .emcydocs-blog-card-image-wrap {
+  position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
   background: hsl(var(--emcydocs-accent));
@@ -2927,6 +2928,7 @@
 }
 
 .emcydocs-blog-post-image-wrap {
+  position: relative;
   overflow: hidden;
   margin: 1.5rem 0;
   aspect-ratio: 16 / 9;

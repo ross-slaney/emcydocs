@@ -3,7 +3,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { DocsNavSection } from "../types";
 
 export default function DocsSidebar({
@@ -21,23 +21,50 @@ export default function DocsSidebar({
   /** Content rendered below the navigation */
   footer?: ReactNode;
 }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const sections = useMemo(
     () => navigation.filter((section) => section.items.length > 0),
     [navigation]
   );
+  const sidebarStateKey = useMemo(
+    () =>
+      variant === "mobile"
+        ? `mobile:${pathname}:${sections.map((section) => section.key).join("|")}`
+        : variant,
+    [pathname, sections, variant]
+  );
+
+  return (
+    <DocsSidebarContent
+      key={sidebarStateKey}
+      sections={sections}
+      pathname={pathname}
+      variant={variant}
+      onNavigate={onNavigate}
+      header={header}
+      footer={footer}
+    />
+  );
+}
+
+function DocsSidebarContent({
+  sections,
+  pathname,
+  variant,
+  onNavigate,
+  header,
+  footer,
+}: {
+  sections: DocsNavSection[];
+  pathname: string;
+  variant: "desktop" | "mobile";
+  onNavigate?: () => void;
+  header?: ReactNode;
+  footer?: ReactNode;
+}) {
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
     getInitialCollapsedState(sections, pathname, variant)
   );
-
-  useEffect(() => {
-    if (variant !== "mobile") {
-      return;
-    }
-
-    setCollapsed(getInitialCollapsedState(sections, pathname, variant));
-  }, [pathname, sections, variant]);
-
   const isDesktop = variant === "desktop";
 
   return (

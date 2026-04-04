@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { BlogCardCopy, BlogEntryMeta } from "../types";
 import { formatBlogDate } from "./blog-utils";
 
@@ -19,11 +20,13 @@ export default function BlogCard({
       <Link href={post.href} className="emcydocs-blog-card-link">
         {post.image ? (
           <div className="emcydocs-blog-card-image-wrap">
-            <img
+            <Image
               src={post.image}
               alt={post.imageAlt || post.title}
               className="emcydocs-blog-card-image"
-              loading="lazy"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              unoptimized
             />
           </div>
         ) : null}

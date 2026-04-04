@@ -1,0 +1,10 @@
+.git
+.github
+.next
+coverage
+dist
+node_modules
+npm-debug.log*
+site/.next
+site/node_modules
+tests

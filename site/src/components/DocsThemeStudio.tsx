@@ -551,31 +551,33 @@ export function DocsThemeStudioSidebarCard() {
     <button
       type="button"
       onClick={openStudio}
-      className="w-full rounded-2xl border border-border bg-card p-4 text-left shadow-sm transition-all hover:-translate-y-0.5 hover:border-foreground/30 hover:shadow-md"
+      className="group w-full rounded-2xl border border-[hsl(var(--border)/0.72)] bg-[hsl(var(--background)/0.74)] px-3 py-2.5 text-left shadow-none backdrop-blur-sm transition-colors duration-200 hover:border-[hsl(var(--border))] hover:bg-[hsl(var(--background)/0.94)]"
     >
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div>
-          <div className="text-sm font-semibold text-foreground">Theme Studio</div>
-          <div className="mt-1 text-xs text-muted-foreground">
-            {resolvedTheme.config.color.preset} / {resolvedTheme.config.color.mode},{" "}
-            {resolvedTheme.config.layout.density}
+      <div className="flex items-center gap-3">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl border border-[hsl(var(--border)/0.7)] bg-[hsl(var(--muted)/0.32)] text-muted-foreground transition-colors group-hover:text-foreground">
+          <Settings2 className="h-3.5 w-3.5" />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-sm font-medium text-foreground">
+            Theme Studio
+          </div>
+          <div className="truncate text-[11px] text-muted-foreground">
+            {resolvedTheme.config.color.preset} / {resolvedTheme.config.color.mode}
           </div>
         </div>
-        <div className="rounded-full border border-border bg-accent px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-accent-foreground">
-          Open
-        </div>
-      </div>
 
-      <div className="grid grid-cols-4 gap-2">
-        {docsShowcaseThemes.slice(0, 4).map((themePreset) => (
-          <div
-            key={themePreset.id}
-            className="h-12 rounded-2xl border border-border"
-            style={{
-              background: `linear-gradient(135deg, ${themePreset.swatches.join(", ")})`,
-            }}
-          />
-        ))}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {(["background", "primary", "accent"] as const).map((tokenKey) => (
+            <span
+              key={tokenKey}
+              className="h-2.5 w-2.5 rounded-full border border-black/5"
+              style={{
+                backgroundColor: `hsl(${resolvedTheme.tokens[tokenKey]})`,
+              }}
+            />
+          ))}
+        </div>
       </div>
     </button>
   );

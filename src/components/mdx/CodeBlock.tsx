@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import CopyCodeButton from "./CopyCodeButton";
+import Mermaid from "./Mermaid";
 
 interface CodeBlockProps {
   children: ReactNode;
@@ -53,6 +54,11 @@ export function Pre({
     className,
     dataLanguage: typeof dataLanguage === "string" ? dataLanguage : undefined,
   });
+  const codeText = collectText(children).trimEnd();
+
+  if (language?.toLowerCase() === "mermaid") {
+    return <Mermaid chart={codeText} />;
+  }
 
   return (
     <CodeBlock language={language}>

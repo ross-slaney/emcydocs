@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { isValidElement } from "react";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import remarkGfm from "remark-gfm";
@@ -57,6 +58,8 @@ export async function DocsMdx({ entry, content, components }: DocsMdxProps) {
             remarkPlugins: [remarkGfm],
             rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]],
           },
+          blockJS: false,
+          blockDangerousJS: true,
         }}
         components={{
           ...getDefaultMdxComponents(),
@@ -86,6 +89,7 @@ export function getDefaultMdxComponents(): MdxComponentMap {
     InlineToc,
     Mermaid,
     pre: Pre,
+    figure: PrettyCodeFigure,
     Step,
     Steps,
     Tabs,
@@ -93,6 +97,20 @@ export function getDefaultMdxComponents(): MdxComponentMap {
     TabsList,
     TabsTrigger,
   };
+}
+
+function PrettyCodeFigure({
+  children,
+  ...props
+}: {
+  children?: ReactNode;
+  "data-rehype-pretty-code-figure"?: string;
+}) {
+  if ("data-rehype-pretty-code-figure" in props && isValidElement(children)) {
+    return children;
+  }
+
+  return <figure {...props}>{children}</figure>;
 }
 
 function createHeadingComponent(tag: "h1" | "h2" | "h3" | "h4") {

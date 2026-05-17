@@ -1,22 +1,30 @@
 "use client";
 
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 
 interface MermaidProps {
-  chart: string;
+  chart?: string;
   caption?: string;
+  children?: ReactNode;
 }
 
-export default function Mermaid({ chart, caption }: MermaidProps) {
+export default function Mermaid({ chart, caption, children }: MermaidProps) {
   const id = useId().replace(/:/g, "-");
   const containerRef = useRef<HTMLDivElement>(null);
   const [svg, setSvg] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const chartSource = (chart ?? collectText(children)).trim();
 
   useEffect(() => {
     let cancelled = false;
 
     async function render() {
+      if (!chartSource) {
+        setSvg("");
+        setError("Missing Mermaid chart content");
+        return;
+      }
+
       try {
         const mermaid = (await import("mermaid")).default;
         mermaid.initialize({
@@ -27,7 +35,7 @@ export default function Mermaid({ chart, caption }: MermaidProps) {
         });
         const { svg: rendered } = await mermaid.render(
           `mermaid-${id}`,
-          chart.trim()
+          chartSource
         );
         if (!cancelled) {
           setSvg(rendered);
@@ -45,7 +53,7 @@ export default function Mermaid({ chart, caption }: MermaidProps) {
     return () => {
       cancelled = true;
     };
-  }, [chart, id]);
+  }, [chartSource, id]);
 
   if (error) {
     return (
@@ -67,4 +75,24 @@ export default function Mermaid({ chart, caption }: MermaidProps) {
       ) : null}
     </figure>
   );
+}
+
+function collectText(node: ReactNode): string {
+  if (node === null || node === undefined || typeof node === "boolean") {
+    return "";
+  }
+
+  if (typeof node === "string" || typeof node === "number") {
+    return `${node}`;
+  }
+
+  if (Array.isArray(node)) {
+    return node.map(collectText).join("");
+  }
+
+  if (typeof node === "object" && "props" in node) {
+    return collectText((node as { props?: { children?: ReactNode } }).props?.children);
+  }
+
+  return "";
 }

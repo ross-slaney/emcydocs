@@ -987,6 +987,23 @@
 .emcydocs-prose ol {
   margin: 1em 0;
   padding-left: 1.5em;
+  list-style-position: outside;
+}
+
+.emcydocs-prose ul {
+  list-style-type: disc;
+}
+
+.emcydocs-prose ol {
+  list-style-type: decimal;
+}
+
+.emcydocs-prose ul ul {
+  list-style-type: circle;
+}
+
+.emcydocs-prose ol ol {
+  list-style-type: lower-alpha;
 }
 
 .emcydocs-prose li {

@@ -101,7 +101,37 @@
       "ctaHeading": "Listo para crear mejores docs?",
       "ctaDescription": "Empieza en minutos. Instala el paquete, crea tu primer archivo MDX y publicalo.",
       "ctaPrimary": "Leer la documentacion",
-      "ctaSecondary": "Dar estrella en GitHub"
+      "ctaSecondary": "Dar estrella en GitHub",
+      "stats": [
+        { "value": "⌘K", "label": "Busqueda rapida" },
+        { "value": "RSC", "label": "MDX en servidor" },
+        { "value": "∞", "label": "Tokens de tema" }
+      ],
+      "devHeading": "Headless donde importa. Tuyo donde cuenta.",
+      "devDescription": "Cambia el shell, el tema, el mapa de componentes MDX y los slots de chrome sin romper tu pipeline de contenido ni el SEO.",
+      "stepsHeading": "Docs en produccion en tres pasos",
+      "stepsDescription": "Sin CMS aparte. Sin DSL opaco. Solo archivos que tu equipo ya entiende.",
+      "steps": [
+        {
+          "title": "Instala y conecta la fuente",
+          "description": "createDocsSource() descubre MDX, navegacion, metadata, busqueda y rutas estaticas."
+        },
+        {
+          "title": "Agrega DocsLayout",
+          "description": "Busqueda, barra lateral, TOC y UX movil con defaults sensatos que puedes reemplazar."
+        },
+        {
+          "title": "Publica con tu estilo",
+          "description": "Ajusta presets, densidad, acento y componentes de header o sidebar personalizados."
+        }
+      ],
+      "marquee": [
+        "App Router nativo",
+        "MDX basado en archivos",
+        "Rutas con locales",
+        "Busqueda con paleta",
+        "Listo para theme studio"
+      ]
     },
     "docsClassicHome": {
       "title": "Docs localizados con prefijos de idioma conscientes de la ruta",

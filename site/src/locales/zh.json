@@ -101,7 +101,37 @@
       "ctaHeading": "准备好构建更好的文档了吗？",
       "ctaDescription": "几分钟内即可开始。安装包、创建第一个 MDX 文件，然后立即上线。",
       "ctaPrimary": "阅读文档",
-      "ctaSecondary": "GitHub Star"
+      "ctaSecondary": "GitHub Star",
+      "stats": [
+        { "value": "⌘K", "label": "命令搜索" },
+        { "value": "RSC", "label": "服务端 MDX" },
+        { "value": "∞", "label": "主题令牌" }
+      ],
+      "devHeading": "该无头处无头，该自定义处自定义。",
+      "devDescription": "可替换外壳、主题对象、MDX 组件映射和 chrome 插槽，无需分叉内容管道或 SEO 路由。",
+      "stepsHeading": "三步上线生产级文档",
+      "stepsDescription": "无需独立 CMS，无需晦涩配置 DSL，只用团队已熟悉的文件。",
+      "steps": [
+        {
+          "title": "安装并连接数据源",
+          "description": "createDocsSource() 发现 MDX，构建导航、元数据、搜索与静态参数。"
+        },
+        {
+          "title": "接入 DocsLayout",
+          "description": "搜索、侧栏、目录与移动端体验开箱即用，可按需覆盖。"
+        },
+        {
+          "title": "发布你的风格",
+          "description": "调整预设、密度、强调色，以及自定义页眉或侧栏组件。"
+        }
+      ],
+      "marquee": [
+        "App Router 原生",
+        "基于文件的 MDX",
+        "多语言路由",
+        "命令面板搜索",
+        "主题工作室就绪"
+      ]
     },
     "docsClassicHome": {
       "title": "带有路由感知语言前缀的本地化文档",

@@ -10,9 +10,9 @@ export interface DocsShowcaseThemePreset {
 
 export const docsClassicTheme: DocsThemeConfig = {
   color: {
-    preset: "neutral",
+    preset: "ocean",
     mode: "light",
-    accentHue: 270,
+    accentHue: 178,
     accentStrength: "balanced",
     surfaceStyle: "tinted",
   },
@@ -28,13 +28,40 @@ export const docsClassicTheme: DocsThemeConfig = {
   },
 };
 
+export const docsAuroraTheme: DocsThemeConfig = {
+  color: {
+    preset: "ocean",
+    mode: "dark",
+    accentHue: 178,
+    accentStrength: "bold",
+    surfaceStyle: "tinted",
+  },
+  layout: {
+    density: "comfortable",
+    layoutWidth: "1480px",
+    contentWidth: "50rem",
+    sidebarWidth: "272px",
+    tocWidth: "232px",
+  },
+  shape: {
+    radius: "lg",
+  },
+};
+
 export const docsShowcaseThemes: DocsShowcaseThemePreset[] = [
   {
     id: "classic-canvas",
     label: "Classic Canvas",
-    description: "Balanced reading-first docs with a soft violet accent.",
-    swatches: ["#f7f5ff", "#d8cef7", "#7a49cc"],
+    description: "Aurora cyan surfaces with glass sidebar and command search.",
+    swatches: ["#ecfeff", "#5eead4", "#0d9488"],
     config: docsClassicTheme,
+  },
+  {
+    id: "aurora-night",
+    label: "Aurora Night",
+    description: "Deep space docs with cyan–violet glow and glass chrome.",
+    swatches: ["#0a0f1a", "#22d3ee", "#a78bfa"],
+    config: docsAuroraTheme,
   },
   {
     id: "mission-control",

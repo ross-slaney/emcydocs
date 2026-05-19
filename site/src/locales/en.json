@@ -100,7 +100,37 @@
       "ctaHeading": "Ready to build better docs?",
       "ctaDescription": "Get started in minutes. Install the package, create your first MDX file, and you are live.",
       "ctaPrimary": "Read the docs",
-      "ctaSecondary": "Star on GitHub"
+      "ctaSecondary": "Star on GitHub",
+      "stats": [
+        { "value": "⌘K", "label": "Command search" },
+        { "value": "RSC", "label": "Server MDX" },
+        { "value": "∞", "label": "Theme tokens" }
+      ],
+      "devHeading": "Headless where it counts. Yours where it matters.",
+      "devDescription": "Swap the shell, theme object, MDX component map, and chrome slots without forking your content pipeline or SEO routes.",
+      "stepsHeading": "Production docs in three moves",
+      "stepsDescription": "No separate CMS. No opaque config DSL. Just files your team already understands.",
+      "steps": [
+        {
+          "title": "Install & wire the source",
+          "description": "createDocsSource() discovers MDX, builds nav, metadata, search, and static params."
+        },
+        {
+          "title": "Drop in DocsLayout",
+          "description": "Search, sidebar, TOC, and mobile UX ship with sensible defaults you can override."
+        },
+        {
+          "title": "Ship your voice",
+          "description": "Tune presets, density, accent hue, and custom header or sidebar components."
+        }
+      ],
+      "marquee": [
+        "App Router native",
+        "File-based MDX",
+        "Locale-aware routes",
+        "Command palette search",
+        "Theme studio ready"
+      ]
     },
     "docsClassicHome": {
       "title": "Localized docs with route-aware locale prefixes",

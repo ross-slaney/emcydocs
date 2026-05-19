@@ -1,35 +1,11 @@
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
+import BrandLogo from "@/components/BrandLogo";
 import {
   buildLocalizedHref,
   getSiteChromeDictionary,
   type RouteLocale,
 } from "@/lib/site-i18n";
-
-function Logo({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 32 32" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="footerLogoGrad" x1="0" y1="0" x2="32" y2="32">
-          <stop offset="0%" stopColor="#10b981" />
-          <stop offset="100%" stopColor="#14b8a6" />
-        </linearGradient>
-      </defs>
-      <rect width="32" height="32" rx="8" fill="url(#footerLogoGrad)" />
-      <text
-        x="16"
-        y="21"
-        textAnchor="middle"
-        fill="white"
-        fontSize="11"
-        fontWeight="700"
-        fontFamily="system-ui, sans-serif"
-      >
-        ED
-      </text>
-    </svg>
-  );
-}
 
 export default function Footer({ locale }: { locale: RouteLocale }) {
   const currentYear = new Date().getFullYear();
@@ -39,24 +15,38 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
   const blogHref = buildLocalizedHref("/blog", locale);
 
   return (
-    <footer className="border-t bg-background">
-      <div className="mx-auto max-w-[1400px] px-6 py-12">
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative border-t border-primary/10 bg-background">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
+        aria-hidden="true"
+      />
+      <div className="mx-auto max-w-[1400px] px-6 py-14">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href={marketingHomeHref} className="inline-flex items-center gap-2">
-              <Logo className="h-6 w-6" />
+            <Link
+              href={marketingHomeHref}
+              className="inline-flex items-center gap-2.5 transition-opacity hover:opacity-90"
+            >
+              <BrandLogo className="h-7 w-7" />
               <span className="font-semibold">{copy.common.brand}</span>
             </Link>
-            <p className="mt-3 text-sm text-muted-foreground">{copy.footer.tagline}</p>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              {copy.footer.tagline}
+            </p>
+            <p className="mt-4 font-mono text-xs text-primary/80">
+              npm i @emcy/docs
+            </p>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">{copy.footer.sections.resources}</h3>
-            <ul className="mt-4 space-y-2">
+            <h3 className="text-sm font-semibold tracking-tight">
+              {copy.footer.sections.resources}
+            </h3>
+            <ul className="mt-4 space-y-2.5">
               <li>
                 <Link
                   href={docsHomeHref}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   {copy.footer.links.documentation}
                 </Link>
@@ -64,7 +54,7 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
               <li>
                 <Link
                   href={blogHref}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   {copy.footer.links.blog}
                 </Link>
@@ -74,7 +64,7 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
                   href="https://github.com/ross-slaney/emcydocs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   {copy.common.github}
                 </a>
@@ -84,7 +74,7 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
                   href="https://www.npmjs.com/package/@emcy/docs"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
                 >
                   {copy.common.npm}
                 </a>
@@ -93,16 +83,20 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold">{copy.footer.sections.legal}</h3>
-            <ul className="mt-4 space-y-2">
+            <h3 className="text-sm font-semibold tracking-tight">
+              {copy.footer.sections.legal}
+            </h3>
+            <ul className="mt-4 space-y-2.5">
               <li>
-                <span className="text-sm text-muted-foreground">{copy.footer.links.license}</span>
+                <span className="text-sm text-muted-foreground">
+                  {copy.footer.links.license}
+                </span>
               </li>
             </ul>
           </div>
         </div>
 
-        <Separator className="my-8" />
+        <Separator className="my-10 bg-border/60" />
 
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-sm text-muted-foreground">
@@ -113,7 +107,7 @@ export default function Footer({ locale }: { locale: RouteLocale }) {
               href="https://github.com/ross-slaney/emcydocs"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-lg border border-border/80 p-2 text-muted-foreground transition-all hover:border-primary/30 hover:text-primary"
               aria-label="GitHub"
             >
               <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">

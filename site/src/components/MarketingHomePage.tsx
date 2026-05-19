@@ -6,13 +6,12 @@ import {
   ArrowRight,
   BookOpen,
   Check,
-  ChevronRight,
-  FileText,
-  Folder,
+  Code2,
   Layers,
   Palette,
   Search,
   Sparkles,
+  Terminal,
   Zap,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,38 +35,44 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
   return (
     <div className="marketing-page">
       <div className="marketing-mesh" aria-hidden="true" />
+      <div className="marketing-orb marketing-orb-a" aria-hidden="true" />
+      <div className="marketing-orb marketing-orb-b" aria-hidden="true" />
 
-      <section className="relative px-6 pb-20 pt-24 sm:pb-28 sm:pt-32">
+      {/* Hero */}
+      <section className="relative px-6 pb-12 pt-24 sm:pb-16 sm:pt-32">
         <div className="mx-auto max-w-6xl">
-          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="grid items-center gap-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12">
             <div className="text-center lg:text-left">
               <Badge
                 variant="outline"
-                className="mb-6 animate-fadeIn border-emerald-500/30 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                className="mb-6 animate-fadeIn border-primary/30 bg-primary/10 text-primary"
               >
                 {copy.heroBadge}
               </Badge>
 
-              <h1 className="animate-fadeUp text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-                {copy.heroTitlePrimary}
-                <br />
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent dark:from-emerald-400 dark:to-teal-300">
+              <h1 className="animate-fadeUp text-4xl font-bold tracking-tight sm:text-5xl lg:text-[3.25rem] lg:leading-[1.05]">
+                {copy.heroTitlePrimary}{" "}
+                <span className="bg-gradient-to-r from-teal-500 via-cyan-500 to-violet-500 bg-clip-text text-transparent">
                   {copy.heroTitleAccent}
                 </span>
               </h1>
 
-              <p className="animate-fadeUp mx-auto mt-6 max-w-xl text-lg text-muted-foreground lg:mx-0 [animation-delay:100ms]">
+              <p className="animate-fadeUp mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mx-0 [animation-delay:80ms]">
                 {copy.heroDescription}
               </p>
 
-              <div className="animate-fadeUp mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start [animation-delay:200ms]">
-                <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+              <div className="animate-fadeUp mt-8 flex flex-wrap items-center justify-center gap-4 lg:justify-start [animation-delay:160ms]">
+                <Button
+                  asChild
+                  size="lg"
+                  className="bg-gradient-to-r from-teal-600 to-cyan-600 shadow-lg shadow-teal-500/20 hover:from-teal-500 hover:to-cyan-500"
+                >
                   <Link href={docsHref}>
                     {copy.primaryCta}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Link>
                 </Button>
-                <Button variant="outline" size="lg" asChild>
+                <Button variant="outline" size="lg" className="marketing-glass" asChild>
                   <a href={githubUrl} target="_blank" rel="noreferrer">
                     {copy.secondaryCta}
                   </a>
@@ -75,70 +80,131 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
               </div>
 
               <InstallCommand command={copy.installCommand} label={copy.terminalLabel} />
+
+              <div className="animate-fadeUp mt-10 grid grid-cols-3 gap-3 [animation-delay:240ms]">
+                {copy.stats.map((stat) => (
+                  <div
+                    key={stat.label}
+                    className="marketing-stat rounded-xl px-3 py-4 text-center lg:text-left"
+                  >
+                    <div className="font-mono text-2xl font-bold text-primary">{stat.value}</div>
+                    <div className="mt-1 text-xs text-muted-foreground">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="animate-fadeUp [animation-delay:300ms]">
-              <div className="overflow-hidden rounded-xl border border-border bg-card/80 shadow-2xl backdrop-blur-sm">
-                <div className="flex items-center justify-between border-b border-border bg-muted/50 px-4 py-2">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1.5">
-                      <div className="h-3 w-3 rounded-full bg-red-500" />
-                      <div className="h-3 w-3 rounded-full bg-yellow-500" />
-                      <div className="h-3 w-3 rounded-full bg-green-500" />
-                    </div>
-                    <span className="ml-3 text-xs text-muted-foreground">emcydocs-site</span>
-                  </div>
-                  <span className="rounded bg-emerald-500/15 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:text-emerald-300">
-                    localhost:3000/docs
-                  </span>
-                </div>
-                <div className="flex min-h-[280px]">
-                  <div className="hidden w-44 border-r border-border bg-muted/20 p-3 sm:block">
-                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      Sidebar
-                    </p>
-                    <FileTree />
-                  </div>
-                  <div className="flex-1 p-4 sm:p-5">
-                    <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                      Getting started
-                    </p>
-                    <h2 className="mt-1 text-lg font-semibold">Install @emcy/docs</h2>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      App Router-native MDX docs with search, TOC, and i18n.
-                    </p>
-                    <pre className="mt-4 overflow-x-auto rounded-lg bg-muted/60 p-3 text-xs">
-                      <code>{copy.installCommand}</code>
-                    </pre>
-                  </div>
-                </div>
-              </div>
+            <div className="animate-fadeUp [animation-delay:200ms]">
+              <DocsPreview command={copy.installCommand} />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-t border-border/60 px-6 py-16 sm:py-20">
+      {/* Marquee */}
+      <section className="marketing-marquee-wrap" aria-hidden="true">
+        <div className="marketing-marquee-track">
+          {[...copy.marquee, ...copy.marquee].map((item, index) => (
+            <span key={`${item}-${index}`} className="marketing-marquee-item">
+              {item}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* Developer composability */}
+      <section className="relative px-6 py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
+            <div>
+              <p className="font-mono text-xs font-semibold uppercase tracking-widest text-primary">
+                Composable API
+              </p>
+              <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">{copy.devHeading}</h2>
+              <p className="mt-4 text-lg text-muted-foreground">{copy.devDescription}</p>
+              <ul className="mt-8 space-y-3 text-sm text-muted-foreground">
+                {[
+                  "createDocsSource() — routes, nav, search, metadata",
+                  "DocsLayout slots — header, sidebar, theme, searchAction",
+                  "getDefaultMdxComponents() — split core vs interactive",
+                  "DocsThemeConfig — preset, hue, density, radius, tokens",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-2">
+                    <Code2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                    <span>{line}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="marketing-glass marketing-code-window rounded-2xl p-1">
+              <pre className="marketing-terminal overflow-x-auto rounded-xl bg-[#0a0f1a] p-5 text-[13px] leading-relaxed text-slate-300">
+                <code>{`import { DocsLayout, createDocsSource } from "@emcy/docs";
+
+export const docs = createDocsSource({
+  contentDir: "./content/docs",
+  basePath: "/docs",
+});
+
+export default function Layout({ children }) {
+  return (
+    <DocsLayout
+      navigation={docs.getNavigation()}
+      searchAction={searchDocs}
+      theme={{ color: { accentHue: 178 } }}
+    >
+      {children}
+    </DocsLayout>
+  );
+}`}</code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Steps */}
+      <section className="border-t border-border/60 bg-muted/30 px-6 py-20 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{copy.layoutsHeading}</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{copy.stepsHeading}</h2>
+            <p className="mt-3 text-muted-foreground">{copy.stepsDescription}</p>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {copy.steps.map((step, index) => (
+              <Card key={step.title} className="marketing-glass border-primary/10">
+                <CardContent className="p-6">
+                  <div className="marketing-step-num">{index + 1}</div>
+                  <h3 className="mt-4 font-semibold">{step.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Layout cards */}
+      <section className="px-6 py-20 sm:py-24">
+        <div className="mx-auto max-w-6xl">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-tight">{copy.layoutsHeading}</h2>
             <p className="mt-3 text-muted-foreground">{copy.layoutsDescription}</p>
           </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {copy.layoutCards.map((card, index) => {
               const Icon = layoutIcons[index] ?? Layers;
               return (
                 <Card
                   key={card.title}
-                  className="relative overflow-hidden transition-all hover:border-emerald-500/40 hover:shadow-md"
+                  className="marketing-glass relative overflow-hidden transition-all hover:-translate-y-1 hover:border-primary/30"
                 >
                   {card.badge ? (
-                    <Badge className="absolute right-3 top-3 bg-emerald-600 text-white">
+                    <Badge className="absolute right-3 top-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white">
                       {card.badge}
                     </Badge>
                   ) : null}
                   <CardContent className="p-5">
-                    <Icon className="mb-3 h-5 w-5 text-emerald-600 dark:text-emerald-400" />
+                    <Icon className="mb-3 h-5 w-5 text-primary" />
                     <h3 className="font-semibold">{card.title}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">{card.description}</p>
                   </CardContent>
@@ -149,23 +215,31 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
         </div>
       </section>
 
-      <section className="border-t border-border/60 bg-muted/20 px-6 py-16 sm:py-20">
+      {/* Features bento */}
+      <section className="border-t border-border/60 px-6 py-20 sm:py-24">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{copy.featuresHeading}</h2>
+            <h2 className="text-3xl font-bold tracking-tight">{copy.featuresHeading}</h2>
             <p className="mt-3 text-muted-foreground">{copy.featuresDescription}</p>
           </div>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {copy.features.map((feature, index) => {
               const Icon = featureIcons[index] ?? Sparkles;
               return (
-                <Card key={feature.title} className="transition-colors hover:bg-card">
+                <Card
+                  key={feature.title}
+                  className={`marketing-glass transition-all hover:-translate-y-1 hover:border-primary/25 ${
+                    index === 0 ? "lg:col-span-2 lg:row-span-1" : ""
+                  }`}
+                >
                   <CardContent className="p-6">
-                    <div className="mb-4 inline-flex rounded-lg bg-emerald-500/10 p-2 text-emerald-600 dark:text-emerald-400">
+                    <div className="mb-4 inline-flex rounded-xl bg-gradient-to-br from-primary/20 to-violet-500/10 p-2.5 text-primary">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <h3 className="font-semibold">{feature.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">{feature.description}</p>
+                    <h3 className="text-lg font-semibold">{feature.title}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                      {feature.description}
+                    </p>
                   </CardContent>
                 </Card>
               );
@@ -174,24 +248,32 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
         </div>
       </section>
 
-      <section className="border-t border-border/60 px-6 py-16 sm:py-20">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{copy.ctaHeading}</h2>
-          <p className="mt-3 text-muted-foreground">{copy.ctaDescription}</p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Button asChild size="lg" className="bg-emerald-600 hover:bg-emerald-700">
-              <Link href={docsHref}>{copy.ctaPrimary}</Link>
-            </Button>
-            <Button variant="outline" size="lg" asChild>
-              <a href={githubUrl} target="_blank" rel="noreferrer">
-                {copy.ctaSecondary}
-              </a>
-            </Button>
-            <Button variant="ghost" size="lg" asChild>
-              <a href={npmUrl} target="_blank" rel="noreferrer">
-                {copy.exploreLabel} npm
-              </a>
-            </Button>
+      {/* CTA */}
+      <section className="px-6 pb-24 pt-8 sm:pb-32">
+        <div className="mx-auto max-w-4xl">
+          <div className="marketing-glass rounded-3xl px-8 py-14 text-center sm:px-12">
+            <Terminal className="mx-auto h-8 w-8 text-primary" />
+            <h2 className="mt-4 text-3xl font-bold tracking-tight">{copy.ctaHeading}</h2>
+            <p className="mx-auto mt-3 max-w-lg text-muted-foreground">{copy.ctaDescription}</p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-teal-600 to-cyan-600 shadow-lg shadow-teal-500/20"
+              >
+                <Link href={docsHref}>{copy.ctaPrimary}</Link>
+              </Button>
+              <Button variant="outline" size="lg" asChild>
+                <a href={githubUrl} target="_blank" rel="noreferrer">
+                  {copy.ctaSecondary}
+                </a>
+              </Button>
+              <Button variant="ghost" size="lg" asChild>
+                <a href={npmUrl} target="_blank" rel="noreferrer">
+                  {copy.exploreLabel} npm →
+                </a>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -208,75 +290,92 @@ function InstallCommand({ command, label }: { command: string; label: string }) 
       setCopied(true);
       window.setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* clipboard unavailable */
+      /* noop */
     }
   };
 
   return (
-    <div className="animate-fadeUp mx-auto mt-8 max-w-md lg:mx-0 [animation-delay:250ms]">
-      <p className="mb-2 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+    <div className="animate-fadeUp mx-auto mt-8 max-w-md lg:mx-0 [animation-delay:200ms]">
+      <p className="mb-2 flex items-center gap-2 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
+        <Terminal className="h-3.5 w-3.5" />
         {label}
       </p>
       <button
         type="button"
         onClick={handleCopy}
-        className="flex w-full items-center justify-between gap-3 rounded-lg border border-border bg-card/80 px-4 py-3 text-left text-sm backdrop-blur-sm transition-colors hover:border-emerald-500/40"
+        className="marketing-glass flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3.5 text-left text-sm transition-all hover:border-primary/40"
       >
-        <code>
-          <span className="text-muted-foreground">$</span> {command}
+        <code className="marketing-terminal text-foreground">
+          <span className="text-primary">$</span> {command}
         </code>
         {copied ? (
-          <Check className="h-4 w-4 shrink-0 text-emerald-600" />
+          <Check className="h-4 w-4 shrink-0 text-primary" />
         ) : (
-          <span className="shrink-0 text-xs text-muted-foreground">Copy</span>
+          <span className="shrink-0 rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground">
+            Copy
+          </span>
         )}
       </button>
     </div>
   );
 }
 
-function FileTree() {
+function DocsPreview({ command }: { command: string }) {
   return (
-    <div className="space-y-0.5 text-xs">
-      <TreeFolder name="content/docs" defaultOpen>
-        <TreeFile name="getting-started" active />
-        <TreeFile name="guides" />
-        <TreeFile name="reference" />
-      </TreeFolder>
-    </div>
-  );
-}
-
-function TreeFolder({
-  name,
-  children,
-  defaultOpen = false,
-}: {
-  name: string;
-  children?: React.ReactNode;
-  defaultOpen?: boolean;
-}) {
-  return (
-    <div>
-      <div className="flex items-center gap-1 py-0.5 text-muted-foreground">
-        <ChevronRight className={`h-3 w-3 ${defaultOpen ? "rotate-90" : ""}`} />
-        <Folder className="h-3.5 w-3.5 text-emerald-500" />
-        <span>{name}</span>
+    <div className="marketing-glass marketing-code-window overflow-hidden rounded-2xl">
+      <div className="flex items-center justify-between border-b border-border/60 bg-muted/40 px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-red-500/90" />
+          <span className="h-2.5 w-2.5 rounded-full bg-amber-400/90" />
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/90" />
+          <span className="ml-2 font-mono text-[10px] text-muted-foreground">emcydocs — docs</span>
+        </div>
+        <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 font-mono text-[10px] text-primary">
+          ⌘K
+        </span>
       </div>
-      {defaultOpen && children ? <div className="ml-4 border-l border-border pl-2">{children}</div> : null}
-    </div>
-  );
-}
-
-function TreeFile({ name, active = false }: { name: string; active?: boolean }) {
-  return (
-    <div
-      className={`flex items-center gap-1.5 py-0.5 pl-2 ${
-        active ? "rounded bg-emerald-500/15 font-medium text-foreground" : "text-muted-foreground"
-      }`}
-    >
-      <FileText className="h-3.5 w-3.5 text-orange-400" />
-      <span>{name}</span>
+      <div className="flex min-h-[300px]">
+        <aside className="hidden w-44 border-r border-border/60 bg-muted/20 p-3 sm:block">
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Navigate
+          </p>
+          <nav className="space-y-1 text-xs">
+            {["Getting started", "Components", "Theme", "Search"].map((item, i) => (
+              <div
+                key={item}
+                className={`rounded-md px-2 py-1.5 ${
+                  i === 0
+                    ? "border-l-2 border-primary bg-primary/10 font-medium text-primary"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {item}
+              </div>
+            ))}
+          </nav>
+        </aside>
+        <div className="flex flex-1 flex-col p-5">
+          <p className="text-xs font-medium text-primary">Getting started</p>
+          <h2 className="mt-1 text-xl font-semibold tracking-tight">Install the package</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Server-rendered MDX with search, TOC, and a theme you can actually tune.
+          </p>
+          <pre className="marketing-terminal mt-4 rounded-lg bg-[#0a0f1a]/80 p-3 text-xs text-cyan-100/90">
+            <code>{command}</code>
+          </pre>
+          <div className="mt-auto flex gap-2 pt-6">
+            <span className="rounded-md border border-primary/20 bg-primary/5 px-2 py-1 text-[10px] text-primary">
+              RSC
+            </span>
+            <span className="rounded-md border border-border px-2 py-1 text-[10px] text-muted-foreground">
+              SSG
+            </span>
+            <span className="rounded-md border border-border px-2 py-1 text-[10px] text-muted-foreground">
+              i18n
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

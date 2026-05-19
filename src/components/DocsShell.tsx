@@ -10,7 +10,8 @@ import type {
 } from "../types";
 import { resolveDocsTheme } from "../theme";
 import { useOptionalDocsTheme } from "../theme-provider";
-import DocsSearch from "./DocsSearch";
+import DocsSearchPalette from "./DocsSearchPalette";
+import DocsSearchTrigger from "./DocsSearchTrigger";
 import DocsSidebar from "./DocsSidebar";
 import HeadingLinks from "./HeadingLinks";
 import MobileDocsChrome from "./MobileDocsChrome";
@@ -34,6 +35,7 @@ export default function DocsShell({
 }: DocsLayoutCommonProps) {
   const pathname = usePathname();
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const isEmbedded = variant === "embedded";
   const themeContext = useOptionalDocsTheme();
 
@@ -44,6 +46,13 @@ export default function DocsShell({
 
     return () => window.clearTimeout(timeoutId);
   }, [pathname]);
+
+  useEffect(() => {
+    document.body.style.overflow = isNavOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isNavOpen]);
 
   const currentTitle = useMemo(() => {
     const current = navigation
@@ -91,7 +100,25 @@ export default function DocsShell({
             {brand ?? <span>Documentation</span>}
           </div>
           <div className="emcydocs-header-search">
-            <DocsSearch searchAction={searchAction} locale={locale} />
+            <button
+              type="button"
+              className="emcydocs-search-trigger"
+              onClick={() => setIsSearchOpen(true)}
+              aria-label="Open search"
+            >
+              <svg
+                className="emcydocs-search-trigger-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <path d="M21 21l-4.35-4.35" />
+              </svg>
+              <span className="emcydocs-search-trigger-label">Search the docs...</span>
+              <span className="emcydocs-search-kbd">⌘K</span>
+            </button>
           </div>
           {themeSwitcher ? (
             <div className="emcydocs-header-theme">{themeSwitcher}</div>
@@ -121,6 +148,7 @@ export default function DocsShell({
           onToggleNav={() => setIsNavOpen((current) => !current)}
           showNavigationToggle={hasSidebar}
         >
+          <DocsSearchTrigger onClick={() => setIsSearchOpen(true)} />
           {themeSwitcher ? (
             <div className="emcydocs-mobile-theme">{themeSwitcher}</div>
           ) : null}
@@ -194,6 +222,7 @@ export default function DocsShell({
       {/* In embedded mode on mobile, show a simple nav toggle */}
       {isEmbedded && hasSidebar ? (
         <div className="emcydocs-embedded-mobile-bar">
+          <DocsSearchTrigger onClick={() => setIsSearchOpen(true)} />
           <button
             type="button"
             className="emcydocs-embedded-nav-toggle"
@@ -224,6 +253,14 @@ export default function DocsShell({
           {children}
         </main>
       </div>
+
+      <DocsSearchPalette
+        searchAction={searchAction}
+        locale={locale}
+        open={isSearchOpen}
+        onOpenChange={setIsSearchOpen}
+        showTrigger={false}
+      />
     </div>
   );
 }

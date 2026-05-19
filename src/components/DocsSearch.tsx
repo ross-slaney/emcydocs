@@ -1,22 +1,9 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  useEffect,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
-import type { DocsSearchAction, DocsSearchResponse } from "../types";
-
-const EMPTY_RESPONSE: DocsSearchResponse = {
-  query: "",
-  total: 0,
-  results: [],
-};
+import { useEffect, useRef } from "react";
+import type { DocsSearchAction } from "../types";
+import DocsSearchResults from "./DocsSearchResults";
+import { useDocsSearch } from "./useDocsSearch";
 
 export default function DocsSearch({
   searchAction,
@@ -29,58 +16,11 @@ export default function DocsSearch({
   placeholder?: string;
   variant?: "desktop" | "mobile";
 }) {
-  const pathname = usePathname();
-  const inputId = useId();
   const containerRef = useRef<HTMLDivElement>(null);
-  const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
-  const [query, setQuery] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const [response, setResponse] = useState<DocsSearchResponse>(EMPTY_RESPONSE);
-  const [error, setError] = useState<string | null>(null);
-  const [isPending, startTransition] = useTransition();
-
-  const trimmedQuery = query.trim();
-  const visibleResults = useMemo(
-    () => (trimmedQuery.length >= 2 ? response.results : []),
-    [response.results, trimmedQuery.length]
-  );
+  const search = useDocsSearch({ searchAction, locale });
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      setQuery("");
-      setIsOpen(false);
-      setResponse(EMPTY_RESPONSE);
-      setError(null);
-      setActiveIndex(-1);
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [pathname]);
-
-  useEffect(() => {
-    if (!searchAction || trimmedQuery.length < 2) {
-      return;
-    }
-
-    const timeoutId = window.setTimeout(() => {
-      startTransition(async () => {
-        try {
-          const next = await searchAction(trimmedQuery, locale);
-          setResponse(next);
-          setError(null);
-          setActiveIndex(next.results.length > 0 ? 0 : -1);
-        } catch {
-          setError("Search is unavailable right now.");
-        }
-      });
-    }, 140);
-
-    return () => window.clearTimeout(timeoutId);
-  }, [locale, searchAction, trimmedQuery]);
-
-  useEffect(() => {
-    if (!isOpen) {
+    if (!search.isOpen) {
       return;
     }
 
@@ -91,13 +31,13 @@ export default function DocsSearch({
       }
 
       if (!containerRef.current?.contains(target)) {
-        setIsOpen(false);
+        search.setIsOpen(false);
       }
     };
 
     document.addEventListener("pointerdown", handlePointerDown);
     return () => document.removeEventListener("pointerdown", handlePointerDown);
-  }, [isOpen]);
+  }, [search]);
 
   useEffect(() => {
     if (variant !== "desktop") {
@@ -110,47 +50,12 @@ export default function DocsSearch({
       }
 
       event.preventDefault();
-      setIsOpen(true);
-      const input = document.getElementById(inputId);
-      if (input instanceof HTMLInputElement) {
-        input.focus();
-        input.select();
-      }
+      search.open();
     };
 
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
-  }, [inputId, variant]);
-
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!visibleResults.length) {
-      return;
-    }
-
-    if (event.key === "ArrowDown") {
-      event.preventDefault();
-      setActiveIndex((current) => {
-        const next = current < visibleResults.length - 1 ? current + 1 : 0;
-        resultRefs.current[next]?.focus();
-        return next;
-      });
-      return;
-    }
-
-    if (event.key === "ArrowUp") {
-      event.preventDefault();
-      setActiveIndex((current) => {
-        const next = current > 0 ? current - 1 : visibleResults.length - 1;
-        resultRefs.current[next]?.focus();
-        return next;
-      });
-      return;
-    }
-
-    if (event.key === "Escape") {
-      setIsOpen(false);
-    }
-  };
+  }, [search, variant]);
 
   return (
     <div ref={containerRef} className="emcydocs-search">
@@ -160,63 +65,34 @@ export default function DocsSearch({
           <path d="M21 21l-4.35-4.35" />
         </svg>
         <input
-          id={inputId}
+          id={search.inputId}
           type="search"
-          value={query}
+          value={search.query}
           placeholder={placeholder}
           className="emcydocs-search-input"
-          onFocus={() => setIsOpen(true)}
+          onFocus={() => search.setIsOpen(true)}
           onChange={(event) => {
-            setQuery(event.target.value);
-            setIsOpen(true);
-            setError(null);
+            search.setQuery(event.target.value);
+            search.setIsOpen(true);
           }}
-          onKeyDown={handleKeyDown}
+          onKeyDown={search.handleKeyDown}
           disabled={!searchAction}
         />
         {variant === "desktop" ? <span className="emcydocs-search-kbd">⌘K</span> : null}
       </div>
 
-      {isOpen && trimmedQuery.length > 0 ? (
+      {search.isOpen && search.trimmedQuery.length > 0 ? (
         <div className="emcydocs-search-panel">
-          {error ? <p className="emcydocs-search-empty">{error}</p> : null}
-          {!error && isPending ? <p className="emcydocs-search-empty">Searching…</p> : null}
-          {!error && !isPending && visibleResults.length === 0 ? (
-            <p className="emcydocs-search-empty">No matching documents.</p>
-          ) : null}
-
-          {visibleResults.length > 0 ? (
-            <ul className="emcydocs-search-results" role="listbox">
-              {visibleResults.map((result, index) => (
-                <li key={`${result.href}-${index}`}>
-                  <Link
-                    href={result.href}
-                    ref={(element) => {
-                      resultRefs.current[index] = element;
-                    }}
-                    className={[
-                      "emcydocs-search-result",
-                      activeIndex === index ? "is-active" : "",
-                    ]
-                      .filter(Boolean)
-                      .join(" ")}
-                    onClick={() => setIsOpen(false)}
-                    onFocus={() => setActiveIndex(index)}
-                  >
-                    <div className="emcydocs-search-result-top">
-                      <span className="emcydocs-search-result-title">{result.title}</span>
-                      {result.sectionTitle ? (
-                        <span className="emcydocs-search-result-section">
-                          {result.sectionTitle}
-                        </span>
-                      ) : null}
-                    </div>
-                    <p className="emcydocs-search-result-snippet">{result.snippet}</p>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null}
+          <DocsSearchResults
+            visibleResults={search.visibleResults}
+            activeIndex={search.activeIndex}
+            resultRefs={search.resultRefs}
+            error={search.error}
+            isPending={search.isPending}
+            trimmedQuery={search.trimmedQuery}
+            onResultClick={search.handleResultClick}
+            onFocusResult={search.setActiveIndex}
+          />
         </div>
       ) : null}
     </div>

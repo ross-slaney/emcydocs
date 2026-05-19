@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { DocsEntry, DocsEntryMeta } from "../types";
 import { DocsMdx } from "../mdx";
 import CopyPageButton from "./CopyPageButton";
+import DocsPageMobileToc from "./DocsPageMobileToc";
 import DocsToc from "./DocsToc";
 
 export default async function DocsPage({
@@ -11,6 +12,7 @@ export default async function DocsPage({
   nextEntry,
   backHref,
   backLabel = "All docs",
+  showDeveloperMeta = false,
   components,
   asideHeader,
   asideFooter,
@@ -20,10 +22,9 @@ export default async function DocsPage({
   nextEntry?: DocsEntryMeta | null;
   backHref?: string;
   backLabel?: string;
+  showDeveloperMeta?: boolean;
   components?: Record<string, React.ComponentType<any>>;
-  /** Content rendered above the TOC (e.g., search box) */
   asideHeader?: ReactNode;
-  /** Content rendered below the TOC (e.g., theme editor) */
   asideFooter?: ReactNode;
 }) {
   const headingCount = entry.headings.filter((heading) => heading.level === 2).length;
@@ -33,7 +34,13 @@ export default async function DocsPage({
     <div className="emcydocs-page">
       <article className="emcydocs-article">
         <header className="emcydocs-page-header">
-          {entry.sectionLabel ? (
+          {backHref ? (
+            <nav className="emcydocs-page-breadcrumb" aria-label="Breadcrumb">
+              <Link href={backHref}>{backLabel}</Link>
+              <span aria-hidden="true">/</span>
+              <span>{entry.title}</span>
+            </nav>
+          ) : entry.sectionLabel ? (
             <p className="emcydocs-page-kicker">{entry.sectionLabel}</p>
           ) : null}
           <div className="emcydocs-page-title-row">
@@ -41,7 +48,7 @@ export default async function DocsPage({
             <CopyPageButton />
           </div>
           {entry.description ? <p>{entry.description}</p> : null}
-          {headingCount > 0 || localeCount > 1 ? (
+          {showDeveloperMeta && (headingCount > 0 || localeCount > 1) ? (
             <div className="emcydocs-page-meta">
               {headingCount > 0 ? (
                 <span className="emcydocs-page-meta-chip">
@@ -57,24 +64,46 @@ export default async function DocsPage({
           ) : null}
         </header>
 
+        <DocsPageMobileToc headings={entry.headings} />
+
         <Suspense fallback={<DocsMdxFallback />}>
           <DocsMdx entry={entry} components={components} />
         </Suspense>
 
-        <nav className="emcydocs-page-pagination" aria-label="Document pagination">
-          {previousEntry ? <Link href={previousEntry.href}>← {previousEntry.title}</Link> : <span />}
-          {nextEntry ? <Link href={nextEntry.href}>{nextEntry.title} →</Link> : <span />}
-        </nav>
+        {(previousEntry || nextEntry) && (
+          <nav className="emcydocs-prev-next" aria-label="Document pagination">
+            {previousEntry ? (
+              <Link
+                href={previousEntry.href}
+                className="emcydocs-prev-next-link"
+                data-direction="previous"
+              >
+                <span className="emcydocs-prev-next-label">Previous</span>
+                <span className="emcydocs-prev-next-title">{previousEntry.title}</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+            {nextEntry ? (
+              <Link
+                href={nextEntry.href}
+                className="emcydocs-prev-next-link"
+                data-direction="next"
+              >
+                <span className="emcydocs-prev-next-label">Next</span>
+                <span className="emcydocs-prev-next-title">{nextEntry.title}</span>
+              </Link>
+            ) : (
+              <span />
+            )}
+          </nav>
+        )}
       </article>
 
       <aside className="emcydocs-page-aside">
-        {asideHeader ? (
-          <div className="emcydocs-aside-header">{asideHeader}</div>
-        ) : null}
+        {asideHeader ? <div className="emcydocs-aside-header">{asideHeader}</div> : null}
         <DocsToc headings={entry.headings} />
-        {asideFooter ? (
-          <div className="emcydocs-aside-footer">{asideFooter}</div>
-        ) : null}
+        {asideFooter ? <div className="emcydocs-aside-footer">{asideFooter}</div> : null}
       </aside>
     </div>
   );

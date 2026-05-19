@@ -129,6 +129,31 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.marketing-page {
+  position: relative;
+  overflow: hidden;
+}
+
+.marketing-mesh {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -20%, hsl(160 84% 45% / 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 100% 0%, hsl(174 72% 40% / 0.08), transparent),
+    radial-gradient(ellipse 50% 30% at 0% 50%, hsl(160 60% 50% / 0.06), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fadeIn,
+  .animate-fadeUp,
+  .animate-slideInFromLeft {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 
 ::selection {
   background: hsl(var(--primary) / 0.2);

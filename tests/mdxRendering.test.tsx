@@ -62,7 +62,9 @@ describe("MDX rendering", () => {
       </Figure>
     );
 
-    expect(container.querySelector(".emcydocs-mermaid")).toBeInTheDocument();
+    await waitFor(() =>
+      expect(container.querySelector(".emcydocs-mermaid")).toBeInTheDocument()
+    );
     expect(container.querySelector("[data-rehype-pretty-code-figure]")).not.toBeInTheDocument();
     await waitFor(() => expect(container.querySelector("svg")).toBeInTheDocument());
     expect(mermaid.render).toHaveBeenCalledWith(expect.any(String), "graph LR\n  A --> B");

@@ -59,6 +59,7 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
   }
 
   let contentRecords: ContentRecord[] | null = null;
+  const entriesByLocale = new Map<string, DocsEntry[]>();
 
   const readRecords = () => {
     if (!contentRecords) {
@@ -74,7 +75,16 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
       .filter((entry): entry is DocsEntry => entry !== null)
       .sort(compareEntries(config.sectionOrder));
 
-  const getAllEntries = (locale: string = config.defaultLocale) => materializeEntries(locale);
+  const getAllEntries = (locale: string = config.defaultLocale) => {
+    const cached = entriesByLocale.get(locale);
+    if (cached) {
+      return cached;
+    }
+
+    const entries = materializeEntries(locale);
+    entriesByLocale.set(locale, entries);
+    return entries;
+  };
 
   const getEntry = (slugs?: string[] | string, locale: string = config.defaultLocale) => {
     const normalized = normalizeSlugs(slugs);
@@ -99,7 +109,7 @@ export function createDocsSource(input: DocsSourceConfig): DocsSource {
 
       const key = entry.section ?? "";
       const existing = sections.get(key) ?? [];
-      existing.push(entry);
+      existing.push(toNavItem(entry));
       sections.set(key, existing);
     }
 
@@ -422,6 +432,23 @@ function materializeRecord(
     content,
     headings,
     filePath,
+  };
+}
+
+export function toNavItem(entry: DocsEntry): DocsNavItem {
+  return {
+    slug: entry.slug,
+    slugs: entry.slugs,
+    href: entry.href,
+    title: entry.title,
+    description: entry.description,
+    order: entry.order,
+    section: entry.section,
+    sectionLabel: entry.sectionLabel,
+    locale: entry.locale,
+    contentLocale: entry.contentLocale,
+    availableLocales: entry.availableLocales,
+    isHome: entry.isHome,
   };
 }
 

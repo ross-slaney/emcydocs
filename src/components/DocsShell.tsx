@@ -12,6 +12,7 @@ import { resolveDocsTheme } from "../theme";
 import { useOptionalDocsTheme } from "../theme-provider";
 import DocsSearch from "./DocsSearch";
 import DocsSidebar from "./DocsSidebar";
+import HeadingLinks from "./HeadingLinks";
 import MobileDocsChrome from "./MobileDocsChrome";
 
 export default function DocsShell({
@@ -218,7 +219,10 @@ export default function DocsShell({
         {desktopSidebar ? (
           <aside className="emcydocs-desktop-nav">{desktopSidebar}</aside>
         ) : null}
-        <main className="emcydocs-main">{children}</main>
+        <main className="emcydocs-main">
+          <HeadingLinks />
+          {children}
+        </main>
       </div>
     </div>
   );

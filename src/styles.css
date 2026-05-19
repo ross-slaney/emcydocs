@@ -927,6 +927,38 @@
   color: hsl(var(--emcydocs-foreground));
 }
 
+.emcydocs-mdx-loading {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.5rem 0 1.5rem;
+}
+
+.emcydocs-mdx-loading-line {
+  height: 0.875rem;
+  border-radius: 0.375rem;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--emcydocs-muted) / 0.35) 0%,
+    hsl(var(--emcydocs-muted) / 0.55) 50%,
+    hsl(var(--emcydocs-muted) / 0.35) 100%
+  );
+  background-size: 200% 100%;
+  animation: emcydocs-mdx-loading 1.2s ease-in-out infinite;
+}
+
+.emcydocs-mdx-loading-line-short {
+  width: 72%;
+}
+
+@keyframes emcydocs-mdx-loading {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 .emcydocs-prose > *:first-child {
   margin-top: 0;
 }

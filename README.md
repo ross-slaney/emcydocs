@@ -162,6 +162,18 @@ Welcome to your docs.
 
 At that point, your app can render a static docs section from repo-local MDX under `/docs`.
 
+### Optional: faster route transitions
+
+`DocsPage` streams the MDX body inside a `Suspense` boundary so the shell and title can paint first. For even snappier navigations in large doc sets, add a route-level `loading.tsx` next to your `[[...slug]]` page:
+
+```tsx
+export default function DocsLoading() {
+  return <div className="emcydocs-prose emcydocs-mdx-loading" aria-busy="true" />;
+}
+```
+
+Navigation passed to `DocsLayout` should come from `docsSource.getNavigation()` — it returns metadata-only items (no MDX bodies).
+
 ## Theme system
 
 `DocsLayout` accepts a nested `theme` object for static theming, and it can also read live theme state from `DocsThemeProvider` when you want a runtime switcher, persisted preferences, or a theme studio.

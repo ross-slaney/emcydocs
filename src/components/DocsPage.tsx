@@ -1,10 +1,9 @@
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import Link from "next/link";
 import type { DocsEntry, DocsEntryMeta } from "../types";
 import { DocsMdx } from "../mdx";
 import CopyPageButton from "./CopyPageButton";
 import DocsToc from "./DocsToc";
-import HeadingLinks from "./HeadingLinks";
 
 export default async function DocsPage({
   entry,
@@ -58,8 +57,9 @@ export default async function DocsPage({
           ) : null}
         </header>
 
-        <HeadingLinks />
-        <DocsMdx entry={entry} components={components} />
+        <Suspense fallback={<DocsMdxFallback />}>
+          <DocsMdx entry={entry} components={components} />
+        </Suspense>
 
         <nav className="emcydocs-page-pagination" aria-label="Document pagination">
           {previousEntry ? <Link href={previousEntry.href}>← {previousEntry.title}</Link> : <span />}
@@ -76,6 +76,16 @@ export default async function DocsPage({
           <div className="emcydocs-aside-footer">{asideFooter}</div>
         ) : null}
       </aside>
+    </div>
+  );
+}
+
+function DocsMdxFallback() {
+  return (
+    <div className="emcydocs-prose emcydocs-mdx-loading" aria-busy="true" aria-label="Loading article">
+      <div className="emcydocs-mdx-loading-line" />
+      <div className="emcydocs-mdx-loading-line emcydocs-mdx-loading-line-short" />
+      <div className="emcydocs-mdx-loading-line" />
     </div>
   );
 }

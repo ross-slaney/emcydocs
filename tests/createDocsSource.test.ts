@@ -80,6 +80,19 @@ describe("createDocsSource", () => {
     });
   });
 
+  it("returns metadata-only navigation items without doc bodies", () => {
+    const navigation = source.getNavigation();
+    const items = navigation.flatMap((section) => section.items);
+
+    expect(items.length).toBeGreaterThan(0);
+
+    for (const item of items) {
+      expect(item).not.toHaveProperty("content");
+      expect(item).not.toHaveProperty("headings");
+      expect(item).not.toHaveProperty("filePath");
+    }
+  });
+
   it("uses the redirect target for root metadata and static params", () => {
     expect(redirectedHomeSource.getMetadata([])).toEqual({
       title: "Getting started | Fixture Docs",

@@ -1,6 +1,11 @@
-export { createDocsSource, extractHeadings } from "./server/docs";
+export { createDocsSource, extractHeadings, toNavItem } from "./server/docs";
 export { createBlogSource } from "./server/blog";
-export { DocsMdx, getDefaultMdxComponents } from "./mdx";
+export {
+  DocsMdx,
+  getCoreMdxComponents,
+  getDefaultMdxComponents,
+  getInteractiveMdxComponents,
+} from "./mdx";
 export { default as BlogCard } from "./components/BlogCard";
 export { default as BlogCategories } from "./components/BlogCategories";
 export { default as BlogDirectoryPage } from "./components/BlogDirectoryPage";

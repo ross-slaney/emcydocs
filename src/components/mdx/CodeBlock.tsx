@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import CopyCodeButton from "./CopyCodeButton";
-import Mermaid from "./Mermaid";
+import { LazyMermaid } from "./lazy";
 
 interface CodeBlockProps {
   children: ReactNode;
@@ -57,7 +57,7 @@ export function Pre({
   const codeText = collectText(children).trimEnd();
 
   if (language?.toLowerCase() === "mermaid") {
-    return <Mermaid chart={codeText} />;
+    return <LazyMermaid chart={codeText} />;
   }
 
   return (

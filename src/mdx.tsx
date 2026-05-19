@@ -6,8 +6,6 @@ import remarkGfm from "remark-gfm";
 import type { BlogEntry, DocsEntry } from "./types";
 import { slugifyHeading } from "./utils";
 import {
-  Accordion,
-  AccordionItem,
   Banner,
   Callout,
   Card,
@@ -17,15 +15,19 @@ import {
   Files,
   Folder,
   InlineToc,
-  Mermaid,
   Pre,
   Step,
   Steps,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "./components/mdx";
+import {
+  LazyAccordion,
+  LazyAccordionItem,
+  LazyMermaid,
+  LazyTabs,
+  LazyTabsContent,
+  LazyTabsList,
+  LazyTabsTrigger,
+} from "./components/mdx/lazy";
 
 type MdxComponentMap = Record<string, React.ComponentType<any>>;
 
@@ -72,12 +74,17 @@ export async function DocsMdx({ entry, content, components }: DocsMdxProps) {
 
 export function getDefaultMdxComponents(): MdxComponentMap {
   return {
+    ...getCoreMdxComponents(),
+    ...getInteractiveMdxComponents(),
+  };
+}
+
+export function getCoreMdxComponents(): MdxComponentMap {
+  return {
     h1: createHeadingComponent("h1"),
     h2: createHeadingComponent("h2"),
     h3: createHeadingComponent("h3"),
     h4: createHeadingComponent("h4"),
-    Accordion,
-    AccordionItem,
     Banner,
     Callout,
     Card,
@@ -87,15 +94,23 @@ export function getDefaultMdxComponents(): MdxComponentMap {
     Files,
     Folder,
     InlineToc,
-    Mermaid,
     pre: Pre,
     figure: PrettyCodeFigure,
     Step,
     Steps,
-    Tabs,
-    TabsContent,
-    TabsList,
-    TabsTrigger,
+  };
+}
+
+/** Code-split client widgets (Mermaid, tabs, accordion). */
+export function getInteractiveMdxComponents(): MdxComponentMap {
+  return {
+    Accordion: LazyAccordion,
+    AccordionItem: LazyAccordionItem,
+    Mermaid: LazyMermaid,
+    Tabs: LazyTabs,
+    TabsContent: LazyTabsContent,
+    TabsList: LazyTabsList,
+    TabsTrigger: LazyTabsTrigger,
   };
 }
 

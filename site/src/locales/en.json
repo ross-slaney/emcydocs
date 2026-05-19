@@ -107,7 +107,7 @@
         { "value": "∞", "label": "Theme tokens" }
       ],
       "devHeading": "Headless where it counts. Yours where it matters.",
-      "devDescription": "Swap the shell, theme object, MDX component map, and chrome slots without forking your content pipeline or SEO routes.",
+      "devDescription": "Your MDX files and URLs stay in git. Reskin layout, search, and components through React slots — no migration, no CMS lock-in.",
       "stepsHeading": "Production docs in three moves",
       "stepsDescription": "No separate CMS. No opaque config DSL. Just files your team already understands.",
       "steps": [

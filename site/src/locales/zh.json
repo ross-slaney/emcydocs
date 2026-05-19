@@ -108,7 +108,7 @@
         { "value": "∞", "label": "主题令牌" }
       ],
       "devHeading": "该无头处无头，该自定义处自定义。",
-      "devDescription": "可替换外壳、主题对象、MDX 组件映射和 chrome 插槽，无需分叉内容管道或 SEO 路由。",
+      "devDescription": "MDX 与 URL 仍在 git 里。通过 React 插槽换皮布局、搜索与组件——无需迁移，也不绑定 CMS。",
       "stepsHeading": "三步上线生产级文档",
       "stepsDescription": "无需独立 CMS，无需晦涩配置 DSL，只用团队已熟悉的文件。",
       "steps": [

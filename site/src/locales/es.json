@@ -108,7 +108,7 @@
         { "value": "∞", "label": "Tokens de tema" }
       ],
       "devHeading": "Headless donde importa. Tuyo donde cuenta.",
-      "devDescription": "Cambia el shell, el tema, el mapa de componentes MDX y los slots de chrome sin romper tu pipeline de contenido ni el SEO.",
+      "devDescription": "Tus archivos MDX y URLs siguen en git. Cambia layout, busqueda y componentes con slots de React — sin migracion ni CMS cerrado.",
       "stepsHeading": "Docs en produccion en tres pasos",
       "stepsDescription": "Sin CMS aparte. Sin DSL opaco. Solo archivos que tu equipo ya entiende.",
       "steps": [

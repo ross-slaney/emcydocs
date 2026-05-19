@@ -78,6 +78,7 @@ Create `app/docs/layout.tsx`:
 import { DocsLayout } from "@emcy/docs";
 import "@emcy/docs/styles.css";
 import { docsSource } from "@/lib/docs";
+import { searchDocsAction } from "@/app/doc-actions";
 
 export default function Layout({
   children,
@@ -85,7 +86,10 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   return (
-    <DocsLayout navigation={docsSource.getNavigation()}>
+    <DocsLayout
+      navigation={docsSource.getNavigation()}
+      searchAction={searchDocsAction}
+    >
       {children}
     </DocsLayout>
   );

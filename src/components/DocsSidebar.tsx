@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { DocsNavSection } from "../types";
+import { isActiveDocsPath } from "../utils";
 
 export default function DocsSidebar({
   navigation,
@@ -16,9 +17,7 @@ export default function DocsSidebar({
   navigation: DocsNavSection[];
   variant?: "desktop" | "mobile";
   onNavigate?: () => void;
-  /** Content rendered above the navigation (e.g., search box) */
   header?: ReactNode;
-  /** Content rendered below the navigation */
   footer?: ReactNode;
 }) {
   const pathname = usePathname() ?? "";
@@ -70,42 +69,49 @@ function DocsSidebarContent({
   return (
     <div className={isDesktop ? "emcydocs-sidebar" : "emcydocs-sidebar-mobile"}>
       {header ? <div className="emcydocs-sidebar-header">{header}</div> : null}
-      <nav
-        aria-label="Documentation navigation"
-        className="emcydocs-sidebar-scroll"
-      >
+      <nav aria-label="Documentation navigation" className="emcydocs-sidebar-scroll">
         {sections.map((section) => {
           const isCollapsed = collapsed[section.key] ?? false;
           const sectionId = `emcydocs-sidebar-section-${section.key || "root"}`;
 
           return (
             <section key={section.key || "root"} className="emcydocs-sidebar-section">
-              <button
-                type="button"
-                className="emcydocs-sidebar-section-toggle"
-                aria-controls={sectionId}
-                aria-expanded={!isCollapsed}
-                onClick={() =>
-                  setCollapsed((current) => ({
-                    ...current,
-                    [section.key]: !current[section.key],
-                  }))
-                }
-              >
-                <span>{section.label}</span>
-                <span aria-hidden="true">{isCollapsed ? "+" : "−"}</span>
-              </button>
-              {!isCollapsed ? (
+              {isDesktop ? (
+                <h3 className="emcydocs-sidebar-section-label">{section.label}</h3>
+              ) : (
+                <button
+                  type="button"
+                  className="emcydocs-sidebar-section-toggle"
+                  aria-controls={sectionId}
+                  aria-expanded={!isCollapsed}
+                  onClick={() =>
+                    setCollapsed((current) => ({
+                      ...current,
+                      [section.key]: !current[section.key],
+                    }))
+                  }
+                >
+                  <span>{section.label}</span>
+                  <span aria-hidden="true">{isCollapsed ? "+" : "−"}</span>
+                </button>
+              )}
+              {(!isCollapsed || isDesktop) && (
                 <ul id={sectionId} className="emcydocs-sidebar-list">
                   {section.items.map((item) => {
-                    const isActive = pathname === item.href;
+                    const depth = Math.max(0, item.slugs.length - 1);
+                    const isActive = isActiveDocsPath(pathname, item.href);
                     return (
                       <li key={item.href}>
                         <Link
                           href={item.href}
-                          className={["emcydocs-sidebar-link", isActive ? "is-active" : ""]
+                          className={[
+                            "emcydocs-sidebar-link",
+                            isActive ? "is-active" : "",
+                            depth > 0 ? "is-nested" : "",
+                          ]
                             .filter(Boolean)
                             .join(" ")}
+                          style={depth > 0 ? { paddingLeft: `${0.75 + depth * 0.5}rem` } : undefined}
                           onClick={onNavigate}
                         >
                           {item.title}
@@ -114,7 +120,7 @@ function DocsSidebarContent({
                     );
                   })}
                 </ul>
-              ) : null}
+              )}
             </section>
           );
         })}
@@ -134,7 +140,7 @@ function getInitialCollapsedState(
   }
 
   const activeSection = sections.find((section) =>
-    section.items.some((item) => item.href === pathname)
+    section.items.some((item) => isActiveDocsPath(pathname, item.href))
   );
   const expandedSectionKey = activeSection?.key ?? sections[0]?.key;
 

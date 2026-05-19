@@ -11,6 +11,19 @@ export function normalizeSlugs(
   return parts.map((part) => part.trim()).filter(Boolean);
 }
 
+export function normalizeDocsPath(pathname: string): string {
+  if (!pathname || pathname === "/") {
+    return "/";
+  }
+
+  const normalized = pathname.replace(/\/+$/, "");
+  return normalized || "/";
+}
+
+export function isActiveDocsPath(pathname: string, href: string): boolean {
+  return normalizeDocsPath(pathname) === normalizeDocsPath(href);
+}
+
 export function normalizeBasePath(basePath: string): string {
   if (!basePath) {
     return "";

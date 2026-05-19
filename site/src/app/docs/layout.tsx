@@ -1,4 +1,4 @@
-import { DocsLayout, DocsSearch } from "@emcy/docs";
+import { DocsLayout } from "@emcy/docs";
 import DocumentLanguage from "@/components/DocumentLanguage";
 import DocsRouteThemeBoundary from "@/components/DocsRouteThemeBoundary";
 import { DocsThemeStudioSidebarCard } from "@/components/DocsThemeStudio";
@@ -28,16 +28,7 @@ export default function DocsRootLayout({
           languageSwitcher={
             <LanguageSwitcher locales={docsLocales} fallbackBasePath="/docs" />
           }
-          sidebarHeader={
-            <>
-              <DocsSearch
-                searchAction={searchDocsAction}
-                locale={defaultSiteLocale}
-                placeholder="Search..."
-              />
-              <DocsThemeStudioSidebarCard />
-            </>
-          }
+          sidebarHeader={<DocsThemeStudioSidebarCard />}
         >
           {children}
         </DocsLayout>

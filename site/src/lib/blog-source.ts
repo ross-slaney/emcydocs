@@ -1,5 +1,5 @@
 import path from "node:path";
-import { createBlogSource } from "@emcy/docs";
+import { createBlogSource } from "@mcpstack/docs";
 import {
   defaultSiteLocale,
   hideDefaultSiteLocaleInUrl,
@@ -14,6 +14,6 @@ export const blogSource = createBlogSource({
   defaultLocale: defaultSiteLocale,
   locales: [...routeLocales],
   hideDefaultLocaleInUrl: hideDefaultSiteLocaleInUrl,
-  siteTitle: "EmcyDocs",
-  titleSuffix: "EmcyDocs",
+  siteTitle: "MCP Stack Docs",
+  titleSuffix: "MCP Stack Docs",
 });

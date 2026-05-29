@@ -1,4 +1,4 @@
-import type { DocsThemeConfig } from "@emcy/docs";
+import type { DocsThemeConfig } from "@mcpstack/docs";
 
 export interface DocsShowcaseThemePreset {
   id: string;

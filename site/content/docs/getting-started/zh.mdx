@@ -5,14 +5,14 @@ order: 0
 sectionLabel: "入门"
 ---
 
-几分钟内即可运行 EmcyDocs。
+几分钟内即可运行 MCP Stack Docs。
 
 ## 安装
 
 从 npm 安装这个包：
 
 ```bash
-npm install @emcy/docs
+npm install @mcpstack/docs
 ```
 
 ## 快速配置
@@ -23,7 +23,7 @@ npm install @emcy/docs
 
 ```ts
 import path from "node:path";
-import { createDocsSource } from "@emcy/docs";
+import { createDocsSource } from "@mcpstack/docs";
 
 export const docsSource = createDocsSource({
   contentDir: path.join(process.cwd(), "content/docs"),
@@ -42,8 +42,8 @@ export const docsSource = createDocsSource({
 在 `app/docs/layout.tsx` 中添加布局文件：
 
 ```tsx
-import { DocsLayout } from "@emcy/docs";
-import "@emcy/docs/styles.css";
+import { DocsLayout } from "@mcpstack/docs";
+import "@mcpstack/docs/styles.css";
 import { docsSource } from "@/lib/docs";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -60,7 +60,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 在 `app/docs/[[...slug]]/page.tsx` 中添加 catch-all 页面：
 
 ```tsx
-import { DocsPage, DocsHomePage } from "@emcy/docs";
+import { DocsPage, DocsHomePage } from "@mcpstack/docs";
 import { docsSource } from "@/lib/docs";
 
 export default async function Page({ params }: { params: { slug?: string[] } }) {
@@ -104,7 +104,7 @@ export function generateStaticParams() {
 ```mdx
 ---
 title: "快速开始"
-description: "你的第一篇 EmcyDocs 页面"
+description: "你的第一篇 MCP Stack Docs 页面"
 order: 0
 ---
 

@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   experimental: {
     externalDir: true,
   },
-  transpilePackages: ["@emcy/docs"],
+  transpilePackages: ["@mcpstack/docs"],
 };
 
 export default nextConfig;

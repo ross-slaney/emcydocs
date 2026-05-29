@@ -1,5 +1,5 @@
 import path from "node:path";
-import { createDocsSource } from "@emcy/docs";
+import { createDocsSource } from "@mcpstack/docs";
 import {
   defaultSiteLocale,
   docsLocales,
@@ -13,8 +13,8 @@ const sharedConfig = {
   defaultLocale: defaultSiteLocale,
   locales: [...docsLocales],
   hideDefaultLocaleInUrl: hideDefaultSiteLocaleInUrl,
-  siteTitle: "EmcyDocs",
-  titleSuffix: "EmcyDocs",
+  siteTitle: "MCP Stack Docs",
+  titleSuffix: "MCP Stack Docs",
   sectionOrder: ["", "guides", "layouts", "internationalization", "reference"],
 };
 

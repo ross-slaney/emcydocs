@@ -9,9 +9,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@emcy/docs": ["../src/index.ts"],
-      "@emcy/docs/*": ["../src/*"],
-      "@emcy/docs/styles.css": ["../src/styles.css"]
+      "@mcpstack/docs": ["../src/index.ts"],
+      "@mcpstack/docs/*": ["../src/*"],
+      "@mcpstack/docs/styles.css": ["../src/styles.css"]
     },
     "noEmit": true
   },

@@ -12,7 +12,7 @@ sectionLabel: "Reference"
   href="../layouts/docs-layout"
   actionLabel="查看布局用法"
 >
-  EmcyDocs 现在提供一个 headless 主题引擎。你可以直接把固定 `theme` 传给 `DocsLayout`，也可以在需要实时编辑、持久化或分享链接时使用 `DocsThemeProvider`。
+  MCP Stack Docs 现在提供一个 headless 主题引擎。你可以直接把固定 `theme` 传给 `DocsLayout`，也可以在需要实时编辑、持久化或分享链接时使用 `DocsThemeProvider`。
 </Banner>
 
 <CardGrid cols={3}>
@@ -57,7 +57,7 @@ const docsTheme = {
 ## 实时主题状态
 
 ```tsx
-import { DocsThemeProvider, useDocsTheme } from "@emcy/docs";
+import { DocsThemeProvider, useDocsTheme } from "@mcpstack/docs";
 
 function ThemeModeToggle() {
   const { resolvedTheme, updateTheme } = useDocsTheme();

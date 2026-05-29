@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { DocsHomePage, DocsPage } from "@emcy/docs";
+import { DocsHomePage, DocsPage } from "@mcpstack/docs";
 import { docsSource } from "@/lib/docs-source";
 import { defaultSiteLocale, getDocsPageDictionary } from "@/lib/site-i18n";
 

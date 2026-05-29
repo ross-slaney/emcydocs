@@ -5,14 +5,14 @@ order: 0
 sectionLabel: "Getting Started"
 ---
 
-Get up and running with EmcyDocs in minutes.
+Get up and running with MCP Stack Docs in minutes.
 
 ## Installation
 
 Install the package from npm:
 
 ```bash
-npm install @emcy/docs
+npm install @mcpstack/docs
 ```
 
 ## Quick setup
@@ -23,7 +23,7 @@ Create a file like `lib/docs.ts` in your app:
 
 ```ts
 import path from "node:path";
-import { createDocsSource } from "@emcy/docs";
+import { createDocsSource } from "@mcpstack/docs";
 
 export const docsSource = createDocsSource({
   contentDir: path.join(process.cwd(), "content/docs"),
@@ -42,8 +42,8 @@ export const docsSource = createDocsSource({
 Add a layout file at `app/docs/layout.tsx`:
 
 ```tsx
-import { DocsLayout } from "@emcy/docs";
-import "@emcy/docs/styles.css";
+import { DocsLayout } from "@mcpstack/docs";
+import "@mcpstack/docs/styles.css";
 import { docsSource } from "@/lib/docs";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -60,7 +60,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 Add a catch-all page at `app/docs/[[...slug]]/page.tsx`:
 
 ```tsx
-import { DocsPage, DocsHomePage } from "@emcy/docs";
+import { DocsPage, DocsHomePage } from "@mcpstack/docs";
 import { docsSource } from "@/lib/docs";
 
 export default async function Page({ params }: { params: { slug?: string[] } }) {
@@ -104,7 +104,7 @@ Create `content/docs/getting-started/en.mdx`:
 ```mdx
 ---
 title: "Getting Started"
-description: "Your first EmcyDocs page"
+description: "Your first MCP Stack Docs page"
 order: 0
 ---
 

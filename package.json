@@ -1,6 +1,6 @@
 {
-  "name": "@emcy/docs",
-  "version": "0.3.0",
+  "name": "@mcpstack/docs",
+  "version": "1.0.0",
   "description": "App Router-native MDX documentation for Next.js with reusable layouts, search, TOC, and locale-aware routing.",
   "type": "module",
   "main": "dist/index.js",
@@ -61,18 +61,18 @@
     "i18n",
     "seo",
     "saas",
-    "emcy"
+    "mcpstack"
   ],
-  "author": "Emcy <hello@emcy.ai>",
+  "author": "MCP Stack <hello@mcpstack.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ross-slaney/emcydocs.git"
+    "url": "git+https://github.com/ross-slaney/mcpstack-docs.git"
   },
   "bugs": {
-    "url": "https://github.com/ross-slaney/emcydocs/issues"
+    "url": "https://github.com/ross-slaney/mcpstack-docs/issues"
   },
-  "homepage": "https://github.com/ross-slaney/emcydocs",
+  "homepage": "https://github.com/ross-slaney/mcpstack-docs",
   "engines": {
     "node": ">=20.0.0"
   },

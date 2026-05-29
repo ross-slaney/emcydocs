@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-import "@emcy/docs/styles.css";
+import "@mcpstack/docs/styles.css";
 import "./globals.css";
 import { defaultSiteLocale } from "@/lib/site-i18n";
 
 export const metadata: Metadata = {
-  title: "EmcyDocs | App Router-native docs for Next.js",
+  title: "MCP Stack Docs | App Router-native docs for Next.js",
   description:
-    "EmcyDocs is an App Router-native MDX documentation library for Next.js with locale-aware routes, a flexible theme system, built-in mobile docs UX, search, TOC, and customizable docs chrome.",
+    "MCP Stack Docs is an App Router-native MDX documentation library for Next.js with locale-aware routes, a flexible theme system, built-in mobile docs UX, search, TOC, and customizable docs chrome.",
   icons: {
     icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23171717'/></svg>",
   },

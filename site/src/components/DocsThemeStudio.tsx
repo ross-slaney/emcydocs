@@ -1,6 +1,6 @@
 "use client";
 
-import { useDocsTheme } from "@emcy/docs";
+import { useDocsTheme } from "@mcpstack/docs";
 import {
   Check,
   Copy,

@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "EmcyDocs",
+    "brand": "MCP Stack Docs",
     "github": "GitHub",
     "npm": "npm"
   },
@@ -28,11 +28,11 @@
       "documentation": "Documentation",
       "license": "MIT License"
     },
-    "copyright": "EmcyDocs. All rights reserved."
+    "copyright": "MCP Stack Docs. All rights reserved."
   },
   "docs": {
     "layout": {
-      "brand": "EmcyDocs",
+      "brand": "MCP Stack Docs",
       "classicDocs": "Classic docs",
       "defaultDocs": "Default docs"
     }
@@ -42,11 +42,11 @@
       "heroBadge": "Now available on npm",
       "heroTitlePrimary": "Documentation that",
       "heroTitleAccent": "lives in your app",
-      "heroDescription": "EmcyDocs is an App Router-native MDX documentation library for Next.js. File-based content, locale-aware routes, a flexible theme system, and a mobile-first UX all in one package.",
+      "heroDescription": "MCP Stack Docs is an App Router-native MDX documentation library for Next.js. File-based content, locale-aware routes, a flexible theme system, and a mobile-first UX all in one package.",
       "primaryCta": "Get started",
       "secondaryCta": "View on GitHub",
       "terminalLabel": "Terminal",
-      "installCommand": "npm install @emcy/docs",
+      "installCommand": "npm install @mcpstack/docs",
       "layoutsHeading": "One layout, flexible docs chrome",
       "layoutsDescription": "Shape the experience with preset palettes, accent tuning, density, shell sizing, token overrides, and optional custom header or sidebar overrides.",
       "exploreLabel": "Explore",
@@ -156,7 +156,7 @@
       "updatedOnLabel": "Updated",
       "tagsLabel": "Tags",
       "suggestedLabel": "Suggested Posts",
-      "suggestedDescription": "More implementation notes, release writeups, and patterns from the EmcyDocs example content.",
+      "suggestedDescription": "More implementation notes, release writeups, and patterns from the MCP Stack Docs example content.",
       "readMoreLabel": "Read more",
       "readingTimeSuffix": "min read"
     }

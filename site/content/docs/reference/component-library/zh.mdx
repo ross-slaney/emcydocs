@@ -12,7 +12,7 @@ sectionLabel: "Reference"
   href="theme-configuration"
   actionLabel="打开主题指南"
 >
-  EmcyDocs 现在内置了一组紧凑的文档组件，让首页、指南页和参考页能够共享一套视觉语言，而不是在不同仓库里各自演化。
+  MCP Stack Docs 现在内置了一组紧凑的文档组件，让首页、指南页和参考页能够共享一套视觉语言，而不是在不同仓库里各自演化。
 </Banner>
 
 <InlineToc items='[{"href":"#why-it-exists","label":"Why it exists"},{"href":"#banner-and-cards","label":"Banner and cards"},{"href":"#accordions","label":"Accordions"},{"href":"#file-trees","label":"File trees"},{"href":"#tabs-and-steps","label":"Tabs and steps"},{"href":"#code-blocks","label":"Code blocks"}]' />
@@ -51,7 +51,7 @@ sectionLabel: "Reference"
     可以。你仍然可以在同一个 `.mdx` 文件里混合 fenced code、标题、列表、表格和 JSX 组件。
   </AccordionItem>
   <AccordionItem title="为什么不再拆一个 UI 包？">
-    因为 EmcyDocs 要保持单一库的边界。这些组件体积小、面向文档、并且由同一份样式系统驱动。
+    因为 MCP Stack Docs 要保持单一库的边界。这些组件体积小、面向文档、并且由同一份样式系统驱动。
   </AccordionItem>
 </Accordion>
 
@@ -81,7 +81,7 @@ sectionLabel: "Reference"
   <TabsContent value="adopt">
     <Steps>
       <Step title="一次性引入包">
-        全局导入 `@emcy/docs/styles.css`，并继续把内容留在你的仓库中。
+        全局导入 `@mcpstack/docs/styles.css`，并继续把内容留在你的仓库中。
       </Step>
       <Step title="从共享布局开始">
         先用 `DocsLayout` 搭起文档外壳，再按需加入主题、搜索、语言切换或 chrome 覆盖。

@@ -29,8 +29,8 @@ const layoutIcons = [BookOpen, Palette, Layers, Sparkles];
 export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
   const copy = getPageDictionary(locale, "marketingHome");
   const docsHref = buildLocalizedHref("/docs", locale);
-  const githubUrl = "https://github.com/ross-slaney/emcydocs";
-  const npmUrl = "https://www.npmjs.com/package/@emcy/docs";
+  const githubUrl = "https://github.com/ross-slaney/mcpstack-docs";
+  const npmUrl = "https://www.npmjs.com/package/@mcpstack/docs";
 
   return (
     <div className="marketing-page">
@@ -138,7 +138,7 @@ export default function MarketingHomePage({ locale }: { locale: RouteLocale }) {
             </div>
             <div className="marketing-glass marketing-code-window rounded-2xl p-1">
               <pre className="marketing-terminal overflow-x-auto rounded-xl bg-[#0a0f1a] p-5 text-[13px] leading-relaxed text-slate-300">
-                <code>{`import { DocsLayout, createDocsSource } from "@emcy/docs";
+                <code>{`import { DocsLayout, createDocsSource } from "@mcpstack/docs";
 
 export const docs = createDocsSource({
   contentDir: "./content/docs",
@@ -328,7 +328,7 @@ function DocsPreview({ command }: { command: string }) {
           <span className="h-2.5 w-2.5 rounded-full bg-red-500/90" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-400/90" />
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/90" />
-          <span className="ml-2 font-mono text-[10px] text-muted-foreground">emcydocs — docs</span>
+          <span className="ml-2 font-mono text-[10px] text-muted-foreground">mcpstackdocs — docs</span>
         </div>
         <span className="rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 font-mono text-[10px] text-primary">
           ⌘K

@@ -1,6 +1,6 @@
-# EmcyDocs
+# MCP Stack Docs
 
-`@emcy/docs` is an App Router-native MDX docs library for Next.js.
+`@mcpstack/docs` is an App Router-native MDX docs library for Next.js.
 
 It is built for teams that want documentation content in the repo while still getting SEO-friendly prerendered routes, locale-aware file conventions, search, heading extraction, mobile-friendly docs UX, and a configurable docs shell that can either stay simple or plug into a richer app chrome.
 
@@ -13,8 +13,8 @@ This repository contains both the published package and the example site that do
 ## Preview
 
 <p align="center">
-  <img src=".github/assets/docs-page.png" alt="EmcyDocs docs page screenshot" width="49%" />
-  <img src=".github/assets/theme-studio.png" alt="EmcyDocs theme studio screenshot" width="49%" />
+  <img src=".github/assets/docs-page.png" alt="MCP Stack Docs docs page screenshot" width="49%" />
+  <img src=".github/assets/theme-studio.png" alt="MCP Stack Docs theme studio screenshot" width="49%" />
 </p>
 
 The example site ships with a polished docs shell and an optional live theme studio for tuning presets, density, surface styles, and accent behavior.
@@ -39,13 +39,13 @@ The example site ships with a polished docs shell and an optional live theme stu
 ## Install
 
 ```bash
-npm install @emcy/docs
+npm install @mcpstack/docs
 ```
 
 Then import the shared stylesheet once in your docs layout:
 
 ```tsx
-import "@emcy/docs/styles.css";
+import "@mcpstack/docs/styles.css";
 ```
 
 ## Quick start
@@ -56,7 +56,7 @@ Create `lib/docs.ts`:
 
 ```ts
 import path from "node:path";
-import { createDocsSource } from "@emcy/docs";
+import { createDocsSource } from "@mcpstack/docs";
 
 export const docsSource = createDocsSource({
   contentDir: path.join(process.cwd(), "content/docs"),
@@ -75,8 +75,8 @@ export const docsSource = createDocsSource({
 Create `app/docs/layout.tsx`:
 
 ```tsx
-import { DocsLayout } from "@emcy/docs";
-import "@emcy/docs/styles.css";
+import { DocsLayout } from "@mcpstack/docs";
+import "@mcpstack/docs/styles.css";
 import { docsSource } from "@/lib/docs";
 import { searchDocsAction } from "@/app/doc-actions";
 
@@ -102,7 +102,7 @@ Create `app/docs/[[...slug]]/page.tsx`:
 
 ```tsx
 import { notFound, redirect } from "next/navigation";
-import { DocsHomePage, DocsPage } from "@emcy/docs";
+import { DocsHomePage, DocsPage } from "@mcpstack/docs";
 import { docsSource } from "@/lib/docs";
 
 interface PageProps {
@@ -157,7 +157,7 @@ Create `content/docs/getting-started/en.mdx`:
 ```mdx
 ---
 title: "Getting Started"
-description: "Your first EmcyDocs page"
+description: "Your first MCP Stack Docs page"
 order: 0
 ---
 
@@ -187,7 +187,7 @@ import {
   DocsLayout,
   DocsThemeProvider,
   type DocsThemeConfig,
-} from "@emcy/docs";
+} from "@mcpstack/docs";
 import { docsSource } from "@/lib/docs";
 
 const docsTheme: DocsThemeConfig = {
@@ -234,7 +234,7 @@ If you do not need live editing, pass the same object directly to `DocsLayout` v
 - Theme primitives: `DocsThemeProvider`, `useDocsTheme()`, `resolveDocsTheme(theme)`
 - MDX helpers and components: `DocsMdx`, `getDefaultMdxComponents()`, plus banners, callouts, cards, tabs, steps, file trees, accordions, and code blocks
 - Optional blog primitives: `createBlogSource`, `BlogDirectoryPage`, `BlogPostPage`, `BlogSearch`, and related components
-- Shared stylesheet: `@emcy/docs/styles.css`
+- Shared stylesheet: `@mcpstack/docs/styles.css`
 
 ## Local development
 
@@ -267,7 +267,7 @@ From `sqlos/web`, use a local file dependency:
 ```json
 {
   "dependencies": {
-    "@emcy/docs": "file:../../emcydocs"
+    "@mcpstack/docs": "file:../../emcydocs"
   }
 }
 ```
@@ -279,4 +279,4 @@ The SqlOS repo also includes helper scripts to switch between a local file depen
 - Merge to `main` with passing CI
 - Tag a release like `v0.1.0`
 - Push the tag
-- GitHub Actions rebuilds, retests, and publishes `@emcy/docs` to npm
+- GitHub Actions rebuilds, retests, and publishes `@mcpstack/docs` to npm

@@ -5,7 +5,7 @@ import {
   useDocsTheme,
   type DocsThemeConfig,
   type DocsThemeTokens,
-} from "@emcy/docs";
+} from "@mcpstack/docs";
 import { usePathname } from "next/navigation";
 import {
   createContext,

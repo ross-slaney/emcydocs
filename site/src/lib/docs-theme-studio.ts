@@ -10,7 +10,7 @@ import {
   type DocsThemeRadius,
   type DocsThemeSurfaceStyle,
   type DocsThemeTokens,
-} from "@emcy/docs";
+} from "@mcpstack/docs";
 
 export const DOCS_THEME_STORAGE_KEY = "emcydocs-docs-theme-v2";
 export const DOCS_THEME_PARAM_KEY = "docsTheme";
@@ -205,7 +205,7 @@ export function createDocsThemeShareUrl(
   theme: DocsThemeConfig,
   defaults: DocsThemeConfig
 ) {
-  const url = new URL(pathname + currentSearch, "http://emcydocs.local");
+  const url = new URL(pathname + currentSearch, "http://mcpstackdocs.local");
   const encoded = encodeDocsThemeParam(theme, defaults);
 
   if (encoded) {
